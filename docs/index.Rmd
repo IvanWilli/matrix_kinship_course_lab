@@ -8,18 +8,41 @@ output:
     # toc_depth: 2
     toc_float: true
     # number_sections: true
-    theme: united
-    highlight: espresso
+    theme: yeti
+    highlight: pygments
     # code_folding: hide
+bibliography: kinship.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Day {.tabset}
+## {.tabset}
 
 ### Introduction
+
+This guide pretends to give you some practical tools for applying the theory on your own specific research goals. In each day we will have a time for learn how to code in R some key matrix forms and get basic results. In a second part we will use DemoKin package for speeding up the pathway between ideas/questions and results. With the first part you will have a notion of what is happening when you run functions in the second part, so you can customize your code for your own purpose if is necessary.
+
+For the next 10 days we are kind of course-related-non biological-family, so brother/sister: please reach us for any doubt.
+
+We hope you enjoy it and be helpful. Hands on.
+
+Hal, Diego and Iván.
+
+### Wed 3
+
+#### Settings
+
+We will start tomorrow the computer lab, but would be great if in advance we have prepared R environment.
+
+Install the [development version from GitHub](https://github.com/IvanWilli/DemoKin) (could take ~1 minute). We made changes to the `DemoKin` package ahead of this workshop If you had already installed the package, please uninstall it and and install it again.
+
+```{r, eval=FALSE}
+# remove.packages("DemoKin")
+# install.packages("devtools")
+devtools::install_github("IvanWilli/DemoKin", build_vignettes = TRUE)
+```
 
 ### Thurs 4
 
@@ -35,24 +58,100 @@ In this section...
 
 3. Imagine a world where...
 
-### Fri 5
+### Mon 8
 
-#### Matrix population models
+#### Age-classified time-invariant one-sex kinship models
 
 In this section...
+
+##### R-clues
+
+1. Project focal´s kin in time invariant rates [@caswell_formal_2019] ...
+
+##### DemoKin package
+
+Let´s see how to solve exercise 1 with DemoKin.
 
 1. Project the pop...
 
 2. Give a value for...
 
+3. Focal lives in...
+
 #### By your own
 
 3. Imagine a world where...
 
-### Mon 8
-
 ### Tues 9
+
+#### Age-classified time-variant one-sex kinship models
+
+In this section...
+
+##### R-clues
+
+1. Project the pop...
+
+##### DemoKin package
+
+Let´s see how to solve exercise 1 with DemoKin.
+
+1. Project the pop...
+
+2. Give a value for...
+
+3. Focal lives in...
+
+#### By your own
+
+3. Imagine a world where...
 
 ### Wed 10
 
+#### Age-classified time-invariant two-sex kinship models
+
+In this section...
+
+##### R-clues
+
+1. Project the pop...
+
+##### DemoKin package
+
+Let´s see how to solve exercise 1 with DemoKin.
+
+1. Project the pop...
+
+2. Give a value for...
+
+3. Focal lives in...
+
+#### By your own
+
+3. Imagine a world where...
+
 ### Thurs 11
+
+#### Multistate kinship models with applications to health
+
+In this section...
+
+##### R-clues
+
+1. Project the pop...
+
+##### DemoKin package
+
+Let´s see how to solve exercise 1 with DemoKin.
+
+1. Project the pop...
+
+2. Give a value for...
+
+3. Focal lives in...
+
+#### By your own
+
+3. Imagine a world where...
+
+### References
