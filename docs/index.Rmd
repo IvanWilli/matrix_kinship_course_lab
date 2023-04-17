@@ -1,30 +1,58 @@
 ---
-title: "Untitled"
-author: "iw_da"
-date: "`r Sys.Date()`"
-output: html_document
+title: "Matrix Approaches to Modelling Kinship Theory and Applications"
+subtitle: "IDEM 128 - Computer lab exercises"
+# author: "iw_da"
+date: "Update: `r Sys.Date()`"
+output:
+  html_document:
+    # toc_depth: 2
+    toc_float: true
+    # number_sections: true
+    theme: united
+    highlight: espresso
+    # code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Day {.tabset}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### Introduction
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### Thurs 4
 
-```{r cars}
-summary(cars)
-```
+#### Matrix population models
 
-## Including Plots
+In this section...
 
-You can also embed plots, for example:
+1. Project the pop...
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+2. Give a value for...
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#### By your own
+
+3. Imagine a world where...
+
+### Fri 5
+
+#### Matrix population models
+
+In this section...
+
+1. Project the pop...
+
+2. Give a value for...
+
+#### By your own
+
+3. Imagine a world where...
+
+### Mon 8
+
+### Tues 9
+
+### Wed 10
+
+### Thurs 11
