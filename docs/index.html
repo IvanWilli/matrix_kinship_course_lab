@@ -481,7 +481,7 @@ display: none;
 <h1 class="title toc-ignore">Matrix Approaches to Modelling Kinship
 Theory and Applications</h1>
 <h3 class="subtitle">IDEM 128 - Computer lab exercises</h3>
-<h4 class="date">Update: 2023-04-16</h4>
+<h4 class="date">Update: 2023-04-18</h4>
 
 </div>
 
@@ -508,7 +508,8 @@ biological-family, so brother/sister: please reach us for any doubt.</p>
 <div id="settings" class="section level4">
 <h4>Settings</h4>
 <p>We will start tomorrow the computer lab, but would be great if in
-advance we have prepared R environment.</p>
+advance we have prepared R environment. Firs, you will need R and
+Rstudio installed.</p>
 <p>Install the <a href="https://github.com/IvanWilli/DemoKin">development version from
 GitHub</a> (could take ~1 minute). We made changes to the
 <code>DemoKin</code> package ahead of this workshop If you had already
@@ -516,6 +517,12 @@ installed the package, please uninstall it and and install it again.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove.packages(&quot;DemoKin&quot;)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;IvanWilli/DemoKin&quot;</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Other packages that will be useful are:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>packages_needed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;HMDHFDplus&quot;</span>, <span class="st">&quot;matrixcalc&quot;</span>, <span class="st">&quot;Matrix&quot;</span>) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>packages_needed_nothaving <span class="ot">&lt;-</span> packages_needed[<span class="sc">!</span>packages_needed <span class="sc">%in%</span> <span class="fu">installed.packages</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(lib <span class="cf">in</span> packages_needed_nothaving) <span class="fu">install.packages</span>(lib,<span class="at">dependencies=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Load all those libraries and you should receive no error. Please
+contact us in case some issues come up with this topic.</p>
 </div>
 </div>
 <div id="thurs-4" class="section level3">
@@ -542,15 +549,36 @@ installed the package, please uninstall it and and install it again.</p>
 <p>In this section…</p>
 <div id="r-clues" class="section level5">
 <h5>R-clues</h5>
-<ol style="list-style-type: decimal">
-<li>Project focal´s kin in time invariant rates <span class="citation">(Caswell 2019)</span> …</li>
-</ol>
+<p>Imagine you are studying a female population with 5 ages (from 0 to
+4) and fixed survival probabilities and fertility rates, given by:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">4</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">9</span>, .<span class="dv">7</span>, .<span class="dv">4</span>, .<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">2</span>, .<span class="dv">5</span>, .<span class="dv">3</span>, <span class="dv">0</span>)</span></code></pre></div>
+<p>Let´s build the transition matrix <span class="math inline">\(U\)</span> and <span class="math inline">\(f\)</span>. The fertility transition matrix should
+be a capitol letter but R has this letter reserved.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">=</span> <span class="fu">length</span>(age)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>U <span class="ot">=</span> f <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>ages, <span class="at">ncol=</span>ages)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>U[<span class="fu">row</span>(U)<span class="sc">-</span><span class="dv">1</span> <span class="sc">==</span> <span class="fu">col</span>(U)] <span class="ot">&lt;-</span> p[<span class="sc">-</span>ages]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>U[ages, ages] <span class="ot">=</span> p[ages]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>f[<span class="dv">1</span>,] <span class="ot">=</span> m</span></code></pre></div>
+<p>Now find eigenvalues and eigenvectors for having the stable
+distribution by age <span class="math inline">\(w\)</span>, and then the
+ones for mothers <span class="math inline">\(pi\)</span>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> U <span class="sc">+</span> f</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>A_eigen <span class="ot">=</span> <span class="fu">eigen</span>(A)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>A_eigen_value <span class="ot">=</span> <span class="fu">as.double</span>(A_eigen<span class="sc">$</span>values[<span class="dv">1</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>A_eigen_vector <span class="ot">=</span> <span class="fu">as.double</span>(A_eigen<span class="sc">$</span>vectors[,<span class="dv">1</span>])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> A_eigen_vector<span class="sc">/</span><span class="fu">sum</span>(A_eigen_vector)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>pi <span class="ot">=</span> w<span class="sc">*</span>m<span class="sc">/</span><span class="fu">sum</span>(w<span class="sc">*</span>m)</span></code></pre></div>
+<p>Let´s focus in the mother.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>e <span class="ot">=</span> <span class="fu">diag</span>(<span class="dv">1</span>, ages)</span></code></pre></div>
 </div>
 <div id="demokin-package" class="section level5">
 <h5>DemoKin package</h5>
 <p>Let´s see how to solve exercise 1 with DemoKin.</p>
 <ol style="list-style-type: decimal">
-<li><p>Project the pop…</p></li>
+<li><p>Project the pop… <span class="citation">(Caswell
+2019)</span></p></li>
 <li><p>Give a value for…</p></li>
 <li><p>Focal lives in…</p></li>
 </ol>
@@ -646,6 +674,9 @@ installed the package, please uninstall it and and install it again.</p>
 <li>Imagine a world where…</li>
 </ol>
 </div>
+</div>
+<div id="solutions" class="section level3">
+<h3>Solutions</h3>
 </div>
 <div id="references" class="section level3 unnumbered">
 <h3 class="unnumbered">References</h3>

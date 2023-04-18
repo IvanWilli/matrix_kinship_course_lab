@@ -34,7 +34,7 @@ Hal, Diego and Iván.
 
 #### Settings
 
-We will start tomorrow the computer lab, but would be great if in advance we have prepared R environment.
+We will start tomorrow the computer lab, but would be great if in advance we have prepared R environment. Firs, you will need R and Rstudio installed.
 
 Install the [development version from GitHub](https://github.com/IvanWilli/DemoKin) (could take ~1 minute). We made changes to the `DemoKin` package ahead of this workshop If you had already installed the package, please uninstall it and and install it again.
 
@@ -43,6 +43,17 @@ Install the [development version from GitHub](https://github.com/IvanWilli/DemoK
 # install.packages("devtools")
 devtools::install_github("IvanWilli/DemoKin", build_vignettes = TRUE)
 ```
+
+Other packages that will be useful are:
+
+```{r, eval=FALSE}
+packages_needed <- c("tidyverse", "HMDHFDplus", "matrixcalc", "Matrix") 
+packages_needed_nothaving <- packages_needed[!packages_needed %in% installed.packages()
+for(lib in packages_needed_nothaving) install.packages(lib,dependencies=TRUE)
+```
+
+Load all those libraries and you should receive no error. Please contact us in case some issues come up with this topic.
+
 
 ### Thurs 4
 
@@ -66,13 +77,48 @@ In this section...
 
 ##### R-clues
 
-1. Project focal´s kin in time invariant rates [@caswell_formal_2019] ...
+Imagine you are studying a female population with 5 ages (from 0 to 4) and fixed survival probabilities and fertility rates, given by:
+
+```{r}
+age <- 0:4
+p <- c(.9, .7, .4, .1, 0)
+m <- c(0, .2, .5, .3, 0)
+```
+
+Let´s build the transition matrix $U$ and $f$. The fertility transition matrix should be a capitol letter but R has this letter reserved.
+
+```{r}
+ages = length(age)
+U = f = matrix(0, nrow=ages, ncol=ages)
+U[row(U)-1 == col(U)] <- p[-ages]
+U[ages, ages] = p[ages]
+f[1,] = m
+```
+
+Now find eigenvalues and eigenvectors for having the stable distribution by age $w$, and then the ones for mothers $pi$.
+
+```{r}
+A = U + f
+A_eigen = eigen(A)
+A_eigen_value = as.double(A_eigen$values[1])
+A_eigen_vector = as.double(A_eigen$vectors[,1])
+w = A_eigen_vector/sum(A_eigen_vector)
+pi = w*m/sum(w*m)
+```
+
+Let´s focus in the mother.  
+
+```{r}
+e = diag(1, ages)
+```
+
+
 
 ##### DemoKin package
 
 Let´s see how to solve exercise 1 with DemoKin.
 
-1. Project the pop...
+1. Project the pop... [@caswell_formal_2019]
 
 2. Give a value for...
 
@@ -154,4 +200,7 @@ Let´s see how to solve exercise 1 with DemoKin.
 
 3. Imagine a world where...
 
+### Solutions
+
 ### References
+
