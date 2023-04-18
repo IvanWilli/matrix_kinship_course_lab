@@ -8,7 +8,7 @@ output:
     # toc_depth: 2
     toc_float: true
     # number_sections: true
-    theme: yeti
+    theme: readable
     highlight: pygments
     # code_folding: hide
 bibliography: kinship.bib
@@ -30,9 +30,11 @@ We hope you enjoy it and be helpful. Hands on.
 
 Hal, Diego and Iván.
 
+<!-- --------------------------------------------------------------------- -->
+
 ### Wed 3
 
-#### Settings
+#### Initial settings
 
 We will start tomorrow the computer lab, but would be great if in advance we have prepared R environment. Firs, you will need R and Rstudio installed.
 
@@ -54,6 +56,7 @@ for(lib in packages_needed_nothaving) install.packages(lib,dependencies=TRUE)
 
 Load all those libraries and you should receive no error. Please contact us in case some issues come up with this topic.
 
+<!-- --------------------------------------------------------------------- -->
 
 ### Thurs 4
 
@@ -61,13 +64,15 @@ Load all those libraries and you should receive no error. Please contact us in c
 
 In this section...
 
-1. Project the pop...
+##### R-clues
 
-2. Give a value for...
+...
 
-#### By your own
+##### Practice
 
-3. Imagine a world where...
+...
+
+<!-- --------------------------------------------------------------------- -->
 
 ### Mon 8
 
@@ -112,9 +117,7 @@ Let´s focus in the mother.
 e = diag(1, ages)
 ```
 
-
-
-##### DemoKin package
+##### Using DemoKin
 
 Let´s see how to solve exercise 1 with DemoKin.
 
@@ -124,9 +127,11 @@ Let´s see how to solve exercise 1 with DemoKin.
 
 3. Focal lives in...
 
-#### By your own
+##### Practice
 
 3. Imagine a world where...
+
+<!-- --------------------------------------------------------------------- -->
 
 ### Tues 9
 
@@ -138,7 +143,7 @@ In this section...
 
 1. Project the pop...
 
-##### DemoKin package
+##### Using DemoKin
 
 Let´s see how to solve exercise 1 with DemoKin.
 
@@ -148,9 +153,11 @@ Let´s see how to solve exercise 1 with DemoKin.
 
 3. Focal lives in...
 
-#### By your own
+##### Practice
 
 3. Imagine a world where...
+
+<!-- --------------------------------------------------------------------- -->
 
 ### Wed 10
 
@@ -162,7 +169,7 @@ In this section...
 
 1. Project the pop...
 
-##### DemoKin package
+##### Using DemoKin
 
 Let´s see how to solve exercise 1 with DemoKin.
 
@@ -172,9 +179,11 @@ Let´s see how to solve exercise 1 with DemoKin.
 
 3. Focal lives in...
 
-#### By your own
+##### Practice
 
 3. Imagine a world where...
+
+<!-- --------------------------------------------------------------------- -->
 
 ### Thurs 11
 
@@ -186,7 +195,7 @@ In this section...
 
 1. Project the pop...
 
-##### DemoKin package
+##### Using DemoKin
 
 Let´s see how to solve exercise 1 with DemoKin.
 
@@ -196,11 +205,15 @@ Let´s see how to solve exercise 1 with DemoKin.
 
 3. Focal lives in...
 
-#### By your own
+##### Practice
 
 3. Imagine a world where...
 
+<!-- --------------------------------------------------------------------- -->
+
 ### Solutions
+
+<!-- --------------------------------------------------------------------- -->
 
 ### References
 
