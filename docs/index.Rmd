@@ -29,6 +29,15 @@ In each day we will have a time for learn how to code in R some key matrix forms
 In a second part we will use DemoKin package for speeding up the pathway between ideas/questions and results.
 With the first part you will have a notion of what is happening when you run functions in the second part, so you can customize your code for your own purpose if is necessary.
 
+Some useful things to know:
+
+- Download the syllabus: https://github.com/alburezg/EDSD_2023_kinship_demography/blob/main/EDSD_2023_kinship.pdf
+- The required readings can be downloaded from: https://nextcloud.demogr.mpg.de/s/LoiF9zbE95ow7ge
+- The course's slides are available here: https://github.com/alburezg/EDSD_2023_kinship_demography/tree/main/slides
+- Find this website's source code on GitHub: https://github.com/alburezg/EDSD_2023_kinship_demography.
+
+This page will be changing during the workshop so don't be afraid if you see changes, we are making adaptations and fixing errors (hope not).
+
 For the next 10 days we are kind of course-related-non biological-family, so brother/sister: please reach us for any doubt.
 
 We hope you enjoy it and be helpful.
@@ -43,7 +52,7 @@ Hal, Diego and Iván.
 ### Initial settings
 
 We will start tomorrow the computer lab, but would be great if in advance we have prepared the R environment.
-Firs, you will need R and Rstudio installed.
+First, you will need [R]^(https://www.r-project.org/) and [Rstudio](https://posit.co/download/rstudio-desktop/) installed.
 
 Second, install the [development version from GitHub](https://github.com/IvanWilli/DemoKin) (could take \~1 minute).
 We made changes to the `DemoKin` package ahead of this workshop If you had already installed the package, please uninstall it and and install it again.
@@ -62,7 +71,100 @@ packages_needed_nothaving <- packages_needed[!packages_needed %in% installed.pac
 for(lib in packages_needed_nothaving) install.packages(lib,dependencies=TRUE)
 ```
 
-Packages in the tidyverse family will be very useful for summarise and visualizing results Load all those libraries and you should receive no error, but please contact us in case some issues come up with this topic.
+Packages in the `tidyverse` family will be very useful for summarize and visualizing results Load all those libraries and you should receive no error, but please contact us in case some issues come up with this topic. Packages `matrixcalc` and `Matrix` will help us with some matrix operations.
+
+Data for examples and exercises can come from HMD and HFD collection data projects, accessible via `HMDHFDplus` package, or using the [DataPortal API](https://population.un.org/dataportal/about/dataapi) from United Nations-Population Division, or from tables located in the shared folder.
+
+### Key vector and matrix operator in R
+
+There is a lot of resources on matrix algebra with R ([here]() and [here]() for example), but some quick things for our purposes would be:  
+
+- Creation
+
+```{r}
+a_vector <- c(1, 1, 1, 1)
+same_vector <- rep(1, 4)
+a_matrix <- matrix(1:8, nrow = 4, ncol = 4)
+```
+
+- Check dimensions
+
+```{r}
+# with matrix:
+dim(a_matrix)
+
+# vectors in R are column-vectors, but dont have a dimension 5x1, are created as
+# "atomic", with a legth. If we need to see the vector in two dimensions we need to
+# convert him to a matrix object, in this case with 5 rows and 1 column:
+# dim(a_vector) this gives error
+dim(as.matrix(a_vector))
+length(a_vector)
+```
+
+- Sum
+
+```{r}
+# needs same dimensions
+other_vector <- rep(10, 4)
+a_vector + other_vector
+```
+```{r}
+# needs same dimensions
+other_matrix <- matrix(10, nrow = 4, ncol = 4)
+a_matrix + other_matrix
+```
+
+- Multiplication
+
+```{r}
+# element by element between matrices
+a_matrix * other_matrix # column-sum
+a_vector * other_vector # row-sum
+```
+
+```{r}
+# multiplication
+a_matrix %*% other_matrix
+a_matrix %*% a_vector
+t(a_vector) %*% a_matrix
+```
+
+- Determinant, inverse and eigen-decomposition
+
+```{r}
+det(a_matrix) # why?
+```
+
+```{r}
+# let´s create a (hopefully) non-singular matrix
+set.seed(50)
+other_matrix <- matrix(rpois(25, 3), 5, 5)
+det(other_matrix)
+solve(other_matrix)
+eigen(other_matrix)
+```
+
+### Exploring and summarising tables with `dplyr` and `tidyr`
+
+In some exercises we will a long table with many variables and we will need to get indicators, like mean age of daughters when focal is ages 30. `dplyr` and `tidyr` packages are really good for that, and for sure you already know those, but here a quick example with `mtcars` data, getting mean age of `wt` by `cyl` and `am`, but later showing `am` cathegories in columns:
+
+```{r}
+head(mtcars)
+```
+```{r, message=F, warning=F}
+library(dplyr)
+library(tidyr)
+mtcars %>% 
+  group_by(cyl, am) %>% 
+  summarise(mean_wt = mean(wt)) %>% 
+  pivot_wider(names_from = am, values_from = mean_wt)
+```
+
+Finally the package `ggplot2` will be for visualize results.
+More on all this [here](). 
+
+> Of course, in the exercises you can use the tools that you want.
+
 
 <!-- ---------------------------------------------------------------------- -->
 
@@ -154,7 +256,7 @@ for(x in 2:ages){
 k_s <- ones %*% (os + ys)
 ```
 
-What about the grandmother? The initial distribution comes from the living mother distribution by age of focal´s mother:
+What about the **grandmother**? The initial distribution comes from the living mother distribution by age of focal´s mother:
 
 ```{r}
 gm <- matrix(0, 5, 5)
@@ -180,12 +282,13 @@ In the `Demokin` package we have this automatized. Let´s take a look on how to 
 
 ### Using DemoKin
 
+Load libraries:
+
 ```{r, warning=FALSE, message=FALSE}
 library(DemoKin)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(fields)
 ```
 
 #### 1. Built-in data
@@ -205,14 +308,23 @@ swe_px[1:4, 1:4]
 
 And plotted over time and age:
 
-```{r}
-fields::image.plot(
-  x = as.numeric(colnames(swe_px))
-  , y = 0:nrow(swe_px)
-  , z = t(as.matrix(swe_px))
-  , xlab = "Year"
-  , ylab = "Survival probability"
-  )
+```{r, warning=F, message=F}
+swe_px %>% 
+    as.data.frame() %>% 
+    mutate(ages = 1:nrow(swe_asfr)-1) %>% 
+    pivot_longer(-ages, names_to = "year", values_to = "px") %>%
+    mutate(qx = 1-px) %>% 
+    ggplot() + 
+    geom_line(aes(x = ages, y = qx, col = year)) +
+    scale_y_log10() + theme(legend.position = "none")
+
+# fields::image.plot(
+#   x = as.numeric(colnames(swe_px))
+#   , y = 0:nrow(swe_px)
+#   , z = t(as.matrix(swe_px))
+#   , xlab = "Year"
+#   , ylab = "Survival probability"
+#   )
 ```
 
 ##### 1.2. `swe_asfr` matrix; age specific fertility rate (DemoKin's *f* argument)
@@ -227,13 +339,20 @@ swe_asfr[15:20, 1:4]
 And plotted over time and age:
 
 ```{r}
-fields::image.plot(
-  x = as.numeric(colnames(swe_asfr))
-  , y = 0:nrow(swe_asfr)
-  , z = t(as.matrix(swe_asfr))
-  , xlab = "Year"
-  , ylab = "Age-specific fertility (f)"
-  )
+swe_asfr %>% as.data.frame() %>% 
+     mutate(ages = 1:nrow(swe_asfr)-1) %>% 
+     pivot_longer(-ages, names_to = "year", values_to = "asfr") %>%
+     mutate(year = as.integer(year)) %>% 
+     ggplot() + geom_tile(aes(x = year, y = ages, fill = asfr)) + 
+     scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10))
+
+# fields::image.plot(
+#   x = as.numeric(colnames(swe_asfr))
+#   , y = 0:nrow(swe_asfr)
+#   , z = t(as.matrix(swe_asfr))
+#   , xlab = "Year"
+#   , ylab = "Age-specific fertility (f)"
+#   )
 ```
 
 #### 3. The function `kin()`
@@ -247,21 +366,25 @@ This is what it looks like in action, in this case assuming time-invariant demog
 swe_surv_2015 <- DemoKin::swe_px[,"2015"]
 swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"]
 # Run kinship models
-swe_2015 <- kin(U = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE)
+swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE)
 ```
 
 ##### 3.1. Arguments
 
--   **U** numeric. A vector (atomic) or matrix of survival probabilities with rows as ages (and columns as years in case of matrix).
--   **f** numeric. Same as U but for fertility rates.
+Main arguments are:
+
+-   **p** numeric. A vector (atomic) or matrix of survival probabilities with rows as ages (and columns as years in case of matrix).
+-   **f** numeric. Same as p but for age-specific fertility rates.
 -   **time_invariant** logical. Assume time-invariant rates. Default TRUE.
 -   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ...
+
+The argument **birth_female** is set as 1/2.04 by default, and this multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only this parameter needs to be set to 1. 
 
 ##### 3.2. Relative types
 
 Relatives for the `output_kin` argument are identified by a unique code.
 Note that the relationship codes used in `DemoKin` differ from those in Caswell [-@caswell_formal_2019].
-The equivalence between the two set of codes is given in the following table:
+The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion:
 
 ```{r}
 demokin_codes()
@@ -269,13 +392,12 @@ demokin_codes()
 
 ##### 3.4. Value
 
-`DemoKin::kin()` returns a list containing two data frames: `kin_full` and `kin_summary`.
-
+`DemoKin::kin()` returns a list containing two data frames: `kin_full` and `kin_summary`. 
 ```{r}
 str(swe_2015)
 ```
 
--   `kin_full` : This data frame contains expected kin counts by year (or cohort), age of Focal, and age of kin.
+-   `kin_full` : This data frame contains expected kin counts by year (or cohort), age of Focal, and age of kin. The number of rows is because we have *14 kin types*, *101 Focal  ages* and *101 kin ages*. 
 
 ```{r}
 head(swe_2015$kin_full)
@@ -299,25 +421,28 @@ kin_by_age_focal %>%
   )
 ```
 
+A lot of interesting data to explore. Let´s give more context and set some research questions as an example.
+
 #### 4. Example: kin counts in time-invariant populations
 
-Following Caswell [-@caswell_formal_2019], we assume a female closed population in which everyone experiences the Swedish 1950 mortality and fertility rates at each age throughout their life.
+Following Caswell [-@caswell_formal_2019], we assume a female closed population in which everyone experiences the Swedish 2015 mortality and fertility rates at each age throughout their life.
 We then ask:
 
 > How can we characterize the kinship network of an average member of the population (call her 'Focal')?
-> For this exercise, we'll use the pre-loaded Swedish data.
+
+Let´s use the pre-loaded Swedish data.
 
 ```{r}
 # First, get vectors for a given year
 swe_surv_2015 <- DemoKin::swe_px[,"2015"]
 swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"]
-# Run kinship models
+# Run kinship model
 swe_2015 <- kin(U = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE)
 ```
 
 ##### 4.1. 'Keyfitz' kinship diagram
 
-We can visualize the implied kin counts for a Focal woman aged 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function:
+We can visualize the implied kin counts for a Focal woman aged 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Let´s take a moment to see what means each value.
 
 ```{r, fig.height=10, fig.width=12}
 swe_2015$kin_summary %>% 
@@ -346,17 +471,17 @@ swe_2015$kin_summary %>%
 > How does overall family size (and family composition) vary over life for an average woman who survives to each age?
 
 ```{r}
-counts <- 
-  swe_2015$kin_summary %>%
-  group_by(age_focal) %>% 
-  summarise(count = sum(count_living)) %>% 
-  ungroup()
+# counts <- 
+#   swe_2015$kin_summary %>%
+#   group_by(age_focal) %>% 
+#   summarise(count = sum(count_living)) %>% 
+#   ungroup()
 swe_2015$kin_summary %>%
   select(age_focal, kin, count_living) %>% 
   rename_kin(., consolidate_column = "count_living") %>%
   ggplot(aes(x = age_focal, y = count)) +
   geom_area(aes(fill = kin), colour = "black") +
-  geom_line(data = counts, size = 2) +
+  # geom_line(data = counts, size = 2) +
   labs(x = "Focal's age", y = "Number of living female relatives") +
   coord_cartesian(ylim = c(0, 6)) +
   theme_bw() +
@@ -390,12 +515,12 @@ We start by considering the number of kin deaths that can expect to experience a
 In other words, the non-cumulative number of deaths in the family that Focal experiences at a given age.
 
 ```{r}
-loss1 <- 
-  swe_2015$kin_summary %>%
-  filter(age_focal>0) %>%
-  group_by(age_focal) %>% 
-  summarise(count = sum(count_dead)) %>% 
-  ungroup()
+# loss1 <- 
+#   swe_2015$kin_summary %>%
+#   filter(age_focal>0) %>%
+#   group_by(age_focal) %>% 
+#   summarise(count = sum(count_dead)) %>% 
+#   ungroup()
 swe_2015$kin_summary %>%
   filter(age_focal>0) %>%
   group_by(age_focal, kin) %>% 
@@ -404,7 +529,7 @@ swe_2015$kin_summary %>%
   rename_kin(., consolidate_column = "count") %>% 
   ggplot(aes(x = age_focal, y = count)) +
   geom_area(aes(fill = kin), colour = "black") +
-  geom_line(data = loss1, size = 2) +
+  # geom_line(data = loss1, size = 2) +
   labs(x = "Focal's age", y = "Number of kin deaths experienced at each age") +
   coord_cartesian(ylim = c(0, 0.086)) +
   theme_bw() +
@@ -414,10 +539,10 @@ swe_2015$kin_summary %>%
 Now, we combine all kin types to show the cumulative burden of kin death for an average member of the population surviving to each age:
 
 ```{r}
-loss2 <- 
+loss2 <-
   swe_2015$kin_summary %>%
-  group_by(age_focal) %>% 
-  summarise(count = sum(count_cum_dead)) %>% 
+  group_by(age_focal) %>%
+  summarise(count = sum(count_cum_dead)) %>%
   ungroup()
 swe_2015$kin_summary %>%
   group_by(age_focal, kin) %>% 
@@ -426,22 +551,18 @@ swe_2015$kin_summary %>%
   rename_kin(., consolidate = "count") %>% 
   ggplot(aes(x = age_focal, y = count)) +
   geom_area(aes(fill = kin), colour = "black") +
-  geom_line(data = loss2, size = 2) +
+  # geom_line(data = loss2, size = 2) +
   labs(x = "Focal's age", y = "Number of kin deaths experienced (cumulative)") +
   theme_bw() +
   theme(legend.position = "bottom")
 ```
 
 A member of the population aged 15, 50, and 65yo will have experienced, on average, the death of `r loss2 %>% filter(age_focal %in% c(15, 50, 65)) %>% pull(count) %>% round(1) %>% paste(., collapse = ", ")` relatives, respectively.
+
 ### Exercises
 
 > For all exercises, assume time-invariant rates at the 2010 levels in Sweden and a female-only population.
 > All exercises can be completed using datasets included in DemoKin.
-
-#### E0. By hand calculation
-
-**E1.2**.
-Code the projection for the kin ... following the toy example.
 
 #### E1. Offspring availability and loss
 
@@ -508,6 +629,11 @@ Conditional on ego's survival, $M_1{(a)}$ can be thought of as a survival probab
 ```{r}
 # Write your code here
 ```
+
+#### E4. By hand calculation
+
+**E4.1**.
+Code the projection for the kin ... following the toy example.
 
 #### E4. Sandwich Generation
 
