@@ -32,10 +32,10 @@ With the first part you will have a notion of what is happening when you run fun
 
 Some useful things to know:
 
-- Syllabus: sent by mail but can be found also in https://github.com/IvanWilli/matrix_kinship_course_lab/syllabus.
+- Syllabus: sent by mail but can be found also in https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus.
 - The required readings and course's slides can be downloaded from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in syllabus.
 - Find this website's source code on GitHub: https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd.
-- Data for exercises can be found in previous dropbox folder or at https://github.com/IvanWilli/matrix_kinship_course_lab/data.
+- Data for exercises can be found in previous dropbox folder or at https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data.
 
 This page will be *changing* during the workshop so don't be afraid if you see some movements, we are adapting content or fixing errors (hope not).
 
@@ -113,7 +113,9 @@ For matrices and vectors is a bit different:
 dim(a_matrix)
 
 # with vectors:
-# dim(a_vector) gives error. Vectors in R are dimensionless, don´t have a dimension by default but have a length. Operationally it works as a column vector.
+# dim(a_vector) gives error. 
+# Vectors in R are dimensionless, don´t have a dimension by default but have a length. 
+# Operationally it works as a column vector.
 length(a_vector)
 ```
 
@@ -134,7 +136,7 @@ a_matrix + other_matrix
 
 - Multiplication
 
-We´ll use this in *By hand* sections, and is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$: 
+We´ll use this in *By hand* sections, and is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$ (dimensions 4x2 by 2x3 gets dimension 4x3): 
 
 
 ![https://en.wikipedia.org/wiki/Matrix_multiplication](Matrix_multiplication_diagram.png)
