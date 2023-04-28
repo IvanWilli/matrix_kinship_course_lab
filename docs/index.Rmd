@@ -178,7 +178,7 @@ Eigendecomposition:
 ```{r}
 eigen_decomposition <- eigen(other_matrix)
 eigen_values <- eigen_decomposition$values
-eigen_vectors <- eigen_decomposition$vectors # left ones
+eigen_vectors <- eigen_decomposition$vectors
 eigen_values
 eigen_vectors
 ```
