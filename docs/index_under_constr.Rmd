@@ -394,7 +394,7 @@ In the `Demokin` package we have this automatized. Let´s take a look on how to 
 
 ### Using DemoKin {#using_demokin_mon8}
 
-First please load the libraries:
+First please load these libraries:
 
 ```{r, warning=FALSE, message=FALSE}
 library(DemoKin)
@@ -769,7 +769,7 @@ During this section the idea is to have a sense of how translate theory of Age-c
 
 ### By hand {#by_hand_tues9}
 
-Let´s keep studying our female closed population with 5 ages (from 0 to 4), but now we know that in next 9 years is expected that probability of death will decline 1% by year for all ages, and fertility rates will decline 1% by year too. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns). $T$ is the time interval (in years, in principle) for which we have data.
+Let´s keep studying our female closed population with 5 age-classes, but now we know that in next 9 years ($T=9$) is expected that probability of death will decline 1% by year for all age-classes, and fertility rates will decline 1% by year too. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows).
 
 ```{r}
 age <- 0:4
@@ -785,6 +785,7 @@ plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0)
 ```
 
 Those matrices are not convenient for projection purpose, because we need to create transition matrices. Let´s create two lists with time dependent matrices for survival and fertility, called $Ut_list$ and $Ft_list$, that will be used soon.
+
 ```{r}
 Ut_list <- list() # eq 6 Caswell (2021)
 Ft_list <- list() # eq 7 Caswell (2021)
@@ -794,14 +795,14 @@ for(t in 1:years){
   U_temp[row(U_temp)-1 == col(U_temp)] <- Pt[-ages,t]
   F_temp[1,] <- Ft[,t]
   # save as element
-  Ut_list[[t]]<- U_temp
+  Ut_list[[t]] <- U_temp
   Ft_list[[t]] <- F_temp
 }
 # see survival matrix at t=1 (second element)
 Ut_list[[2]]
 ```
 
-In this case we had access to vector female population, at the beginning of the period so we can project this and calculate empirical mother´s distribution by age for that year and next ones:
+In this case we had access to a vector female population `pop` at the beginning of the period, so we can project this and calculate empirical mother´s distribution by age for that year and next ones:
 
 ```{r}
 # initial population count
@@ -828,22 +829,24 @@ For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*
 
 - **Mother**
 
-One solution to the time boundary restriction comes with assuming a stable population behaviour before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution?
+One solution to the time boundary restriction comes with assuming a stable population behavior before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution?
 
-The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And taht´s the reason why we saved $\pi$ for all the years.
+The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that´s the reason why we saved $\pi$ for all the years.
 
-Let´s start in base year ($t=0$), define a list that will save mothers by age (rows) by Focal´s age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption:
+Let´s start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal´s age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption:
 
 ```{r}
 Dt_list <- list()
 D0 <- matrix(0, ages, ages)
 D0[,1] <- Pi[,1] # from stable assumption
 for(x in 2:ages){
-  D0[,x] <- Ut_list[[1]] %*% D0[,x-1]
+  D0[,x] <- Ut_list[[1]] %*% D0[,x-1] # look that we are using akways the base year
 }
 ```
 
-So this is the inital snapshot of mothers by age of Focal in base year. Every average woman by age in that year experimented what Focal did in the time-invariant scenario.
+> As with age classes, try to not confuse $t$ value with the order of elements in the list: for $t=0$ is the first element, for $t=1$ is the second..., for $t=9$ is the tenth.
+
+So this is the initial snapshot of mothers by age of Focal in base year. Every average woman by age in that year experimented what Focal did in the time-invariant scenario.
 
 ```{r}
 plot(age, D0[,1], t = "b",ylab = "Mother by focal age in base year")
@@ -853,7 +856,7 @@ for(x in 2:ages){
 legend("topright", c("0","1","2","3","4"), col = 1:5, lty = 1)
 ```
 
-Let´s create a list for saving each $Dt$ matrix of living mothers at each year:
+Let´s project over time Create a list for saving each $Dt$ matrix of living mothers at each year:
 
 ```{r}
 Dt_list[[1]] <- D0
@@ -862,10 +865,11 @@ Dt_list[[1]] <- D0
 After 1 year, the mother of each Focal will survive, and new Focals (just born) will have mothers with $\Pi(t+1)$ distribution:
 
 ```{r}
+# D1 for t=1
 D1 <- matrix(0, ages, ages)
 D1[,1] <- Pi[,1]
 for(x in 2:ages){
-  D1[,x] <- Ut_list[[1]] %*% D0[,x-1]
+  D1[,x] <- Ut_list[[1]] %*% D0[,x-1] # we look the distribution in the previous year
 }
 Dt_list[[2]] <- D1
 ```
@@ -873,10 +877,11 @@ Dt_list[[2]] <- D1
 After 1 year more...
 
 ```{r}
+# D2 for t=2
 D2 <- matrix(0, ages, ages)
 D2[,1] <- Pi[,2]
 for(x in 2:ages){
-  D2[,x] <- Ut_list[[2]] %*% D1[,x-1]
+  D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year
 }
 Dt_list[[3]] <- D2
 ```
@@ -894,9 +899,9 @@ Dt_list[[t]] <- Dt
 }
 ```
 
-> Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 4 Focals, one at each age (not 5 because $\omega=5$) with living kin distribution by age and type that depends of experienced rates.
+> Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 5 Focals, one at each age-class with living kin distribution by age and type that depends of experienced rates.
 
-Let´s bind results in a table (data frame), so we can see what we have.
+Let´s bind results in a table, so we can see what we have.
 
 ```{r}
 D_table <-lapply(1:length(Dt_list), function(t){
@@ -904,9 +909,9 @@ D_table <-lapply(1:length(Dt_list), function(t){
   dplyr::bind_rows()
 ```
 
-We have a table with 250 rows (5 ages of Focal by 10 years by 5 ages of mother), with living mothers by focal´s age, in each year, depending kin´s age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame.
+We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal´s age, in each year, depending kin´s age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame.
 
-Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in t=3 will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$.
+Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in $t=3$ will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$.
 
 ![Caswell, 2021](time_var_summary.png)
 
@@ -979,9 +984,9 @@ swe_time_varying_1960_cohort$kin_summary %>%
   theme_bw()
 ```
 
-These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (100 ages and 119 years). Estimates stop at age 58 because of input restriction up to 2018.
+These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018.
 
-> Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). One option is only return `kin_summary` in this cases. This limitation could a programming skills limitation too ;) (sorry for that).
+> Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)).
 
 But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot).
 
@@ -1059,38 +1064,27 @@ swe_time_varying_1960_1910_cohort$kin_summary %>%
 
 ### Exercises {#exercises_tues9}
 
-**E.1** Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick your country and download the data with the function `get_UNWPP_inputs` (located with this Rmd [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)).
+**E.1** Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located at same folder than with this *Rmd*,  [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)).
 
-```{r, eval = F}
+```{r}
 # load function
 source("get_UNWPP_inputs.R")
 
 # pick country
-country <- c("Guatemala")
+country <- c("Argentina")
 
 # Year range
 my_startyr   <- 1950
-my_endyr     <- 2015
+my_endyr     <- 2021
 
 # data downloaded
 data <- get_UNWPP_inputs(
-  countries = country
-  , my_startyr = my_startyr
-  , my_endyr = my_endyr
+  countries = country, 
+  my_startyr = my_startyr, 
+  my_endyr = my_endyr
   )
 
-# reshape surv
-country_surv <- data %>%
-  select(age, year, px) %>%
-  pivot_wider(names_from = year, values_from = px) %>%
-  select(-age) %>%
-  as.matrix()
-```
-
-**E.1.1** Reshape data for fertility.
-
-```{r, eval = F}
-# reshape surv
+# reshape fertility
 country_fert <- data %>%
   select(age, year, fx) %>%
   pivot_wider(names_from = year, values_from = fx) %>%
@@ -1098,10 +1092,31 @@ country_fert <- data %>%
   as.matrix()
 ```
 
-**E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective, and compare them.
+**E.1.1** Reshape data for survival in the same way and visualize it.
 
-```{r, eval = F}
-E.1.2.country_time_varying_period <-
+```{r}
+# reshape survival
+country_surv <- data %>%
+  select(age, year, px) %>%
+  pivot_wider(names_from = year, values_from = px) %>%
+  select(-age) %>%
+  as.matrix()
+country_surv %>%
+    as.data.frame() %>%
+    mutate(age = 1:nrow(swe_asfr)-1) %>%
+    pivot_longer(-age, names_to = "year", values_to = "px") %>%
+    mutate(qx = 1-px) %>%
+    ggplot() +
+    geom_line(aes(x = age, y = qx, col = year)) +
+    scale_y_log10() +
+    theme(legend.position = "none")
+
+```
+
+**E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal´s ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings.
+
+```{r}
+E.1.2 <-
   kin(
     p = country_surv,
     f = country_fert,
@@ -1110,8 +1125,8 @@ E.1.2.country_time_varying_period <-
     output_kin = c("d","gd","ggd","m","gm","ggm")
     )
 
-E.1.2.country_time_varying_period$kin_summary %>%
-  # DemoKin::rename_kin() %>%
+E.1.2$kin_summary %>%
+  DemoKin::rename_kin() %>%
   ggplot(aes(age_focal,count_living,color=factor(year))) +
   geom_line() +
   labs(y = "Expected number of living relatives") +
@@ -1119,12 +1134,69 @@ E.1.2.country_time_varying_period$kin_summary %>%
   theme_bw()
 ```
 
+**E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters. 
 
-E.1.3 Covid bereavemnet...
+> Take a look to the graphic from @Song2019, we are in the definition 2 of years lived but with a simpler approach for sisters in our case.
+![Fig. 1 in Song (2019)](song_shared.png)
 
-<!-- E.2 for which situation affects closed population assumption. migration of realtives can modify average pattern initially from sweden, sistematic migration for daughters students -->
+```{r}
+E.1.3 <-
+  kin(
+    p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_cohort = c(1990),
+    output_kin = c("os", "ys")
+    )
 
-E.3 Run toy example with DemoKin and check if you have the same results for *mother*. To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$.
+# E.1.3$kin_summary %>%
+#   DemoKin::rename_kin() %>%
+#   ggplot(aes(age_focal,count_living)) +
+#   geom_line() +
+#   labs(y = "Expected number of living relatives") +
+#   facet_wrap(~kin)+
+#   theme_bw()
+
+E.1.3$kin_summary %>% 
+  group_by(kin, cohort) %>% 
+  mutate(shared_years = cumsum(count_living)) %>% 
+  filter(age_focal == 30) %>% 
+  group_by(cohort, kin) %>% 
+  summarise(sister_years =sum(shared_years))
+```
+
+
+**E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect. 
+
+```{r}
+country_surv_counterfactual <- country_surv
+country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"]
+country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"]
+
+E.1.4 <-
+  kin(
+    p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+E.1.4_counterfactual <-
+  kin(
+    p = country_surv_counterfactual,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+
+c(E.1.4$kin_full %>% 
+  summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])),
+E.1.4_counterfactual$kin_full %>% 
+  summarise(all_kin = sum(living[age_focal == 50 & age_kin>50]))
+)
+
+```
+
+E.3 Run the toy example with DemoKin and check if you have the same results for type *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$.
 
 ```{r}
 rownames(Pt) <- rownames(Ft) <- rownames(Pi) <- 0:4
