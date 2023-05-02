@@ -1,8 +1,8 @@
 ---
-title: "Matrix Approaches to Modelling Kinship Theory and Applications"
+title: "Matrix Approaches to Modelling Kinship: Theory and Applications"
 subtitle: "IDEM 128 - Computer labs"
 # author: "iw_da"
-date: "Update: `r Sys.Date()`"
+date: "Updated: `r Sys.Date()`"
 output:
   html_document:
     toc_depth: 1
@@ -25,30 +25,34 @@ library(kableExtra)
 
 ## Introduction
 
-This guide pretends to give you some practical tools for applying the theory for your own specific research goals.
-In each day we will have a time to have a sense about how coding in R for the relationships from the theory.
-In a second part we will use `DemoKin` package for speeding up the pathway between ideas/questions and results.
-With the first part you will have a notion of what is happening when you run functions in the second part, so you can customize your code for your own purpose if is necessary at some point.
+This website contains all the 'practical' materials for the course 'Matrix Approaches to Modelling Kinship: Theory and Applications' offered at the Max Planck Institute for Demographic Research (May 3-12 2023). 
+Here, you will find some practical resources and tools for applying the theory to your own research goals.
+
+Each day, we will have practical lab sessions in R to in which we will implement the theoretical content of the course.
+This will include computing things 'by hand' (i.e., from scratch) and, later on, using the `DemoKin` package for a more convenient implementation.
+The hands-on exercises will will help you understand how `DemoKin` works and give you the tools to customize the code for your own research, if needed.
+In the `Setup` tab above, we have a added a brief instruction for setting things up and getting familiar with some of the functions we will be using for the practical part of the course. Please check it out!
 
 Some useful things to know:
 
-- Syllabus: sent by mail but can be found also in https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus.
-- The required readings and course's slides can be downloaded from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in syllabus.
+- The updated syllabus can be found here: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus.
+- The required readings and course's slides can be downloaded from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in the syllabus.
 - Find this website's source code on GitHub: https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd.
-- Data for exercises can be found in previous dropbox folder or at https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data.
+- Data for exercises can be found in previous dropbox folder and at https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data.
 
-This page will be *changing* during the workshop so don't be afraid if you see some movements, we are adapting content or fixing errors (hope not).
+Note that this page may *change* during the course so don't fret if you notice things moving around a bit.  We may adapt the content based on our interaction or fix bugs in the code along the way.
 
-For the next 10 days we are kind of *course-related-non-biological-family*, so brother/sister: please reach us for any doubt.
+Please reach out to us if you have any doubts: For the next 10 days we will be a kind of *course-related-non-biological-family*!
 
-We hope you enjoy it and be helpful.
-Hands on.
+We hope you enjoy the course and find it helpful.
 
-Hal, Diego and Iván.
+Let's get to it!
+
+Hal Caswell, Diego Alburez and Iván Williams
 
 <!-- --------------------------------------------------------------------- -->
 
-## Set up
+## Setup
 
 ### Initial settings
 
@@ -68,7 +72,7 @@ Other packages that will be useful are:
 
 ```{r, eval=FALSE}
 packages_needed <- c("tidyverse", "matrixcalc", "Matrix") 
-packages_needed_nothaving <- packages_needed[!packages_needed %in% installed.packages()
+packages_needed_nothaving <- packages_needed[!packages_needed %in% installed.packages()]
 for(lib in packages_needed_nothaving) install.packages(lib,dependencies=TRUE)
 ```
 
@@ -78,7 +82,7 @@ Data for examples and exercises may come from UN population estimates and projec
 
 ### Operations with vector and matrix in R
 
-The intention of this section is to introduce some basic operators of matrices and vectors, in line with appendix A of @Caswell2001. There is a lot of online resources on matrix algebra with R ([here](https://www.taylorfrancis.com/books/mono/10.1201/9781315370200/basics-matrix-algebra-statistics-nick-fieller) a most comprehensive one), here we are going to show some relevant ones for our purposes. In case you have some experience with matrix operations in R, this won´t add you too much. See @Caswell2001 for mathematical details. 
+The intention of this section is to introduce some basic operators of matrices and vectors, in line with appendix A of @Caswell2001. There is a lot of online resources on matrix algebra with R ([This](https://www.taylorfrancis.com/books/mono/10.1201/9781315370200/basics-matrix-algebra-statistics-nick-fieller) is a comprehensive one). Here we are going to show some relevant ones for our purposes. In case you have some experience with matrix operations in R, this won't add you too much. See @Caswell2001 for mathematical details. 
 
 - Creation
 
@@ -114,12 +118,12 @@ dim(a_matrix)
 
 # with vectors:
 # dim(a_vector) gives error. 
-# Vectors in R are dimensionless, don´t have a dimension by default but have a length. 
+# Vectors in R are dimensionless, don't have a dimension by default but have a length. 
 # Operationally it works as a column vector.
 length(a_vector)
 ```
 
-> Checking dimensions is a good practice for validate if two objects can be multiplied and in which order. You know something related to that is going on wrongly when you see this message "non-conformable arguments".
+> Checking dimensions is a good practice for validating if two objects can be multiplied and in which order. You know something related to that is going on wrongly when you see this message "non-conformable arguments".
 
 - Addition
 
@@ -136,7 +140,7 @@ a_matrix + other_matrix
 
 - Multiplication
 
-We´ll use this in *By hand* sections, and is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$ (dimensions 4x2 by 2x3 gets dimension 4x3): 
+We'll use this in the *By hand* sections, and it is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$ (dimensions 4x2 by 2x3 gets dimension 4x3): 
 
 
 ![https://en.wikipedia.org/wiki/Matrix_multiplication](Matrix_multiplication_diagram.png)
@@ -149,7 +153,7 @@ a_vector %*% other_vector
 a_matrix %*% a_vector
 ```
 
-Don´t confuse with the *Hadamard* product, the element by element operator,  which use the symbol `*`.
+Don't confuse with the *Hadamard* product, the element by element operator,  which use the symbol `*`.
 
 ```{r}
 a_matrix * other_matrix
@@ -158,7 +162,7 @@ a_vector * other_vector
 
 - Determinant, inverse and eigendecomposition
 
-Let´s create a square *non-singular* matrix (with no zero determinant, with inverse):
+Let's create a square *non-singular* matrix (with no zero determinant, with inverse):
 ```{r}
 set.seed(50)
 other_matrix <- matrix(rpois(25, 3), 5, 5)
@@ -185,13 +189,13 @@ eigen_vectors
 
 - System of linear equations:
 
-Linear algebra is useful for finding a vector $x$ that pre-multiplied by $A$ produce a vector $b$, in the form of a linear system of equations $Ax=b$, finding the solution as $x=A^{-1}b$ (see @Caswell2001 for details about when this have an unique, none or infinite solutions). As an example let´s solve this situation: *"I have 6 nephews and 10 nieces. My brothers have in average 1 son and 2 daughters and my sisters 1.5 sons and 2 daughters. How many brothers and sister do I have?"*. 
+Linear algebra is useful for finding a vector $x$ that pre-multiplied by $A$ produce a vector $b$, in the form of a linear system of equations $Ax=b$, finding the solution as $x=A^{-1}b$ (see @Caswell2001 for details about when this have an unique, none or infinite solutions). As an example let's solve this situation: *"I have 6 nephews and 10 nieces. My brothers have in average 1 son and 2 daughters and my sisters 1.5 sons and 2 daughters. How many brothers and sister do I have?"*. 
 
 ```{r}
 b = c(6, 10) # I have 6 nephews and 10 nieces
 A = matrix(c(1, 1.5, # My brother had in average 1 son and my sister 1.5
              2, 2),  # My brother had in average 2 daughters and my sister 2
-          2, 2, byrow = T) # it´s a 2 by 2 matrix arranged by row
+          2, 2, byrow = T) # it's a 2 by 2 matrix arranged by row
 x = solve(A) %*% b # vector with brothers and sisters
 ```
 
@@ -201,7 +205,7 @@ Answer: I have `r x[1]` brothers and `r x[2]` sisters.
 
 ### `dplyr` and `tidyr`
 
-In some exercises we will have a long table with many variables and we will need to get indicators from that, like for example the mean age of daughters when Focal is 30 yo. `dplyr` and `tidyr` packages are really good for that. Let´s use `mtcars` data, getting the mean of `wt` by `cyl` and `am`, but later showing `am` categories in columns:
+In some exercises we will have a long table with many variables and we will need to get indicators from that, like for example the mean age of daughters when Focal is 30 yo. `dplyr` and `tidyr` packages are really good for that. Let's use `mtcars` data, getting the mean of `wt` by `cyl` and `am`, but later showing `am` categories in columns:
 
 ```{r}
 head(mtcars)
@@ -224,13 +228,13 @@ ggplot(aes(mpg, wt, colour = hp)) +
   geom_point()
 ```
 
-> In the exercises you can use the tools that you want!
+> Here, we showed you some packages and functions we like, but in the exercises you can use the tools that you want!
 
 <!-- ---------------------------------------------------------------------- -->
 
 ## Mon 8
 
-During this day the idea is to have a sense of how translate theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for that, and finally do some exercises. Sections:
+We will see how to translate the theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for a seamless implementation, and finally do some exercises. Sections:
 
 - [By hand](#by_hand_mon8)
 
@@ -250,13 +254,13 @@ f <- c(0, .5, .5, .3, 0)
 
 Remember: each *age* is a *stage*, so age 0-1 is the stage 1, age 1-2 is the stage 2, and so on. At stage 5 (age 4+) nobody is alive ($\omega=4$ in life table applications).
 
-> Note: we are going to use Hal´s letters for naming relatives.
+> Note: we are going to use Hal's letters for naming relatives:
 
 ```{r, echo = F}
 DemoKin::demokin_codes() %>% select(-1)
 ```
 
-Let´s build matrices $U$ and $F$. In R, the letter $F$ is reserved for `FALSE`, so we need to modify the label, in our case we choose to add a point (sorry).
+Let's build matrices $U$ and $F$. In R, the letter $F$ is reserved for `FALSE`, so we need to modify the label, in our case we choose to add a point (sorry).
 
 ```{r}
 ages <- length(age)
@@ -266,7 +270,7 @@ U[ages, ages] <- p[ages] # in this case is 0
 F.[1,] <- f
 ```
 
-Now let´s find eigenvalues and eigenvectors to calculate $w$ (the stable distribution by age) and $\pi$ (the one for the mothers).
+Now let's find eigenvalues and eigenvectors to calculate $w$ (the stable distribution by age) and $\pi$ (the one for the mothers).
 
 ```{r}
 A = U + F.
@@ -277,7 +281,7 @@ w <- A_eigen_vector/sum(A_eigen_vector)
 pi <- w * f / sum(w * f)
 ```
 
-Next we are going to see how to project some relatives. For each of those we are going to create a matrix of dimension $5$ x $5$ to save the vectors of surviving kin by age (rows) in each Focal´s age (columns).
+Next we are going to see how to project some relatives. For each of those we are going to create a matrix of dimension $5$ x $5$ to save the vectors of surviving kin by age (rows) in each Focal's age (columns).
 So for example, living mothers by age when Focal is at age 0 will be placed in first column, living mothers by age when Focal is 1 on the second column, and so on.
 
 - **Mother**
@@ -289,7 +293,7 @@ D <- matrix(0, ages, ages)
 D[,1] <- pi  # eq 14 in Caswell (2019)
 ```
 
-Let´s project that population (here the *key*, each kin is a population) and get the living mothers at each age of Focal, preserving the age´s kin too (that´s why we save results in column vectors on the matrix).
+Let's project that population (here the *key*, each kin is a population) and get the living mothers at each age of Focal, preserving the age's kin too (that's why we save results in column vectors on the matrix).
 
 ```{r}
 for(x in 2:ages){
@@ -297,7 +301,7 @@ for(x in 2:ages){
 }
 ```
 
-Each column-vector in $D$ is the vector $d(x)$ in equation 13 of @caswell_formal_2019: the distribution of living mothers by each Focal´s age.
+Each column-vector in $D$ is the vector $d(x)$ in equation 13 of @caswell_formal_2019: the distribution of living mothers by each Focal's age.
 
 ```{r}
 round(D,2)
@@ -321,7 +325,7 @@ Focusing on the **daughters** of Focal, initial living count by age is zero.
 A <- matrix(0, 5, 5) # eq 7 in Caswell (2019)
 ```
 
-Let´s project that population, adding offspring from Focal at each age (the diagonal matrix $E$ is for that purpose, is tracking Focal´s age):
+Let's project that population, adding offspring from Focal at each age (the diagonal matrix $E$ is for that purpose, is tracking Focal's age):
 
 ```{r}
 E <- diag(1, ages)
@@ -338,7 +342,7 @@ Take a moment to see how multiplication between $F$ and $E[,x]$ works.
 
 The treatment is different depending if the sister born before or after Focal.
 
-  - *Older* sisters: the initial distribution by age comes from the probability that Focal´s mother had daughters at the time that Focal born, and then just survive (no subsidy, no new old sisters).
+  - *Older* sisters: the initial distribution by age comes from the probability that Focal's mother had daughters at the time that Focal born, and then just survive (no subsidy, no new old sisters).
   - *Younger* sisters: the initial count is zero, and then the mother can bring little sisters to Focal, sisters that needs to survive with age too.
 
 ```{r}
@@ -357,9 +361,9 @@ m_n <- t(ones) %*% (M + N)
 
 What about the **grandmother**? "The age distribution of grandmothers at the birth of Focal is the age distribution of the mothers of Focal’s mother, at the age of Focal’s mother when Focal is born" (@caswell_formal_2019).
 
-> Note: we are treating a female population in a [matrilineal](https://en.wikipedia.org/wiki/Matrilineality) framework, so Focal has only a grandmother from mother´s side (female line).
+> Note: we are treating a female population in a [matrilineal](https://en.wikipedia.org/wiki/Matrilineality) framework, so Focal has only a grandmother from mother's side (female line).
 
-In other words: What "portion" of the mother remains alive for Focal´s mother when Focal born? We know that at Focal´s birth there was 1 mother with age distribution $\pi$. The distribution by age of her living mother can be obtained as $D %*% \pi$.
+In other words: What "portion" of the mother remains alive for Focal's mother when Focal born? We know that at Focal's birth there was 1 mother with age distribution $\pi$. The distribution by age of her living mother can be obtained as $D %*% \pi$.
 
 ```{r}
 G <- matrix(0, 5, 5)
@@ -368,7 +372,7 @@ G[,1] <- D %*% pi
 
 Take a minute to see what just happened.
 
-Now let´s project $G$ population:
+Now let's project $G$ population:
 
 ```{r}
 for(x in 2:ages){
@@ -377,7 +381,7 @@ for(x in 2:ages){
 g <- t(ones) %*% G # or colSums(G)
 ```
 
-Let´s visualize living kin by Focal´s age for the cases computed:
+Let's visualize living kin by Focal's age for the cases computed:
 
 ```{r}
 plot(age, d, t = "b", ylab = "k", ylim = c(0, 2))
@@ -388,9 +392,9 @@ legend("bottomright", c("m","d","s","gm"), col = 1:4, lty = 1)
 ```
 
 
-That´s the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don´t change), and pretty much the essence for every variant that we will see in next days.
+That's the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don't change), and pretty much the essence for every variant that we will see in next days.
 
-In the `Demokin` package we have this automatized. Let´s take a look on how to use it.
+In the `Demokin` package we have this automatized. Let's take a look on how to use it.
 
 ### Using DemoKin {#using_demokin_mon8}
 
@@ -506,7 +510,7 @@ kin_by_age_Focal %>%
 
 A lot of interesting data to explore. Take a moment to interpret what information is returned in those tables. All comes from the matrices that we calculated in the *by hand* section.
 
-Let´s give more context with some possible research questions as an example.
+Let's give more context with some possible research questions as an example.
 
 #### 3. Example: kin counts in time-invariant populations for Sweden 2015
 
@@ -514,7 +518,7 @@ Following Caswell [-@caswell_formal_2019], we assume a female closed population 
 
 > How can we characterize the kinship network of an average member of the population (call her 'Focal')?
 
-Let´s use the pre-loaded Swedish data and re-run model.
+Let's use the pre-loaded Swedish data and re-run model.
 
 ```{r}
 # First, get vectors for a given year
@@ -538,9 +542,9 @@ swe_2015$kin_summary %>%
   facet_wrap(~kin)
 ```
 
-> You can think of the results as analogous to life expectancy (i.e., expected years of life for a synthetic cohort experiencing a given set of mortality rates), a period indicator. The only difference is that with $e_x$ you don´t care what happened before that year, but with kinship yes (you need to give an age distribution to Focal´s mother, for example).
+> You can think of the results as analogous to life expectancy (i.e., expected years of life for a synthetic cohort experiencing a given set of mortality rates), a period indicator. The only difference is that with $e_x$ you don't care what happened before that year, but with kinship yes (you need to give an age distribution to Focal's mother, for example).
 
-Let´s get together all previous lines in an area plot to study kin composition by age. How does overall family size (and family composition) vary over life for an average woman at each age?
+Let's get together all previous lines in an area plot to study kin composition by age. How does overall family size (and family composition) vary over life for an average woman at each age?
 
 ```{r}
 swe_2015$kin_summary %>%
@@ -558,7 +562,7 @@ Some additional questions can be formulated: is there a pick in the total? How a
 
 ##### 3.2. Age distribution of living kin when Focal has some age
 
-How old are Focal's relatives at some point´s of Focal´s life course? What does she see around when stops a moment of climbing over her diagonal-Lexis line? Using the `kin_full` data frame (with extended results), we can visualize the age distribution of Focal's relatives throughout Focal's life.
+How old are Focal's relatives at some point's of Focal's life course? What does she see around when stops a moment of climbing over her diagonal-Lexis line? Using the `kin_full` data frame (with extended results), we can visualize the age distribution of Focal's relatives throughout Focal's life.
 For example when Focal is 35, the age pattern of her relatives is:
 
 ```{r, fig.height=6, fig.width=8}
@@ -573,9 +577,9 @@ swe_2015$kin_full %>%
   facet_wrap(~kin)
 ```
 
-Is coherent the mode of each kin distribution with Focal´s age? Take amoment and do this bivariate comparison by intuition reviewing each type.
+Is coherent the mode of each kin distribution with Focal's age? Take amoment and do this bivariate comparison by intuition reviewing each type.
 
-If we sum-up the density for each kin we have total living kin. Let´s visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value.
+If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value.
 
 ```{r, fig.height=10, fig.width=12}
 swe_2015$kin_summary %>%
@@ -631,7 +635,7 @@ swe_2015$kin_summary %>%
   filter(age_focal %in% c(15, 50, 65))
 ```
 
-We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell´s paper. Let´s try some exercises.
+We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell's paper. Let's try some exercises.
 
 ### Exercises {#exercises_mon8}
 
@@ -691,7 +695,7 @@ swe_1910$kin_summary %>%
 
 #### E2. Kin age distribution
 
-Let´s back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal´s life-course:
+Let's back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal's life-course:
 
 ```{r, warning=F, message=F}
 swe_2015$kin_summary %>%
@@ -759,7 +763,7 @@ by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living)
 
 ## Tues 9
 
-During this section the idea is to have a sense of how translate theory of Age-classified time-**variant** one-sex kinship models to code, how to use `DemoKin` package for that goal, and do some exercises.
+Here, we will implement the theory of Age-classified time-**variant** one-sex kinship models in R, show how to use the `DemoKin` package for that goal, and do some exercises.
 
 - [By hand](#by_hand_tues9)
 
@@ -769,7 +773,7 @@ During this section the idea is to have a sense of how translate theory of Age-c
 
 ### By hand {#by_hand_tues9}
 
-Let´s keep studying our female closed population with 5 age-classes, but now we know that in next 9 years ($T=9$) is expected that probability of death will decline 1% by year for all age-classes, and fertility rates will decline 1% by year too. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows).
+Let's keep studying our female closed population with 5 age-classes, but now we know that in the next 9 years ($T=9$) the probability of death will decline 1% yearly for all age-classes. Fertility rates will also decline by 1% each year. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows).
 
 ```{r}
 age <- 0:4
@@ -784,7 +788,7 @@ plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female o
 plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5
 ```
 
-Those matrices are not convenient for projection purpose, because we need to create transition matrices. Let´s create two lists with time dependent matrices for survival and fertility, called $Ut_list$ and $Ft_list$, that will be used soon.
+Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon.
 
 ```{r}
 Ut_list <- list() # eq 6 Caswell (2021)
@@ -802,7 +806,7 @@ for(t in 1:years){
 Ut_list[[2]]
 ```
 
-In this case we had access to a vector female population `pop` at the beginning of the period, so we can project this and calculate empirical mother´s distribution by age for that year and next ones:
+In this case we have a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones:
 
 ```{r}
 # initial population count
@@ -831,9 +835,9 @@ For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*
 
 One solution to the time boundary restriction comes with assuming a stable population behavior before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution?
 
-The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that´s the reason why we saved $\pi$ for all the years.
+The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that's the reason why we saved $\pi$ for all the years.
 
-Let´s start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal´s age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption:
+Let's start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal's age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption:
 
 ```{r}
 Dt_list <- list()
@@ -856,7 +860,7 @@ for(x in 2:ages){
 legend("topright", c("0","1","2","3","4"), col = 1:5, lty = 1)
 ```
 
-Let´s project over time Create a list for saving each $Dt$ matrix of living mothers at each year:
+Let's project over time. Create a list for saving each $Dt$ matrix of living mothers at each year:
 
 ```{r}
 Dt_list[[1]] <- D0
@@ -874,7 +878,7 @@ for(x in 2:ages){
 Dt_list[[2]] <- D1
 ```
 
-After 1 year more...
+After 1 more year...
 
 ```{r}
 # D2 for t=2
@@ -886,7 +890,7 @@ for(x in 2:ages){
 Dt_list[[3]] <- D2
 ```
 
-At the end we will have living mothers by age for each Focal´s age, at each year:
+At the end we will have living mothers by age for each Focal's age, at each year:
 
 ```{r, eval = F}
 for(t in 3:years){
@@ -901,7 +905,7 @@ Dt_list[[t]] <- Dt
 
 > Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 5 Focals, one at each age-class with living kin distribution by age and type that depends of experienced rates.
 
-Let´s bind results in a table, so we can see what we have.
+Let's bind results in a table, so we can see what we have.
 
 ```{r}
 D_table <-lapply(1:length(Dt_list), function(t){
@@ -909,19 +913,19 @@ D_table <-lapply(1:length(Dt_list), function(t){
   dplyr::bind_rows()
 ```
 
-We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal´s age, in each year, depending kin´s age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame.
+We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal's age, in each year, depending kin's age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame.
 
 Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in $t=3$ will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$.
 
 ![Caswell, 2021](time_var_summary.png)
 
-Let´s play with real data!
+Let's play with real data!
 
 ### Using DemoKin {#using_demokin_tues9}
 
 #### 1. Living kin
 
-We saw yesterday the case of Sweden in 2015 assuming constant rates. But the demography of Sweden is, as you know, changing every year. This means that Focal and her relatives will have experienced changing mortality and fertility rates over time. Data has year in columns and age in rows, and plotted $q_x$ (p´s complement) over age and time, looks like this:
+We saw yesterday the case of Sweden in 2015 assuming constant rates. But the demography of Sweden is, as you know, changing every year. This means that Focal and her relatives will have experienced changing mortality and fertility rates over time. Data has year in columns and age in rows, and plotted $q_x$ (p's complement) over age and time, looks like this:
 
 ```{r}
 data("swe_px", package="DemoKin")
@@ -984,7 +988,7 @@ swe_time_varying_1960_cohort$kin_summary %>%
   theme_bw()
 ```
 
-These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018.
+These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here it is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018.
 
 > Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)).
 
@@ -1039,7 +1043,7 @@ swe_time_varying_1990_period$kin_summary %>%
 #### 2. Kin deaths
 
 Kin loss can have severe consequences for bereaved relatives. It can also affect the provision of care support and intergenerational transfers over the life course.
-The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let´s follow with the cohort comparison: what types looks with the biggest differences? See absolute and relative terms (scale in this grid plots can be confusing some times)?
+The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison: what types looks with the biggest differences? See absolute and relative terms (scale in this grid plots can be confusing some times)?
 
 ```{r, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, eval=F}
 swe_time_varying_1960_1910_cohort$kin_summary %>%
@@ -1113,7 +1117,7 @@ country_surv %>%
 
 ```
 
-**E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal´s ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings.
+**E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings.
 
 ```{r}
 E.1.2 <-
@@ -1239,7 +1243,7 @@ lines(age, f_female, t="b", col = 2)
 legend("topright", c("males","females"), col=c(4,2), lty = 1)
 ```
 
-Let´s build the survival and fertility matrices $U$ and $F$ for each sex.
+Let's build the survival and fertility matrices $U$ and $F$ for each sex.
 
 ```{r}
 ages <- length(age)
@@ -1267,9 +1271,9 @@ Fb <- rbind(cbind(alpha * F_female,      alpha * F_male), # Fb in eq 9 Caswell (
 Ab <- Ub + Fb
 ```
 
-> We are in a scenario where survival and fertility don't depend of line of descendence (is the same for a grandson that comes from daughters than from sons). Same history for grandmothers, we won´t keep track if she is father´s or mother´s mom. This is done to simplify matrix calculation, but depends of research question.
+> We are in a scenario where survival and fertility don't depend of line of descendence (is the same for a grandson that comes from daughters than from sons). Same history for grandmothers, we won't keep track if she is father's or mother's mom. This is done to simplify matrix calculation, but depends of research question.
 
-Let´s project some fictitious pop to see how block-structured matrices and vectors works:
+Let's project some fictitious pop to see how block-structured matrices and vectors works:
 
 ```{r}
 set.seed(100)
@@ -1286,7 +1290,7 @@ pop_proj
 
 The positions 1 and 6 in vector `pop_proj` corresponds to new offsprings, and are equal because no matter how many new individuals comes from male fertility and how many from female fertility, all are split by `\alpha`. This was how to project a 2-sex population, 
 
-Now let´s find stable distribution by age $w$, and then the ones for parents $pi$, for each sex:
+Now let's find stable distribution by age $w$, and then the ones for parents $pi$, for each sex:
 
 ```{r}
 A_eigen = eigen(Ab)
@@ -1656,7 +1660,7 @@ lines(age, f_high, col=2,  t="b")
 legend("topright", c("low","high"), col = 1:2, lty = 1)
 ```
 
-We need to specify transitions between educational stages within each age, with matrices where element $ij$ is the probability transition between $j \rightarrow i$. In our case a individual can transit from low to high but not in the other way. Let´s create a list in line with equations 7 to 10 in @caswell_formal_2020 (number of elements of a list can be obtained with function `length(x)`, as vectors).
+We need to specify transitions between educational stages within each age, with matrices where element $ij$ is the probability transition between $j \rightarrow i$. In our case a individual can transit from low to high but not in the other way. Let's create a list in line with equations 7 to 10 in @caswell_formal_2020 (number of elements of a list can be obtained with function `length(x)`, as vectors).
 
 ```{r}
 # transition between states within each age class. Transition occurs only in ages 1 and 2
@@ -1671,7 +1675,7 @@ D_low[row(D_low)-1 == col(D_low)] <- p_low[-ages]
 D_high[row(D_high)-1 == col(D_high)] <- p_high[-ages]
 D <- list(D_low, D_high)
 
-# fertility offspring in each age. Every new born is low educated, no matter Focal´s status
+# fertility offspring in each age. Every new born is low educated, no matter Focal's status
 F. <- lapply(1:ages, function(x){
   matrix(c(f_low[x],0,f_high[x],0),2, 2)
   })
@@ -1719,7 +1723,7 @@ w <- A_eigen_vector/sum(A_eigen_vector)
 pi <- w * t(rep(1,s*ages))%*%Ft / sum(w * t(rep(1,s*ages))%*%Ft)
 ```
 
-And now we have the same procedure than in the age-classified model, so let´s project mothers and daughters.
+And now we have the same procedure than in the age-classified model, so let's project mothers and daughters.
 
 - **Mother** and **daughter**
 
@@ -1740,7 +1744,7 @@ for(x in 2:ages){
 }
 ```
 
-Let´s explore marginals, by stage or by age:
+Let's explore marginals, by stage or by age:
 
 ```{r}
 I_ages <- diag(1, ages)
@@ -1749,14 +1753,14 @@ I_s <- diag(1, s)
 ones_ages <- rep(1, ages)
 ones_s_ages <- rep(1, s*ages)
 
-# distribution of daughters by education, for each Focal´sage 
+# distribution of daughters by education, for each Focal'sage 
 A_age = kronecker(I_ages, t(ones_s)) %*% A
 D_age = kronecker(I_ages, t(ones_s)) %*% D
 A_age; D_age
 ```
 
 ```{r}
-# distribution of daughters by age, for each Focal´sage 
+# distribution of daughters by age, for each Focal'sage 
 A_stage = kronecker(t(ones_ages), I_s) %*% A
 D_stage = kronecker(t(ones_ages), I_s) %*% D
 A_stage; D_stage
