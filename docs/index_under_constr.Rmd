@@ -1218,7 +1218,7 @@ by_hand_example$kin_summary %>%
 
 ## Wed 10
 
-During this section the idea is to have the sense of how translate theory of Age-classified time-**invariant** **two**-sex kinship models to code, use `DemoKin` package and do some exercises.
+During this section, we will implement the theory of Age-classified time-**invariant** **two**-sex kinship models In R, use `DemoKin` package and do some exercises.
 
 - [By hand](#by_hand_wed10)
 
@@ -1259,7 +1259,7 @@ U_male[ages, ages] = p_male[ages]
 F_male[1,] = f_male
 ```
 
-@caswell_formal_2021 suggests to mix female and male patterns in a block matrices  $Ub$ and $Fb$ (or $\tilde{U}$ and $tilde{F}$in the paper), which let us to project a population vector with first 5 elements with female population by age and last 5 for males by age (a block-structured vector, see eq. 16 in @caswell_formal_2022).
+@caswell_formal_2021 suggests to mix female and male patterns in a block matrices  $Ub$ and $Fb$ (or $\tilde{U}$ and $\tilde{F}$in the paper), which let us to project a population vector with first 5 elements with female population by age and last 5 for males by age (a block-structured vector, see eq. 16 in @caswell_formal_2022).
 
 `Matrix` package will help us to construct those block matrices (the function `bdiag` returns a [sparse](https://en.wikipedia.org/wiki/Sparse_matrix) matrix, so need to get back to a common matrix).
 
@@ -1271,9 +1271,9 @@ Fb <- rbind(cbind(alpha * F_female,      alpha * F_male), # Fb in eq 9 Caswell (
 Ab <- Ub + Fb
 ```
 
-> We are in a scenario where survival and fertility don't depend of line of descendence (is the same for a grandson that comes from daughters than from sons). Same history for grandmothers, we won't keep track if she is father's or mother's mom. This is done to simplify matrix calculation, but depends of research question.
+> We are in a scenario where survival and fertility don't depend of line of descendence (itis the same for a grandson that comes from daughters than from sons). The same is true for grandmothers: we won't keep track if she is the father's or mother's mom. This is done to simplify matrix calculation. You can change it according to your research question.
 
-Let's project some fictitious pop to see how block-structured matrices and vectors works:
+Let's project some fictitious population to see how block-structured matrices and vectors works:
 
 ```{r}
 set.seed(100)
@@ -1288,7 +1288,7 @@ pop_proj <- Ab %*% popb # still a cycle graph conected
 pop_proj
 ```
 
-The positions 1 and 6 in vector `pop_proj` corresponds to new offsprings, and are equal because no matter how many new individuals comes from male fertility and how many from female fertility, all are split by `\alpha`. This was how to project a 2-sex population, 
+The positions 1 and 6 in vector `pop_proj` corresponds to new offspring, and are equal because no matter how many new individuals comes from male fertility and how many from female fertility, all are split by `$\alpha$`. This was how to project a 2-sex population. 
 
 Now let's find stable distribution by age $w$, and then the ones for parents $pi$, for each sex:
 
@@ -1566,12 +1566,12 @@ library(tidyverse)
 ```
 
 ```{r}
-kolk <- read.csv("../data/kolk_all_kin.csv", stringsAsFactors = F, skip = 3)
+kolk <- read.csv("../data/kolk_all_kin.csv", stringsAsFactors = F, skip = 0)
 ```
 
 ```{r, fig.cap='Average number of kin for the entire 2017 population of Sweden according to Kolk et al. (2021) using data from population registers. Kin counts refer to female and male relatives.'}
 levs <- c("grandchildren", "children", "nephews/nieces", "siblings",
-          "cousins", "uncles/aunts", "grandparents")
+          "cousins", "uncles/aunts", "grandparents", "parents")
 kolk %>%
   mutate(kin = factor(kin, levels = levs)) %>%
   ggplot(aes(x = cohort, y = mean, group = kin, fill = kin)) +
@@ -1587,7 +1587,7 @@ kolk %>%
 
 The figure above shows the empirical distribution of kin for the 2017 population of Sweden based on registry data.
 Note that the figure includes female and male kin and that the sex of Focal is not specified (i.e., it is the average of all male and female individuals in the registers).
-You can download the data to reproduce the fugure from: https://github.com/alburezg/EDSD_2023_kinship_demography/tree/main/data
+You can download the data to reproduce the figure from: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data
 
 
 
@@ -1596,16 +1596,27 @@ You can download the data to reproduce the fugure from: https://github.com/albur
 For this first exercise, you should use `DemoKin` to replicate this figure. Concretely:
 
 
-- Run four iterations of the kinship model:
+- Run three iterations of the kinship model:
 
    1. One-sex model; time-invariant rates; approximate male kin using GKP factors
-   1. One-sex model; time-variant rates; approximate male kin using the androgynous assumption (i.e., male fertility is equivalent to female fertility)
-   1. Two-sex model; time-invariant rates
-   1. Two-sex model; time-variant rates; assume demographic stability before 1968
+   1. Two-sex model; time-variant rates; approximate male kin using the androgynous assumption (i.e., male fertility is equivalent to female fertility); use mortality rates for males and females
+   1. Two-sex model; time-variant rates; use real male and female fertility rates 
+
+Here is a summary of the model specifications:
+
+```{r}
+data.frame(
+`Model ID` = 1:3
+  , `Model Time` = c("invariant", "variant", "variant")
+  , `Model sex` = c("one-sex", "two-sex", "two-sex")
+  , `Two-sex approximation` = c("GKP factors", "Androgynous fertility", "None")
+) %>% 
+  knitr::kable()
+```
 
 Some useful tips for the exercise:
 
-   - For details on methods to approximate two-sex models, see Caswell [-@caswell_formal_2022]
+   - For details on methods to approximate two-sex models (including GKP factors), see Caswell [-@caswell_formal_2022]
    - To learn more about two-sex models in DemoKin, run `vignette("Reference_TwoSex", package = "DemoKin")`. If the vignette does not load, you may need to install the package as `devtools::install_github("IvanWilli/DemoKin", build_vignettes = TRUE)`
    - Mortality data can be obtained from https://www.mortality.org/
    - Fertility data are available from https://www.humanfertility.org and (including for males) https://www.fertilitydata.org/
@@ -1619,18 +1630,9 @@ Using the model outputs, answer:
 # Write your code here
 ```
 
-#### Handing in the assignment
-
-Assignments (one per group) should be sent by email to the instructor **before midnight of Friday, April 28.**
-You should hand in the following files:
-
-  1. An .RMD file with all your code and answers to the exercise questions
-  1. A compiled .pdf of your markdown file showing all the code
-  1. All input data needed to replicate your code
-
 ## Thurs 11
 
-During this section the idea is to have the sense of how translate theory of **stage-age-classified time-invariant one-sex kinship models** to code, use `DemoKin` package and do some exercises.
+During this section we will implement the theory of **stage-age-classified time-invariant one-sex kinship models** in R, use the `DemoKin` package and do some exercises.
 
 - [By hand](#by_hand_thurs11)
 
@@ -1697,7 +1699,7 @@ Hb = bdiag(H) %>% as.matrix()
 dim(Ub); dim(Db); dim(Fb); dim(Hb)
 ```
 
-The key in projectiong age-stage classified populations is next part: coonstruct vec-permutation matrices appropriate to the numbers of stages and age classes, which handle in a very smart way this transitions.
+The key in projectiong age-stage classified populations is the following: constructing vec-permutation matrices appropriate to the numbers of stages and age classes, which handle in a very smart way this transitions.
 
 ```{r}
 # vec-permutation matrix
@@ -1766,8 +1768,6 @@ D_stage = kronecker(t(ones_ages), I_s) %*% D
 A_stage; D_stage
 ```
 
-### Using Demokin (#using_demokin_thurs11)
-
 ### Using DemoKin {#using_demokin_thurs11}
 
 `DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age.
@@ -1830,6 +1830,6 @@ demokin_svk1980_caswell2020 %>%
   facet_wrap(~kin, nrow = 2)
 ```
 
-### Exercises (#exercises_thurs11)
+### Exercises {#exercises_thurs11}
 
 ## References
