@@ -11,7 +11,7 @@
 
 
 
-<title>Matrix Approaches to Modelling Kinship Theory and Applications</title>
+<title>Matrix Approaches to Modelling Kinship: Theory and Applications</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -454,10 +454,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Matrix Approaches to Modelling Kinship
+<h1 class="title toc-ignore">Matrix Approaches to Modelling Kinship:
 Theory and Applications</h1>
-<h3 class="subtitle">IDEM 128 - Computer lab exercises</h3>
-<h4 class="date">Update: 2023-04-28</h4>
+<h3 class="subtitle">IDEM 128 - Computer labs</h3>
+<h4 class="date">Updated: 2023-05-02</h4>
 
 </div>
 
@@ -466,34 +466,42 @@ Theory and Applications</h1>
 <h1 class="tabset"></h1>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This guide pretends to give you some practical tools for applying the
-theory for your own specific research goals. In each day we will have a
-time to have a sense about how coding in R for the relationships from
-the theory. In a second part we will use <code>DemoKin</code> package
-for speeding up the pathway between ideas/questions and results. With
-the first part you will have a notion of what is happening when you run
-functions in the second part, so you can customize your code for your
-own purpose if is necessary at some point.</p>
+<p>This website contains all the ‘practical’ materials for the course
+‘Matrix Approaches to Modelling Kinship: Theory and Applications’
+offered at the Max Planck Institute for Demographic Research (May 3-12
+2023). Here, you will find some practical resources and tools for
+applying the theory to your own research goals.</p>
+<p>Each day, we will have practical lab sessions in R to in which we
+will implement the theoretical content of the course. This will include
+computing things ‘by hand’ (i.e., from scratch) and, later on, using the
+<code>DemoKin</code> package for a more convenient implementation. The
+hands-on exercises will will help you understand how
+<code>DemoKin</code> works and give you the tools to customize the code
+for your own research, if needed. In the <code>Setup</code> tab above,
+we have a added a brief instruction for setting things up and getting
+familiar with some of the functions we will be using for the practical
+part of the course. Please check it out!</p>
 <p>Some useful things to know:</p>
 <ul>
-<li>Syllabus: sent by mail but can be found also in <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus</a>.</li>
-<li>The required readings and course’s slides can be downloaded from: <a href="https://www.dropbox.com/t/iM06GB0D5fXboWYu" class="uri">https://www.dropbox.com/t/iM06GB0D5fXboWYu</a>. See guidance
-from Hal in syllabus.</li>
+<li>The updated syllabus can be found here: <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus</a>.</li>
+<li>The required readings and from: <a href="https://www.dropbox.com/t/iM06GB0D5fXboWYu" class="uri">https://www.dropbox.com/t/iM06GB0D5fXboWYu</a>. See guidance
+from Hal in the syllabus.</li>
+<li>Course’s slides can be downloaded from: <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/slides" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/slides</a>.</li>
 <li>Find this website’s source code on GitHub: <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd</a>.</li>
-<li>Data for exercises can be found in previous dropbox folder or at <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data</a>.</li>
+<li>Data for exercises can be found in previous dropbox folder and at <a href="https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data" class="uri">https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data</a>.</li>
 </ul>
-<p>This page will be <em>changing</em> during the workshop so don’t be
-afraid if you see some movements, we are adapting content or fixing
-errors (hope not).</p>
-<p>For the next 10 days we are kind of
-<em>course-related-non-biological-family</em>, so brother/sister: please
-reach us for any doubt.</p>
-<p>We hope you enjoy it and be helpful. Hands on.</p>
-<p>Hal, Diego and Iván.</p>
+<p>Note that this page may <em>change</em> during the course so don’t
+fret if you notice things moving around a bit. We may adapt the content
+based on our interaction or fix bugs in the code along the way.</p>
+<p>Please reach out to us if you have any doubts: For the next 10 days
+we will be a kind of <em>course-related-non-biological-family</em>!</p>
+<p>We hope you enjoy the course and find it helpful.</p>
+<p>Let’s get to it!</p>
+<p>Hal Caswell, Diego Alburez and Iván Williams</p>
 <!-- --------------------------------------------------------------------- -->
 </div>
-<div id="set-up" class="section level2">
-<h2>Set up</h2>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
 <div id="initial-settings" class="section level3">
 <h3>Initial settings</h3>
 <p>We will start soon the computer lab sessions, so would be great if in
@@ -508,7 +516,7 @@ please uninstall it and and install it again.</p>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;IvanWilli/DemoKin&quot;</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Other packages that will be useful are:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>packages_needed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;matrixcalc&quot;</span>, <span class="st">&quot;Matrix&quot;</span>) </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>packages_needed_nothaving <span class="ot">&lt;-</span> packages_needed[<span class="sc">!</span>packages_needed <span class="sc">%in%</span> <span class="fu">installed.packages</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>packages_needed_nothaving <span class="ot">&lt;-</span> packages_needed[<span class="sc">!</span>packages_needed <span class="sc">%in%</span> <span class="fu">installed.packages</span>()]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(lib <span class="cf">in</span> packages_needed_nothaving) <span class="fu">install.packages</span>(lib,<span class="at">dependencies=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Packages in the <code>tidyverse</code> family will be very useful for
 summarize and visualizing results. Please load those libraries and
@@ -520,33 +528,36 @@ and projections, using the <a href="https://population.un.org/dataportal/about/d
 API</a> from United Nations-Population Division, or from tables located
 in dropbox or github.</p>
 </div>
-<div id="operations-with-vector-and-matrix-in-r" class="section level3">
-<h3>Operations with vector and matrix in R</h3>
+<div id="operations-with-vectors-and-matrices-in-r" class="section level3">
+<h3>Operations with vectors and matrices in R</h3>
 <p>The intention of this section is to introduce some basic operators of
 matrices and vectors, in line with appendix A of <span class="citation">Caswell (2001)</span>. There is a lot of online
-resources on matrix algebra with R (<a href="https://www.taylorfrancis.com/books/mono/10.1201/9781315370200/basics-matrix-algebra-statistics-nick-fieller">here</a>
-a most comprehensive one), here we are going to show some relevant ones
+resources on matrix algebra with R (<a href="https://www.taylorfrancis.com/books/mono/10.1201/9781315370200/basics-matrix-algebra-statistics-nick-fieller">This</a>
+is a comprehensive one). Here we are going to show some relevant ones
 for our purposes. In case you have some experience with matrix
-operations in R, this won´t add you too much. See <span class="citation">Caswell (2001)</span> for mathematical details.</p>
+operations in R, this won’t add you too much. See <span class="citation">Caswell (2001)</span> for mathematical details.</p>
 <ul>
 <li>Creation</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>a_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>a_vector</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># column vector as default</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>a_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>a_vector</span></code></pre></div>
 <pre><code>## [1] 1 1 1 1</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>same_vector <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>) <span class="co"># repeat a value!</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>same_vector</span></code></pre></div>
 <pre><code>## [1] 1 1 1 1</code></pre>
 <p>The function <code>matrix</code> needs a vector and the way it should
-be arranged by row and col.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+be arranged by row and col, in column-direction by default (can goes in
+row-direction with <code>byrow = TRUE</code>).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>a_matrix</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]    1    5    1    5
-## [2,]    2    6    2    6
-## [3,]    3    7    3    7
-## [4,]    4    8    4    8</code></pre>
-<p>Identity matrix, a diagonal matrix with ones in the diagonal.</p>
+## [1,]    1    5    9   13
+## [2,]    2    6   10   14
+## [3,]    3    7   11   15
+## [4,]    4    8   12   16</code></pre>
+<p>Identity matrix, a diagonal matrix with ones in the diagonal and
+zeros elsewhere.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>identity_matrix <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">4</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="sc">%*%</span> identity_matrix <span class="sc">==</span> a_matrix</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
@@ -563,15 +574,15 @@ be arranged by row and col.</p>
 <pre><code>## [1] 4 4</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with vectors:</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dim(a_vector) gives error. </span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors in R are dimensionless, don´t have a dimension by default but have a length. </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors in R are dimensionless, don&#39;t have a dimension by default but have a length. </span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Operationally it works as a column vector.</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(a_vector)</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <blockquote>
-<p>Checking dimensions is a good practice for validate if two objects
-can be multiplied and in which order. You know something related to that
-is going on wrongly when you see this message “non-conformable
-arguments”.</p>
+<p>Checking dimensions is a good practice for validating if two objects
+can be summed or multiplied (and in which order). You know something
+related to that is going on wrongly when you see this message
+“non-conformable arguments”.</p>
 </blockquote>
 <ul>
 <li>Addition</li>
@@ -583,74 +594,94 @@ arguments”.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>other_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">10</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="sc">+</span> other_matrix</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   11   15   11   15
-## [2,]   12   16   12   16
-## [3,]   13   17   13   17
-## [4,]   14   18   14   18</code></pre>
+## [1,]   11   15   19   23
+## [2,]   12   16   20   24
+## [3,]   13   17   21   25
+## [4,]   14   18   22   26</code></pre>
 <ul>
 <li>Multiplication</li>
 </ul>
-<p>We´ll use this in <em>By hand</em> sections, and is used a lot inside
-<code>DemoKin</code>. Here a very intuitive figure multiplying <span class="math inline">\(A\)</span> by <span class="math inline">\(B\)</span> (dimensions 4x2 by 2x3 gets dimension
+<p>We’ll use this in the <em>By hand</em> sections, and it is used a lot
+inside <code>DemoKin</code>. Here a very intuitive figure multiplying
+<span class="math inline">\(A\)</span> by <span class="math inline">\(B\)</span> (dimensions 4x2 by 2x3 gets dimension
 4x3):</p>
 <div class="figure">
 <img src="data:image/png;base64,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" alt />
 <p class="caption"><a href="https://en.wikipedia.org/wiki/Matrix_multiplication" class="uri">https://en.wikipedia.org/wiki/Matrix_multiplication</a></p>
 </div>
-<p>You can multiply a matrix by a another matrix, a vector with another
+<p>You can multiply a matrix by another matrix, a vector with another
 vector, or a matrix with a vector. The symbol in R is the same for
 multiply scalars but surrounded by <code>%</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="sc">%*%</span> other_matrix</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]  120  120  120  120
-## [2,]  160  160  160  160
-## [3,]  200  200  200  200
-## [4,]  240  240  240  240</code></pre>
+## [1,]  280  280  280  280
+## [2,]  320  320  320  320
+## [3,]  360  360  360  360
+## [4,]  400  400  400  400</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>a_vector <span class="sc">%*%</span> other_vector</span></code></pre></div>
 <pre><code>##      [,1]
 ## [1,]   40</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="sc">%*%</span> a_vector</span></code></pre></div>
 <pre><code>##      [,1]
-## [1,]   12
-## [2,]   16
-## [3,]   20
-## [4,]   24</code></pre>
-<p>Don´t confuse with the <em>Hadamard</em> product, the element by
+## [1,]   28
+## [2,]   32
+## [3,]   36
+## [4,]   40</code></pre>
+<p>Don’t confuse with the <em>Hadamard</em> product, the element by
 element operator, which use the symbol <code>*</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>a_matrix <span class="sc">*</span> other_matrix</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
-## [1,]   10   50   10   50
-## [2,]   20   60   20   60
-## [3,]   30   70   30   70
-## [4,]   40   80   40   80</code></pre>
+## [1,]   10   50   90  130
+## [2,]   20   60  100  140
+## [3,]   30   70  110  150
+## [4,]   40   80  120  160</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>a_vector <span class="sc">*</span> other_vector</span></code></pre></div>
 <pre><code>## [1] 10 10 10 10</code></pre>
 <ul>
-<li>Determinant, inverse and eigendecomposition</li>
+<li>Transpose</li>
 </ul>
-<p>Let´s create a square <em>non-singular</em> matrix (with no zero
+<p>Flips a matrix over its diagonal.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(a_matrix)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    2    3    4
+## [2,]    5    6    7    8
+## [3,]    9   10   11   12
+## [4,]   13   14   15   16</code></pre>
+<ul>
+<li>Determinant:</li>
+</ul>
+<p>Let’s create a square <em>non-singular</em> matrix (with no zero
 determinant, with inverse):</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>other_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rpois</span>(<span class="dv">25</span>, <span class="dv">3</span>), <span class="dv">5</span>, <span class="dv">5</span>)</span></code></pre></div>
-<p>Determinant:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">det</span>(other_matrix)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>other_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rpois</span>(<span class="dv">25</span>, <span class="dv">3</span>), <span class="dv">5</span>, <span class="dv">5</span>)</span></code></pre></div>
+<p>Get the determinant:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">det</span>(other_matrix)</span></code></pre></div>
 <pre><code>## [1] 305</code></pre>
-<p>Inverse:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(other_matrix)</span></code></pre></div>
+<ul>
+<li>Inverse:</li>
+</ul>
+<p>This is a square matrix that, when multiplied by the original matrix,
+gives the identity matrix. Useful for calculation of the
+<em>fundamental</em> matrix for example.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(other_matrix)</span></code></pre></div>
 <pre><code>##             [,1]        [,2]         [,3]        [,4]        [,5]
 ## [1,] -0.14754098  0.13114754 -0.311475410  0.14754098  0.40983607
 ## [2,] -0.34426230  0.23934426  0.006557377  0.14426230  0.02295082
 ## [3,]  0.24590164 -0.28524590  0.252459016 -0.44590164  0.38360656
 ## [4,]  0.26229508  0.05573770  0.042622951 -0.06229508 -0.35081967
 ## [5,]  0.01639344 -0.05901639  0.190163934  0.18360656 -0.33442623</code></pre>
-<p>Eigendecomposition:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>eigen_decomposition <span class="ot">&lt;-</span> <span class="fu">eigen</span>(other_matrix)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>eigen_values <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>values</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>eigen_vectors <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>vectors</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>eigen_values</span></code></pre></div>
+<ul>
+<li>Eigendecomposition.</li>
+</ul>
+<p>Very useful when studying <em>asymptotic</em> growth and stage
+distribution.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>eigen_decomposition <span class="ot">&lt;-</span> <span class="fu">eigen</span>(other_matrix)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>eigen_values <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>values</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>eigen_vectors <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>vectors</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>eigen_values</span></code></pre></div>
 <pre><code>## [1] 11.910996+0.000000i  2.318929+1.472428i  2.318929-1.472428i
 ## [4] -1.274427+1.330214i -1.274427-1.330214i</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>eigen_vectors</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>eigen_vectors</span></code></pre></div>
 <pre><code>##              [,1]                  [,2]                  [,3]
 ## [1,] 0.4339381+0i  0.3874815+0.0797035i  0.3874815-0.0797035i
 ## [2,] 0.5607435+0i -0.0993659-0.4991753i -0.0993659+0.4991753i
@@ -664,20 +695,100 @@ determinant, with inverse):</p>
 ## [4,] -0.4817458+0.2580972i -0.4817458-0.2580972i
 ## [5,] -0.2732244-0.3072375i -0.2732244+0.3072375i</code></pre>
 <ul>
+<li>Kronecker product</li>
+</ul>
+<p>From <code>Matrix</code> package we have the <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker</a>
+product between matrices, useful for example when calculating marginals
+distributions in multi-state context:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Matrix)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">11</span><span class="sc">:</span><span class="dv">14</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>A</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>B</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   11   13
+## [2,]   12   14</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kronecker</span>(A, B)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]   11   13   33   39
+## [2,]   12   14   36   42
+## [3,]   22   26   44   52
+## [4,]   24   28   48   56</code></pre>
+<ul>
+<li>Block structured matrix</li>
+</ul>
+<p>Also from <code>Matrix</code> package we have a function to construct
+a blog-structured matrix from a series of matrices (output is a <a href="https://en.wikipedia.org/wiki/Sparse_matrix">sparse</a> matrix by
+default, so we can convert to matrix again to see the zeros):</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>Matrix<span class="sc">::</span><span class="fu">bdiag</span>(A, B) <span class="sc">%&gt;%</span> <span class="fu">as.matrix</span>()</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    1    3    0    0
+## [2,]    2    4    0    0
+## [3,]    0    0   11   13
+## [4,]    0    0   12   14</code></pre>
+<ul>
+<li>Vec-permutation matrix</li>
+</ul>
+<p>Let´s vectorize a matrix with dimension of <span class="math inline">\(s=2\)</span> (rows, could be health states) by
+<span class="math inline">\(w=4\)</span> (columns, age-classes), and see
+what means to apply the vec-permutation (or commutation) matrix.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(matrixcalc)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create matrix A with 2 stages and 4 ages </span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">2</span>, </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>              <span class="dv">4</span>,  <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>), <span class="at">nrow =</span> s, <span class="at">ncol =</span> w, <span class="at">byrow =</span> T)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># vectorize A: re-organize matrix as a vector by grouping stages within age classes</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">vec</span>(A) </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>a</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,]   10
+## [2,]    4
+## [3,]    2
+## [4,]    1
+## [5,]    5
+## [6,]    2
+## [7,]    2
+## [8,]    0</code></pre>
+<p>This operation is useful in multi-state methods to re arrange vectors
+ordered by age-states to state-ages. Relate next result to the previous
+one.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">commutation.matrix</span>(s, w)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>K <span class="sc">%*%</span> a</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,]   10
+## [2,]    2
+## [3,]    5
+## [4,]    2
+## [5,]    4
+## [6,]    1
+## [7,]    2
+## [8,]    0</code></pre>
+<p>In other words, pre-multiply <span class="math inline">\(a\)</span>
+by <span class="math inline">\(K\)</span> (vec-permutation matrix) is
+the same than vectorize <span class="math inline">\(A\)</span>
+transposed. Check:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">vec</span>(<span class="fu">t</span>(A)) <span class="sc">==</span> K <span class="sc">%*%</span> a)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<ul>
 <li>System of linear equations:</li>
 </ul>
 <p>Linear algebra is useful for finding a vector <span class="math inline">\(x\)</span> that pre-multiplied by <span class="math inline">\(A\)</span> produce a vector <span class="math inline">\(b\)</span>, in the form of a linear system of
 equations <span class="math inline">\(Ax=b\)</span>, finding the
 solution as <span class="math inline">\(x=A^{-1}b\)</span> (see <span class="citation">Caswell (2001)</span> for details about when this have
-an unique, none or infinite solutions). As an example let´s solve this
+an unique, none or infinite solutions). As an example let’s solve this
 situation: <em>“I have 6 nephews and 10 nieces. My brothers have in
 average 1 son and 2 daughters and my sisters 1.5 sons and 2 daughters.
 How many brothers and sister do I have?”</em>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">10</span>) <span class="co"># I have 6 nephews and 10 nieces</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="co"># My brother had in average 1 son and my sister 1.5</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>             <span class="dv">2</span>, <span class="dv">2</span>),  <span class="co"># My brother had in average 2 daughters and my sister 2</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>, <span class="dv">2</span>, <span class="at">byrow =</span> T) <span class="co"># it´s a 2 by 2 matrix arranged by row</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">solve</span>(A) <span class="sc">%*%</span> b <span class="co"># vector with brothers and sisters</span></span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">10</span>) <span class="co"># I have 6 nephews and 10 nieces</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="co"># My brother had in average 1 son and my sister 1.5</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>             <span class="dv">2</span>, <span class="dv">2</span>),  <span class="co"># My brother had in average 2 daughters and my sister 2</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>, <span class="dv">2</span>, <span class="at">byrow =</span> T) <span class="co"># it&#39;s a 2 by 2 matrix arranged by row</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">solve</span>(A) <span class="sc">%*%</span> b <span class="co"># vector with brothers and sisters</span></span></code></pre></div>
 <p>Answer: I have 3 brothers and 2 sisters.</p>
 <blockquote>
 <p>During the course we will try to name vectors and matrix with one or
@@ -690,11 +801,11 @@ case.</p>
 <p>In some exercises we will have a long table with many variables and
 we will need to get indicators from that, like for example the mean age
 of daughters when Focal is 30 yo. <code>dplyr</code> and
-<code>tidyr</code> packages are really good for that. Let´s use
+<code>tidyr</code> packages are really good for that. Let’s use
 <code>mtcars</code> data, getting the mean of <code>wt</code> by
 <code>cyl</code> and <code>am</code>, but later showing <code>am</code>
 categories in columns:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span></code></pre></div>
 <pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
 ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
 ## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
@@ -702,11 +813,11 @@ categories in columns:</p>
 ## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_wt =</span> <span class="fu">mean</span>(wt), <span class="at">.by =</span> <span class="fu">c</span>(cyl, am)) <span class="sc">%&gt;%</span> </span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> am, <span class="at">values_from =</span> mean_wt)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_wt =</span> <span class="fu">mean</span>(wt), <span class="at">.by =</span> <span class="fu">c</span>(cyl, am)) <span class="sc">%&gt;%</span> </span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> am, <span class="at">values_from =</span> mean_wt)</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 3
 ##     cyl   `1`   `0`
 ##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -718,20 +829,1269 @@ Check more on transforming data with <a href="https://dplyr.tidyverse.org/articl
 and reshaping with <a href="https://tidyr.tidyverse.org/articles/pivot.html">tidyr</a> if you
 are curious. Finally the package <a href="https://ggplot2.tidyverse.org/">ggplot2</a> will be used for
 visualize results. A very basic one:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(mpg, wt, <span class="at">colour =</span> hp)) <span class="sc">+</span> </span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(mpg, wt, <span class="at">colour =</span> hp)) <span class="sc">+</span> </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="data:image/png;base64,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vnDl7nujdpADAACAlZbRGfjQ30nu07tXNjdf/2Jz88rdT5/cvizfAQAAWD9ZnYHvO3/5duPy7bRHAQAAAKnL7gw8AAAAcEjAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEIJckSdpjAAAAACY4l/YAzsL+/v7y3nxjY2PZH7HaNjY2fHuzce7Nybk3M+fenJx7M3Puzcm5NzPn3pycezMbPPf6z1lzLqEHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgAAACIgIAHAABgSu1qLpfL5YqNXtojWUcCHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAmEGv3agWi7kDxWK10T62Nv3gqvW9dqN6eHhu5OGMdS7tAQDr4ufe/93D53/yrV9OcSQAAMxr72k1V28O/qbTaXbKzYfb3d1afsQfdBvFcr0zeHyzXm7WCycdzwhm4IGzMFjvx38EACAunWa9GQqV7VY3SZIkSbqt7UL/hfqtUVvEd+rleicUKtvdwz+oFPovbFXbZzr0mAl4YOlG5rqGBwCIWqW1u1MrHUye50u13W6/4TsPn46+Mr7S2t2p5Q//YGe3VQkhhND8cFTyM4KAB5ZrTKhreACAWBW275SGfpW/cCmEEEJnrzviDyqtneE/KO30E75Tv2cSfioCHgAAgFO6dOH4jetbFwsnHl+5PpzvIYRQut6fhH/xuTn4aQh4AAAATqdwcWuRx4+etGeYgAcAAGC5Rk3YhzB+0p5jBDywXGN2jLOZHADAmjjpGvnuXmfk7xlJwANLNzLU1TsAAAdOe0X+uhLwwFkYynX1DgCwVk7YW679uBlCCIUbV0dfYc9R59IeALAuRDsAwPrq1G81ru7WjnR6u1rW76diBh4AAICl69S3io32wTx8r92oFg/yfft+Tb9PJ56Af/Wodu3atdqjV2kPBAAAgFMpVCqFEDr18lYul8vlclvlerMTQihsd3fl+9RiCfhXjz5+8DLtQQAAADCLi3d2u63typtN4wqV7VY3Ue+nEsc98PIdAAAgA0o7SbJzwmv52m5SO/lP86XaTql20h8zhRhm4OU7AAAAay/7AX+Q71du3txMeygAAACQlqwH/PNP3n3wMoQrd2//RNpDAQAAgPRk+x7455989CyEzZuf3r4cXn0x8fC333575O8/++yzRY9s2MbGxrI/YoX59ubh25uHb28evr15+Pbm4dubh29vHr69efj25uHb41CWZ+Bf5/t775xPeygAAACQruzOwM+Q7yfNtO/v7y9sWMf0/3vYUj9itW1sbPj2ZuPcm5Nzb2bOvTk592bm3JuTc29mzr05OfdmNnjuRTsPP27Vek4rozPwrx7VzL4DAADAoUwG/MHC8/IdAAAADmTxEvpXf/79lyGE8PLBu9ceDL128Lsrd5/cvpzC0AAAACAdmZyBBwAAAI7K4gz8+XcaT9459ttXj2rvPni5efPThuvqAQAAWDtm4AEAACACAh4AAAAiIOABAAAgAlm8B3600XfGAwAAwFowAw8AAAAREPAAAAAQgXguoQcAACA9X3/y12kP4cAfXvsbaQ8hHQIeAACAaSRpD2DdCXgAAACmoN/TJuABAACYLFHwaRPwAAAATCER8CkT8AAAAExBwKdNwAMAADCZS+hTJ+ABAACYghn4tAl4AAAApiDg0ybgAQAAmEy+p07AAwAAMAUz8GkT8AAAAExBwKdNwAMAADCZVehTJ+ABVsTPvnf/8Pl3P76V4kgAgNVkBj5tAp4V985v//Dw+aNf/WqKI4GlGqz3/o8aHgBYMAGfth9JewCwRIP1fvxHWBlD9T7mlwAAM0tCkpFH2t9EagQ8K2tkrmt4Vs+YUNfwAMAiJZl5rCsBz2oaE+oaHgAAZpF8mZXHunIPPAAAAJOt8cx3Vgh4AAAApmARu7S5hB4gbmNWm7cQPQCwSOmvXvf6sa4EPKtpzI5xNpNj9YwMdfUOACxW2tU+1yr0vXajWsy9Vqw22r0TDmxUi8XJx0152IIJeFbWyFBX76yqoVxX7wDA4qW++Pysq9D3GsWtcr3ZOfxFp1kvbxWr7eED29XcVr3Z6Rw5bubDFk/As8qGcl29s9q++/Gtw0faYwEAVlLq4T5Twfcat+qdEAqVVjfp67YqhRA6zfLR6G5Xy80QQmH74MBua7sQQmiWi43e6Q9bBgHPinv0q189fKQ9FgAAiFiSGacadvtevRNCYfv+Til/8Kt8aed+P7ofvyn4XuPDZgih0tqtHRyYL9V2W5UQQufh094pD1sOAQ8AAMAU0r/5fZZF7Eo7SZIku7X8kd/mL1w6eljv6cNOCKFyvXT0r+9sFwbTfMrDlsQ2crBqfu793z18/iff+uUURwIAwGpZoeXfe5+/CCEULm69/kV3b1SYH5R+p7PXDSE//WFLYgYeVspgvR//EQAAZpb2hfNvzPkP6bWrxa16J4TKB4fz8seC/tDWxUII4cXnvVMctixm4GF1jMz1n3v/d83DAwAwvye3fvykl679zl8s+LN+5SuLfcO+djVXbvafFrZb92vD8+hZJ+BhRYyZbNfwAADMb+GVPvNnzZr3vc9fFAqFEDqdTujUy7f2tu/v1Ka74n3Ki+OXfA29gAcAAGAKyZdpj2BO+drubi2EEEKv3bhVrjfrW+FCsjPNPPyoq+ZnP2xW7oEHAABgstTXnp9pEfrRDrd+a3649M3bF0jAAwAAMI0kM49F6C87d6C/rVxnr3vssP6685cu5E9x2LIIeFgRY+5ydwM8AAALkPrM+yxT8L1GMZfL5artCcedtIr80LrzUx62JAIeVsfIUFfvAAAsRNqbx71xmlH358xD8/Fwwbfv1QfnzPNXbxRC6NTvtUccVbhx9WBmfcrDlkTAw0oZynX1DgDAmivd2S6EEJrlYrX9et68164Wy80QQmH7zusl7PppPnhcr904OGogzKc8bDmsQg+rRrQfGtxaz9cCADC3Bd18fsbytd3WXq7c7DTLW83BFwqV1u7ALnL52v3W3tbx444eNe1hS2EGHlhNg/V+/EcAAE4r7Qvn3zj10Es7SbdVKRwuWlcoVLZb3d3hDeTypZ1ua7vyZm27QmW7e3ybuSkPW4LcLP/42Ozv7y/vzTc2Npb9EattY2PDtzcb594YJ+X64Dy8c29mzr05Ofdm5tybk3NvZs69OTn3ZjZ47vWfp+tq8/+kPYQDTyt/K+0hpMMMPLBqxky2m4cHAJhD6rvHLXQbuQi5Bx4AAIDJ1uHy7YwT8AAAAExBwKfNJfQAAAAQAQEPrJoxO8bZTA4AYGZJ8mVGHml/E6kR8MAKGhnq6h0AYC6pL1237mvYCXhgRQ3lunoHAJhb6uG+7gVvETtgZYl2AIBFsohd2gQ8AAAAk9lGLnUuoQcAAIAImIEHAABgCmbg0ybgAQAAmMwl9KkT8AAAAExDwKdMwAMAADAFM/BpE/AAAABM5hL61Al4AAAApiHgU2YbOQAAAIiAGXgAAACm4BL6tAl4AAAAJnMPfOoEPAAAANMQ8CkT8AAAAExBv6dNwAMAADBZknyZ9hDWnVXoAQAAWHG9dqNaLOYOFIvVRrt3/Kh2NTdStX3s/Y683eh3Wzwz8AAAAEwh2kXs2tViudkZ+EWn0+yUmw+3u7u1/MCve5+/mPL9cuXm4Ns16+XmXivZKS1itGOYgQcAAGCyJDNON+52tdzshFCotLoHf99tbRdCCJ361tGp9e5eJ4RQaR37wCNl3q6WmyGEwvbB+x28W7NcbCx7Gl7AAwAAMI0kM4/p9RofNkMIldbuTun1bHu+VNttVUIIofl4oODbj5shhMLFrener3bwfofv1nn4dMkFL+ABAACYQurZPkO/v55Vvz58dXvpeiWEEF58ftjc/QvoCzeu5sPJek8fjnq/0p3twhkUvIAHAABgsiT5MiOP04y6tHPsGvgTdPc6IRRuXOg2qsU3i90NrU530n8PyF+4FELo7HVPM7ZTs4gdLNc7v/3Dw+ePfvWri3rbX+v8aAh/HUII4Ue/U/irRb0tAACsh4Pr5d/Mt/cn4Dv1cvnNQZ1Os7zVrLxZnu5gln7EVfZbFwshdF583gulcTP48xHwsESD9d7/cSEN/2udHx36UcMDALBsf/Yvf/qkl37mW88W/FnvX1nsGw55fSf7B29Woe/PrYdQqLTu92+X7/Ua927Vm51muXhxaL36lAh4WJahej/85ZwNP1Tvh7/U8AAALNXPfOvPMvJZf/b+z8z17u3qVr0TQmH7zpsr4Q+2kKu0dg8vt8/nazu7F0Ku3Ow8fNqrTVPwnb1uCMsrfffAw1KMrPeJL000st4nvgQAAPM7s13iJprrn9GuFsvNEAqV1pFJ9XxtN0lG3CzfX+xu2uXpJixhPy8z8AAAAExjvnLOgF6jeDD3Pv0l8f2b25c8tT4lM/AAAABMIfXd42bZRu6NdvX09X7oYGr95MXm+7fQX7qw1MgX8AAAAEyW9oXzb5x+7L12NVdudkKh0kpG1nuvUczlcrlq+9grR8t862IhHNk9/vXfn7g8/SIJeFiKMSvVzbOI3ZiV6ixiBwDAkqU+8z7jFHy7ulVu9qfeT9oQvj+1HpqPhwr+9XL1rzd+z1+9UQihU7939Lj2vXrnyKZ0yyHgYVlGhvr828iNDHX1DgDA0iVJVh6n0WsUX9f7uAvnS3e2CyGEZrlYbR9Mr/feXHT/Zrn6fsEPHtdr9z9h+f0u4GGZhnJ9IZvAh2O5rt4BADgDaV84/8ZpRt2fGw+hU9/KjXJ40Xy+dn+7EELoNMsHR26Vm50QQqV1/+hy9fdblcHjtsr1/mHL3yreKvSwXIuK9iHfKfzVxsZGCGF/f3+GP/+pX/v24fPvfeebCxsWAACrLMJV6NuPm1Mfm6/tJlfb1VsfNjudEEIIhULlg/s7peEsz5d2uq2L9z6sN/uHhUJl+/7O0us9CHhYQ4P13v9RwwMAMFmE/R5KO0myc4rj86Wd3dLkP8iXajul2mneeCHmv4S+16hWq9XGhE3te41qtVgsTjoMWLKheh/zSwAAOCr1tevm20cufvMHfHev2Ww2R2yDd0T+Qmh2OqN2ywPOzJhQ1/AAAIyX9p3vb6T9TaTmrC6h72+KBwAAQKzWt5wzYoaAb1dz5WPLADTLuSmWBlj2rvYAAAAsiX5P2wyX0Jd2WpXZPqzywVmsywcAAMDCJcmXGXmk/U2kZqZL6Et3WpXw+OCHFy+anU4oFCqXLo35k4sXr1+9emz1feBMfe873zzpXncL0QMAQMbNdg98vrSzUzp43q42y51w6YM3vwGya2TDq3cAACZb49XjMiI39wp+vUb13l64eOdMtq0HFuLi13/j8PneH/5miiMBACAWf/+Dx5MPOhP/7cPraQ8hHQtYhf7CxetXa5m+On5/f395b76xsbHsj1htGxsbvr3ZzHPuDU65r+3379ybmf/dm5Nzb2bOvTk592bm3JuTc29mg+de/3nazMCnbAH7wD+ul7dyuVyuWG20e70FjAkAAIDMSTLzWFcL3Ae+06yXm/UQQqFQufHBnWxPygMsyN/7+nuHz//HH36c4kgAAJZqnZd/z4j5Z+BLO0nS7ba2K4XCwW86naZJeWAtDNb78R8BAGCB5g/4EELI50u1nd3d5FjKN+vlra1cLlcsVhttJQ+slJG5ruEBgNWV+qXz634N/WIC/o2BlG9tb1eGJ+Wr7QV/HkA6xoS6hgcAVlPq2b7u/b7Ie+CH5Eu1Wql29U776b1yvbm0jwFYksu3/s3h8+f3/9UZfOLPvnf/8Pl3P7512j8/+wEDAGvFPfCpW/QMfAghhF6v3WhUi8VcLre1NVDvhcLFrWV8HjDgp37t24ePtMcSscEYPv7jMgzW+/EfJzr7AQMAcMYWF/C9XrtRrRZzB9Veb3Y6IYQQCoXKdqvVTZIk2d2tWZkelmoo2jX8bEbW71KTeGSuT9/wZz9gAGAdJUlWHutq/oDvNYqH1d5s9qM9FAqV7e3X1b5TK9lSDs7AyFzX8Kc1pnsHXxqzY9xpN5MbE+rTNPyUAwYAmFOSGWl/E6mZP+C7ewdT7SGEwvZ2q9tN+tVuI3g4S2NCXcMvychQtxU8ALC6Ul+8bt1XsVvsPfCder28datYbbTtGQesg6FcV+8AwCpLPdvXvd8XsAp9aSdJdnq99tN7jx82m50QOp1mp9yshxBCoVC58cH1q66gB1aXaAcA1oRV6FO3oBn4fL5U29nZTZIk6Q5sAN/pNOvl8lYul8sVzcsDURizAduS9mYbs2PcNJvJnf2AAQBIxeK3kcvnS7XaSS1/r73wzwNCCCF87zvfnOElRhrZvUuN4ZGhPv1W8Gc/YABgLaV+6fy6X0O/lH3gX8uHcCGEUFjmZwCHRoa6ep/NUP2eQQwP5fr09d539gMGANZO6tk+R7/32o1qfwO1wyvER18g3jty3LyHLVhu8Uvw99rtp48/fNh8szj9gUJl+4M7aaxNv7+/v7w339jYWPZHrLaNjQ3f3mxOOvcG15xX72M492bmf/fm5NybmXNvTs69mTn35uTcm9ngudd/nq7Lv/4g7SEceP5bN091fLtaLDeHAzWEwnZ3t5Y/emCu3Bw+rNJKdkphhsMWb1Ez8L03/z1jq1yuD9T7wI7wO3aWg+X73ne+efhIeywAAJC2drXc7IRQqPTDNEmSbmu7EELo1Leq7aEDQwiFg4J9fVizXGz0Tn/YMswf8O1qLpfLbW0dqfaj2a7bAQAAYpckWXmcQq/xYTOEUGnt7hyGab5U221VQgih+bh9/MDXBXt4WOfh094pD1uOxd4DL9sBAABWU5IZpxl1d68TQqhcH766vXS9EkIILz4/aO7e04ejDizd2S4MpvmUhy3J/PvAH+z2fudqKS/YAQAAVlaMy7+XdpJkZ4rjTgr9/IVLIXQ6e90Q8tMftiTzB3xpZ3fZN+oDAACQthj7/UTtx80QQuHG1X5v9z5/EUIoXNw6duDWxUIInRef90IpP+1hy7KIGXgAAABW3X9v/NOTXvpa7d8v9rN+0Phni33DIa/vZP+gFtWF5AIeAACAyb72zX+Xkc/6wbf/+Vzv3q5u1TshFLbvTH05+ZQXxy/5GnoBDwAAwDRW4hr6drVYboZQqLR2TzH9Puqq+dkPm5WABwAAYAqnW/49i3qN4sHce/c09Z4Zi91GDgAAgNWU9uZxb8w2/nZ1TL3nL1wKB1fAD+mvO3/pQv4Uhy2LgAcAAGC19drVXLnZCYVKKxk99751sRAGtoV/85dH152f8rAlEfAAABnrU9UAACAASURBVABMIUmy8jildnWr3OxPve+ctGxd/uqNQgid+r320T+9V+8M7DY37WFLIuABAACYLO0L59841bB7jeLreh9723s/zUOzXKy2+/PrvXb/T4+E+ZSHLYeABwAAYBpJZh7T68+Nh9Cpb+VGqR5Opedr91uVEEKnWe4fulWud0IIQ8vVT3nYUgh4AAAAVlT7cXP6g/OlnW5ru1I4/EWhst1Njl11P+VhS2AbOQAAAKYQ4zZypZ0k2TnF8flSbadUm/gXUx62aAIeAACAyU578zkLJ+ABAACYhoBPmYAHAABgCmbg0ybgAQAAmEy/p07AAwAAMA0FnzIBDwAAwDQEfMoEPAAAAFNwDX3aBDwAAACT6ffUCXgAAACmoeBTJuABAACYgin4tAl4AAAAJksEfNp+JO0BAAAAAJOZgQcAAGAKyZdpj2DdmYEHAACACJiBBwAAYDL3wKdOwAMAADAFAZ82AQ8AAMA0BHzKBDwAAACTmYBPnYAHYJV97RvvHz7/we9/K8WRAED8FHzKrEIPwMoarPfjPwIAp5MkWXmsKwEPwGoamesaHgCIl4AHYAWNCXUNDwCzSTIj7W8iNQIeAACAKaR+5fxiLqFvV3O5XLV94ksjHD+616gWi69fLlYb7d58g5qORewAgKW4+A9uHj7f+9MHKY4EgAVZhanvdrXcPOm13ucvpnyP3JE36TTr5eZeK9kpzTu6CczAAwCLN1jvx38EIEapz7vPPQHfGy7vId29Tgih0jp2zf6RMj/4TwCF7VY3SZIk6ba2CyGEZrnYWPY0vIAHYAWN2THOZnJnYGSua3iA+H2Zmcep9dqNanFrXL2H0H7cDCEULm6NfaPGh80QQqW1WyvlQwgh5Eu13VYlhNB5+HTJBS/gAVhNI0NdvZ+BMaGu4QHilmTmcUq9RnGrXG92QqHS6rYqJx31+YsQQuHG1fy4t3r6sBNCqFw/erV86c524QwKXsADJ/rGg+7hI+2xwCyGcl29A8B8Ug/3WQs+hFCobLe6uzulk+u8u9cJoXDjQrdRfb08XbFYHVqd7uAq++vDd7vnL1wKIXT2lvt/my1iB4w2FO3feND9/ZtjryaCTBLtALAo8W7flq/tJrVJB/Un4Dv1cvnN7zqdZnmrWXmzPN3BLP2Iq+y3LhZC6Lz4vBfG/DeCeQl4YISRU+4aHgBgne39wb8+6aWLX/+NBX/WH/7mYt9wsv7cegiFSut+f6K+12vcu1Vvdprl4sXubm15XT41AQ8MG3PBvIYHJtr70wcn3etuMzmAqC280mf+rGXk/cEWcpXW7uGS8/l8bWf3QsiVm52HT3u1aQq+s9cNYXml7x54AMiWr/7C7cNH2mOZ0chQV+8AsUt787g3j2X86/K13WMbxoUQQun6aRaYn7CE/bwEPABkyFC0r0zDq3eAVZB+uc+7Efwsti4WwvKXp5uOS+gBICtG5vpXf+H2D//ok7MfzPxEO8CqiXYRuwU4mFrPX7gUQmfUhfL9W+gvXVjqnfJm4IFhY+5ydwM8LM+YyfZ45+EBWC2p7x43xzZyE/QaxVwul6u2j71ytMz78/EvPh++oP7k5ekXScADI4wMdfUOALDOksxYwj+uv497aD4eKvhe48NmGNj4PX/1RiGETv3e0ePa9+qdEAo3ri53qXoBD4w2lOvqHQBg3aV+6/sy74Ev3dkuhBCa5WK1fTC93mtXi1v1TgiF7TuHa9v1C37wuF67USw3wxn0u3vggZOJdgAA1kW+dn/74Va902mWt5qDL1Ra9wd3kMvX7rf2tsrN4eMqreVvFW8GHgAyYcxKdZEuYgfAikmSLzPyWNI/MF/bTbqtSqHw+heFQqXVTXZKQ12eL+10W9uVw8NCobLdPb4B3RKYgQeArPjhH31yfL069Q4Ai1TaSZKdE1/Nl3Z2Sye//Oaw2k6pNvm4BTMDDwAZMpTr6h2ADEn91vdU9oHPEjPwAJAtoh0AGEnAAwAAMNly9m/jFAQ8AAAA0xDwKRPwAAAATMEMfNoEPAAAAJO5hD51VqEHAACACJiBBwAAYApm4NMm4AEAAJiGgE+ZgAcAAGAy98Cnzj3wAAAAEAEz8AAAAEzBDHzaBDwAAACTJe6BT5uABwAAYAr6PW0CHgAAgGko+JQJeAAAAKbgHvi0CXgAAAAms41c6mwjBwAAABEwAw8AAMAUzMCnLdMB/+r5o4e/9+DZy/5Pm1du/tKNdy6fT3dMAAAAa0rApyy7Af/qUe3dBy8HfvHy2YOPnn3/yt3G7cupDQoAAGBNuQc+dVkN+FePPn7wMoTNK3ffu92fdH/1/JOPP3r28tlHnxSeSHgAAIAzJuDTltFF7J4/fPAyhM2br+s9hHD+8u33bm6GEJ51nqc5NAAAAEhBRgP+8u0nT548abxz9Ib38299JZ3hAAAArLskJBl5zPfvaFdzuVy1fcKrvUa1WMwdKFYb7d48hy1YVi+hH+nVF38RQth868fSHggAAMDaWYkr6NvVcnPMi7kjr3aa9XJzr5XslGY5bPGiCfiDW+BDuPJL75y0EP3bb7898vefffbZ8gbWt7GxseyPWGG+vXn49ubh25uHb28evr15+Pbm4dubh29vHr69eWTo24v+Hvheu7o1Nt/LzRBCYbt1v1bKh9BrN26V651muXixu1vLn/KwZcjoJfSDnn9y7dq1a+9+9Oxl2Lx591ML2AEAAKQhyczj1HrtRrU4rt5Dr/FhM4RQae3WSv0Kz5dqu61KCKHz8GnvlIctR/Zn4F998Rebm5shvHz5Mrx88NHHX9x87/YJc/AnzbTv7+8vb3z9/x621I9YbRsbG7692Tj35uTcm5lzb07OvZk59+bk3JuZc29Ozr2ZDZ57WZiHn/vm89T0GsWteieEUKi07l9/PLLje08fdkIIletHL4Mv3dkuNOudh097tVp++sOWJPsz8OffaTQajUbjyZNP797cDC+fPXj3E8vQAwAAnLH0V697/ZhBobLd6u7ulE7K6+7eqDAPIX/hUgihs9c91WFLkv2Af+P85Xcad6+EEJ793qNXaQ8GAABgvaR+4fysV9Dna7vJ7k7txHgPIfQ+fxFCKFzcOvbK1sVCCOHF571THLYs2b+E/qgfe2szhJdpjwIAAGDd/N9n/+Gkl378yq8s+rN+Z7FvuBqyGfCvHtXeffAyXLn7xJJ1AAAAWfA3f/pWRj7r//3X+2c2kgOdvW4Ik+9un/KwWWXzEvrzb30lhBCedYZvdn/+8MHLEMJX3jppJzkAAACWI/VL52dfhX5eo66an/2wWWUz4MPlGzc3QwjPPqp98vz17e6vnn9S++hZCGHz5g3z8gAAAGcr9WxPr98zIpuX0Idw/p3G3S+uffTs5bOP3n02+MLmlbuNE3aRAwAAYHlWOJ3zFy6F0Bl1BXx/3flLF/KnOGxZMjoDH0IIl28/+fTulc3N1z9vbl65effThrviAQAAzl6SGcv41520ivzQuvNTHrYkWZ2B7zt/+Xbj8u20RwEAAMBqy1+9Uah3OvV77drOwCbv7Xv1TgiFG1fzpzpsSTI8Aw8AAEB2JElWHsuQv3qjEEJolovVdn9+vdduFMvNcDTMpzxsObI9Aw8AAEA2LOna9czI1+639rbKzU6zvNUc+H2ltVvLn/qwpTADDwAAACHkSzvd1nalcPiLQmW7mwxeKn+aw5bADDwAAADTWIkZ+NJOkuyc+Gq+VNsp1U5+/XSHLZqABwAAYLJVv4Q+AgIeAACAKQj4tLkHHgAAACJgBh4AAIApmIFPm4AHAABgsmQ1FrGLmYAHIBpf+8b7h89/8PvfSnEkALCO9Hva3AMPQBwG6/34jwDA8iWZeawpAQ9ABEbmuoYHgDOVJFl5rCsBD0DWjQl1DQ8AZybtan/zSPubSI174AEAAJjC+oZzVgh4AAAAprDG165nhIAHAABgGgI+Ze6BByDrxuwYZzM5ADgzqS89v+5r0At4AKIwMtTVOwCcqfRXr7MKPQDEYCjX1TsAnLXUu33tA9498ABEQ7QDAOtMwAMAADDZOm/AnhECHgAAgCms8bXrGSHgAQAAmIKAT5tF7AAAACACZuABAACYLDEDnzYBDwAAwDQEfMpcQg8AAAARMAMPAADAZC6hT52AB2CVvf2L7x8+/+wPvpXiSAAgegI+bS6hB2BlDdb78R8BAOJiBh6AEEL42ffuHz7/7se3UhzJoozM9bd/8X3z8AAwIzPwaTMDD8CRej/+Y4zGTLabhweA2SQhycgj7W8iNQIeYN2NzPUVaHgAYMGSzDzWlUvoAdbamFD/2ffur8a19ADAQuy/+JO0h7DuzMADAABABAQ8ACtozEp1FrEDACIl4AFYTSNDXb0DAPES8ABrbcxd7itwA/xQrqt3ACBqFrEDWHff/fjW8aXsVqDe+0Q7ALAyzMADMJzrK1PvAACrxAw8ACGIdgCAzDMDDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABEQ8AAAABABAQ8AAAAREPAAAAAQAQEPAAAAERDwAAAAEAEBDwAAABE4l/YAAGBaX/vG+4fPf/D730pxJAAAZ88MPABxGKz34z8CAKw8AQ9ABEbmuoYHANaKgAcg68aEuoYHANaHgAcAAIAICHgAAACIgIAHAACACAh4ALJuzI5xNpMDANaHgAcgAiNDXb0DAGtFwAMQh6FcV+8AwLo5l/YAAGBaoh0AWGdm4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACKQS5Ik7TEAAAAAE5xLewBnYX9/f3lvvrGxseyPWG0bGxu+vdk49+bk3JuZc29Ozr2ZOffm5NybmXNvTs69mQ2ee/3nrLm1CHgA6Pu7/+TXD5//z//4WymOBADgtNwDD8C6GKz34z8CAGScgAdgLYzMdQ0PAEREwAOw+saEuoYHAGIh4AEAACACAh4AAAAiIOABAAAgAgIegNU3Zsc4m8kBALEQ8ACshZGhrt4BgIgIeADWxVCuq3cAIC7n0h4AAJwd0Q4AxMsMPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQAQEPAAAAERAwAMAAEAEBDwAAABEQMADAABABAQ8AAAAREDAAwAAQATOpT0AAOCIr/587fD5D/+4keJIAIBMMQMPABkyWO/HfwQA1pmAB4CsGJnrGh4A6BPwAJAJY0JdwwMAQcADAABAFAQ8AAAAREDAAwAAQAQEPABkwpgd42wmBwAEAQ8A2TEy1NU7ANAn4AEgQ4ZyXb0DAIfOpT0AAOAI0Q4AjGQGHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACIg4AEAACACAh4AAAAiIOABAAAgAgIeAAAAIiDgAQAAIAICHgAAACJwLu0BAAAAK+Jv/8NfOXz+v//L76Q2DlhRZuABAIAFGKz34z8C8xPwAADAvEbmuoaHxRLwAADAXMaEuoaHBRLwAAAAEAEBDwAAABEQ8AAAABABAQ8AAMxlzI5xNpODBRLwAADAvEaGunqHxRLwAADAAgzlunqHhTuX9gAAAIAVIdphqczAAwAAQATMwAMATPB3rn/z8Pn/evztFEcCwDozAw8AMM5gvR//EQDOjIAHADjRyFzX8ACkQsADAIw2JtQ1PABnT8ADAABABAQ8AAAAREDAAwAAQAQEPADAaGN2jLOZHABnT8ADAJxoZKirdwBSIeABAMYZynX1DkBazqU9AACArBPtAGSBGXgAAACIgIAHAACACAh4AAAAiICABwAAgAgIeAAAAIiAgAcAAIAICHgA+P/t3b9ro1e6B/AjmD/BnTMQgR0uScpZzMoEroobGAeGLcxwmcLZysaV7GLTKGXUzC1kVcaublwMi3GxGGLD3kILwyiIO+VuuMQGBSbq5n/wLfTDsizJsvVa0pE+n0rW+0Y6GR4/+Pue9z0HACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAJPJj2AQerVk+M3b8u1WgghhHQ6+9Wrl+srixMeFQAAAIzf9Ab4ajFXKNc63qjVyrVC+e3GfmldhgcAAGDOTOst9NVioVwLIZ3N75827Oc30iGE2tF2sTrp0QEAAMCYTWeAr5+8KYcQsvnSbvuO+cWV9VI+G0II5YoEDwAAwJyZzgD/+4daCCGbWel6fyWTDSGE3z7Uxz8mAAAAmKDpfAZ+Zff0dHfSgwAAAIDpkbq6upr0GIZXLb4olEO63zp2z5496/mfvX///nHHBQAAAI9sOm+h7631ZPwrq9ADAAAwb6bzFvpeqsXto1oI6Y2X3U/Gt/Wbaf/48eOjDSssLCw89lfMtoWFBf96D6P2RqT2HkztjUjtPZjaG5HaezC1NyK192Cdtdd4zZyLZAa+WswVyiGks3mbwAMAADCPIpiBr5/kmnPvfR59BwAAgJk37QG+WswVytI7AAAA826aA3y9Wtxu3Ti/2/fBdwAAAJgD0xvgW+nd1DsAAABM6yJ29ZOc9A4AAABt0zkDXz0+qoUQQu1o+8VRj+PZ/Kl76gEAOnzx9Z/br//19/+e2DgAeDRTOQNfrZQnPQQAgIh0pvfbPwIwG6ZyBn5l9/R0d9KDAACIQ8+4/sXXfzYPDzBjpnIGHgCA4QyYbDcPDzBjBHgAAACIgAAPAAAAERDgAQAAIAICPABAxAasVGcRO4AZI8ADAMStZ1CX3gFmjwAPABC9rrguvQPMpKncBx4AgHsS2gFmnhl4AAAAiIAADwAAABEQ4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIwJNJDwAAAGAqfPEf37Zf/+t/fpzgSKAnM/AAAAA30vvtH2EaCPAAAMC86xnXZXimjQAPAADMtQFBXYZnqgjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAGCuDdgxzmZyTBUBHgAAmHc9g7r0zrQR4AEAALrjuvTOFHoy6QEAAABMBaGdKWcGHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAICPAAAAERAgAcAAIAICPAAAAAQAQEeAAAAIiDAAwAAQAQEeAAAAIiAAA8AAAAREOABAAAgAgI8AAAARECABwAAgAgI8AAAABABAR4AAAAiIMADAABABAR4AAAAiIAADwAAABEQ4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAICPAAAAERAgAcAAIAICPAAAAAQAQEeAAAAIvBk0gMAAICZ8m///p/t1//3j79OcCTAjDEDDwAAielM77d/BBiFAA8AAMnoGddleCApAjwAACRgQFCX4YFECPAAAAAQAQEeAAAAIiDAAwAAQAQEeAAASMCAHeNsJgckQoAHAIBk9Azq0juQFAEeAAAS0xXXpXcgQU8mPQAAAJgpQjvwSMzAAwAAQAQEeAAAAIiAAA8AAAAREOABAAAgAgI8AAAARECABwAAgAgI8AAAABABAR4AAAAiIMADAABABJ5MegAAADBT/vAq3379v28KExwJMGPMwAMAQGI60/vtHwFGIcADAEAyesZ1GR5IigAPAAAJGBDUZXggEQI8AAAARECABwAAgAgI8AAAABABAR4AABIwYMc4m8kBiUhdXV1NegwAADAj0l9vdb1T+/vBREYCzJ65CPAfP358vA9fWFh47K+YbQsLC/71HkbtjUjtPZjaG5HaezC1NyK192D3rb3ONefNvQe1N4LO2mu8Zs49mfQAAABgpgjtwCPxDDwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAICPAAAAERAgAcAAIAICPAAAAAQAQEeAAAAIiDAAwAAQAQEeAAAAIiAAA8AAAAREOABAAAgAgI8AAAARECABwAAgAgI8AAAABABAR4AAAAiIMADAABABAR4AAAAiIAADwAAABEQ4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAICPAAAAEQgdXV1NekxxO3Zs2chhPfv3096IMwdtcekqD0mRe0xKWqPSVF7dDEDDwAAABEQ4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAE7AMPAAAAETADDwAAABEQ4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEnkx6ANGpFl8Uytn86e5Kr6P1k+Lrt+VaLYQQQjq78erl+sriWMfH7BpQe9Xii0K5x3/St1LhTvXqyfGb636Wzn7Vp6HpeyRsuNrT90hevXpy/Oao3Ci9Qf1M3yNhw9WevkcIZuDvq1rs+WvTOvhi+6jVzUMItfJRYbtYHcvAmHmDaq/+4bcxjoR5UC3mtgs3+lmtfFTYzp3Ub52o75GoYWtP3yNp9ZNG7bXfaJTe7Yam75GwYWtP3yOEYAb+PurV4vbA+F4ohxDSG/nv1lcWQ6hXT14XjmrlQu7pfmndZVlGcEfthd8/1ILLrySnWiyUayGks/nvdhsTAM2GVjvaLj7tqDN9j4QNXXv6Hgmrn7w+6q694utCuVYuFDOdZabvkbCha0/fo8EM/FDq1ZNibmCCqp+8KYcQsvlS636XxZX1Uj4bQqi9/bl7zgqGdXfthVCtlEMI6aefjGlMzLjrdrbbvn2v3dBCuVK9faK+RyKGrj19j6RVj49qIaQ3vuusvd3vNtLhZunpeyRt2NrT92gR4O/Wvq0lnc3vN/6KuH3Oz29rIYRs5uYFsZWXG2kdnQcbpvZaN1Slv/qj6/4konmFP9N9fX8lkw0hhN8+NBuavkfShq09fY/Ereyenp6eds+gLz799OZp+h6JG7L29D3a3EI/nPZaEtVKz+P9/uhYfPppCLXah99D8MvGg9xVe83qS3/19PeT4uvmA1TpdPZVx5VcuI+V3dPT3SHO0/dI2rC1p+8xJs3EdD3jqe8xJrdqT9+jTYC/2+J66XR98Ck9fsmaPnmaDqH224d68MvFvQ1Re63qqx0VCtfv1Wrlwnb/3RLgIZr37rWu/et7jE1X7el7jEPzMeQQsq/Wb1aevsfj6lV7+h7XBHiIXGM6oHPxk3r95Pj1UdmKOiSp9eDnKxXFmPWoPX2Px9SxVVdjqbrJDoc5Mqj29D1aPAM/FrUPv096CMyq5pYinYs+LS6u71pRh0RVi9uNRXZeDv2XrL5HInrVnr7HY6p/+C2dTqfTIYRQOyq8Lt7aP7MvfY+RDKo9fY82M/BjYb1IHk2/2+xXMtlQLtfe/lxfd02W0VSLuUI5hHQ2f58L/Poeo+tTe/oej2lxvVRq1Fdjh7jy0XZ4OtwtyvoeIxlUe/oebWbgYUZ98jQdzAYwqvpJ7kWhXAvpjf2SR+wYp4fUnr5Hoto7xJXfDD8LDwm4R+3pe/NHgE9EY6uHXr86jedVPn3qkhiTYTaAEVSLuebdyz0ertP3eEQDa+8u+h4JaqSjJn2PMbpRe3fR9+aJAJ+Mxq9Yxxa1Tf2XK4VE1E9yL168eFGs3jrijwlGUq8WG9Of2fyt7Wkb9D0ex521p++RuP5FdZO+R9KGrD19j2sCfDIW//hVOoTa0fHNX6vq8VHtxs43kLDGbEAoV7o6emvZ5lt71cIwqsXtQjkMvnlZ3+MxDFF7+h6J61dUzY7WTkf6Hkkbsvb0Pa4J8AlpdPRQLuSK1cZl2Xr1JFfo2rkWErfycqOr9EL9+ubT4ZcMh7Z6o3ndefOyvkfShqw9fY/E9SiqUG+uothZVfoeSRuy9vQ92lJXV1eTHkNUGvszZvM9ViOtN6cNbup5Ktxf/9qrnzT6d5dsfr+90wgMr2Mb2p46i1DfI0n3qD19j+T1LsB0Nn/zbhB9j8QNV3v6Hg1m4JOzuLK7n9/IXq83kc5u7OvmPL7F9dLpfj6bbtdeOp3N75/q5jxItTIoQXXR90jQfWpP3yN5K7u3imojf/tZDn2PxA1Xe/oeDWbgAQAAIAJm4AEAACACAjwAAABEQIAHAACACAjwAAAAEAEBHgAAACIgwAMAAEAEBHgAAACIgAAPAAAAERDgAQAAIAICPAAAAERAgAcAAIAICPAAAAAQAQEeAAAAIiDAAwAAQAQEeAAAAIiAAA8AAAAREOABAAAgAgI8AAAARECAB2DeXJZWU6lUKrV1HkK4PC9tNX5MpVKp1dWt88v2eeelrdWOY1ul62NN51uNQ6XLW5/U4+zrEdz45OaX3hgWAMAtAjwAc+vX863U8trOYaX9TqVyuLac2joP4XxrdXlt57DScexwZ215tdQ7lV+UVrs+6XBnbTnV4/TL0mrq5ic3v/SnX5L5vwIAZpUAD8C8OtxZOwyZzbOLq4aLs81M48Da6uraYSWzuXdx0Tq01zhU2fm2R4Sv7KztVMKN8xsfVdlZvjmhfr61vFMJIdz+3sPO+A8AcJsAD8D8yuxdvDt4vtT8aen5wfebjZeVStg8e3eQW1pqHcq9O2scq/xy0fOzus4/aJ1/+MN14r8s/XDY83vfXTQvEAAA9CXAAzC3Nr/PLd185/mfmgk+s/eX511nL3/eyNj//LXHXfSbZwfdcg1VvAAAAoBJREFU5z8/aET4ys5/NSfhL386rvT+3rCUa107AADoQ4AHYF5lPl/ue+zLz7ojdlj67Mu+p2/+qTu+h3B9OaAZ+dv5feDJAAB9CPAAzKseIf2BBl0KCO277i9+qQw6uTXDDwDQmwAPAKPqdylAJgcAEiTAA8Coej4WH9pz7jf1WwUPAGAwAR4AHlnzpvk75uN7pn0AgDYBHgBGVTn+qdcU/PnfGpvGvfxmKYQQlr55mQkhhMO/nfc/GQCgHwEeAEZW2fm21B3hz7fWbuT3jgT/w62TWzvEAwD0JcADQAIqO8urpfNmLr88L22tNuP73o/Xm74v5X7cyzRP3mqdHC7Pt1aXd9w/DwDcQYAHgFFlNjczIVR21pZTqVQqlVpe2zmshBAyexfvcjcWqF/K/Xi2GUIIlcPWyanltcNKyGzu7VmyHgAYRIAHgJF9/pd3F2d7m9cJPLO5d3Zx1ZXeQwghLD0/uLo429vMtE/OZDbPLt4dfDOeoQIA0UpdXV1NegwAEKnzrdTaYa+Z9gl/FgAwi8zAA8CYnG817pnf6rUK/eWv/wwhhPDlZ9I7ANCTAA8AY9LaCL7XPnKXPx1XQmjvGQ8AcIsADwBj0tpGLhyudSxCHy47lqHf/N7t8wBAHwI8AIzLUu7dWWOlu45F6FPLy2uNNes3zy4Onk94iADA9BLgAWCMnh+8u7g428xkOvaMy2Q2984uLt4dPDf7DgD0ZxV6AAAAiIAZeAAAAIiAAA8AAAAREOABAAAgAgI8AAAARECABwAAgAgI8AAAABABAR4AAAAiIMADAABABAR4AAAAiIAADwAAABEQ4AEAACACAjwAAABEQIAHAACACPw/xZUN4WRMTjoAAAAASUVORK5CYII=" width="672" /></p>
 <blockquote>
-<p>In the exercises you can use the tools that you want!</p>
+<p>Here, we showed you some packages and functions we like, but in the
+exercises you can use the tools that you want!</p>
 </blockquote>
+<!-- ---------------------------------------------------------------------- -->
+<!-- ## Mon 8 -->
+<!-- We will see how to translate the theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for a seamless implementation, and finally do some exercises. Sections: -->
+<!-- - [By hand](#by_hand_mon8) -->
+<!-- - [Using DemoKin](#using_demokin_mon8) -->
+<!-- - [Exercises](#exercises_mon8) -->
+<!-- ### By hand {#by_hand_mon8} -->
+<!-- Imagine you are studying a female population with 5 age-classes (0 to 1, 1 to 2, ...) and fixed survival probabilities and fertility rates, given by: -->
+<!-- ```{r} -->
+<!-- age <- 0:4 -->
+<!-- p <- c(.9, .7, .4, .1, 0) -->
+<!-- f <- c(0, .5, .5, .3, 0) -->
+<!-- ``` -->
+<!-- Remember: each *age* is a *stage*, so age 0-1 is the stage 1, age 1-2 is the stage 2, and so on. At age 5 nobody is alive ($\omega=5$ in life table applications). -->
+<!-- > Note: we are going to use Hal's letters for naming relatives: -->
+<!-- ```{r, echo = F} -->
+<!-- DemoKin::demokin_codes() %>% select(-1) -->
+<!-- ``` -->
+<!-- Let's build matrices $U$ and $F$. In R, the letter $F$ is reserved for `FALSE`, so we need to modify the label, in our case we choose to add a point (sorry). -->
+<!-- ```{r} -->
+<!-- ages <- length(age) -->
+<!-- U <- F. <- matrix(0, nrow = ages, ncol = ages) -->
+<!-- U[row(U)-1 == col(U)] <- p[-ages] -->
+<!-- U[ages, ages] <- p[ages] # in this case is 0 -->
+<!-- F.[1,] <- f -->
+<!-- ``` -->
+<!-- Now let's find eigenvalues and eigenvectors to calculate $w$ (the stable distribution by age) and $\pi$ (the one for the mothers). -->
+<!-- ```{r} -->
+<!-- A = U + F. -->
+<!-- A_eigen <- eigen(A) -->
+<!-- A_eigen_value <- as.double(A_eigen$values[1]) # Oh! what information does it gives you? -->
+<!-- A_eigen_vector <- as.double(A_eigen$vectors[,1]) -->
+<!-- w <- A_eigen_vector/sum(A_eigen_vector) -->
+<!-- pi <- w * f / sum(w * f) -->
+<!-- ``` -->
+<!-- Next we are going to see how to project some relatives. For each of those we are going to create a matrix of dimension $5$ x $5$ to save the vectors of surviving kin by age (rows) in each Focal's age (columns). -->
+<!-- So for example, living mothers by age when Focal is at age 0 will be placed in first column, living mothers by age when Focal is 1 on the second column, and so on. -->
+<!-- - **Mother** -->
+<!-- In the case of mothers, $\pi$ is the age distribution when Focal just born. Remember, every mother is alive a that moment, so the total (sum of $\pi$) should be 1. This vector will be placed in the first column of $D$. -->
+<!-- ```{r} -->
+<!-- D <- matrix(0, ages, ages) -->
+<!-- D[,1] <- pi  # eq 14 in Caswell (2019) -->
+<!-- ``` -->
+<!-- Let's project that population (here the *key*, each kin is a population) and get the living mothers at each age of Focal, preserving the age's kin too (that's why we save results in column vectors on the matrix). -->
+<!-- ```{r} -->
+<!-- for(x in 2:ages){ -->
+<!--   D[,x] <- U %*% D[,x-1]  # eq 13 in Caswell (2019) but in a matrix form -->
+<!-- } -->
+<!-- ``` -->
+<!-- Each column-vector in $D$ is the vector $d(x)$ in equation 13 of @caswell_formal_2019: the distribution of living mothers by each Focal's age. -->
+<!-- ```{r} -->
+<!-- round(D,2) -->
+<!-- ``` -->
+<!-- If we sum up by columns (marginal), we get the expected living mothers for Focal when she grows up. -->
+<!-- ```{r} -->
+<!-- ones <- rep(1,ages) -->
+<!-- d <- t(ones) %*% D # could be done with colSums(D) -->
+<!-- plot(age, d, t = "b") -->
+<!-- ``` -->
+<!-- This is the general idea for all kin. Some are a bit different because includes subsidy, offspring from *other population* (other kin type), and is necessary a second term in the projection loop. -->
+<!-- - **Daughters** -->
+<!-- The case of relatives that born after Focal requires explicitly an additional matrix of subsidy. -->
+<!-- Focusing on the **daughters** of Focal, initial living count by age is zero. -->
+<!-- ```{r} -->
+<!-- A <- matrix(0, 5, 5) # eq 7 in Caswell (2019) -->
+<!-- ``` -->
+<!-- Let's project that population, adding offspring from Focal at each age (the diagonal matrix $E$ is for that purpose, is tracking Focal's age): -->
+<!-- ```{r} -->
+<!-- E <- diag(1, ages) -->
+<!-- for(x in 2:ages){ -->
+<!--   A[,x] <- U %*% A[,x-1] + F. %*% E[,x-1] # eq 6 in Caswell (2019) in matrix form -->
+<!-- } -->
+<!-- a <- t(ones) %*% A # could be done with colSums(A) -->
+<!-- plot(age, a, t = "b") -->
+<!-- ``` -->
+<!-- Take a moment to see how multiplication between $F$ and $E[,x]$ works. -->
+<!-- - **Sisters** -->
+<!-- The treatment is different depending if the sister born before or after Focal. -->
+<!--   - *Older* sisters: the initial distribution by age comes from the probability that Focal's mother had daughters at the time that Focal born, and then just survive (no subsidy, no new old sisters). -->
+<!--   - *Younger* sisters: the initial count is zero, and then the mother can bring little sisters to Focal, sisters that needs to survive with age too. -->
+<!-- ```{r} -->
+<!-- M <- N <- matrix(0, 5, 5) -->
+<!-- M[,1] <- A %*% D[,1] # eq 22 -->
+<!-- N[,1] <- 0           # eq 24 -->
+<!-- for(x in 2:ages){ -->
+<!--   M[,x] <- U %*% M[,x-1]                 # eq 21 -->
+<!--   N[,x] <- U %*% N[,x-1] + F. %*% D[,x-1]  # eq 23 -->
+<!-- } -->
+<!-- # lets group them directly as sisters -->
+<!-- m_n <- t(ones) %*% (M + N) -->
+<!-- ``` -->
+<!-- - **Grandmother** -->
+<!-- What about the **grandmother**? "The age distribution of grandmothers at the birth of Focal is the age distribution of the mothers of Focal’s mother, at the age of Focal’s mother when Focal is born" (@caswell_formal_2019). -->
+<!-- > Note: we are treating a female population in a [matrilineal](https://en.wikipedia.org/wiki/Matrilineality) framework, so Focal has only a grandmother from mother's side (female line). -->
+<!-- In other words: What "portion" of the mother remains alive for Focal's mother when Focal born? We know that at Focal's birth there was 1 mother with age distribution $\pi$. The distribution by age of her living mother can be obtained as $D %*% \pi$. -->
+<!-- ```{r} -->
+<!-- G <- matrix(0, 5, 5) -->
+<!-- G[,1] <- D %*% pi -->
+<!-- ``` -->
+<!-- Take a minute to see what just happened. -->
+<!-- Now let's project $G$ population: -->
+<!-- ```{r} -->
+<!-- for(x in 2:ages){ -->
+<!--   G[,x] <- U %*% G[,x-1] -->
+<!-- } -->
+<!-- g <- t(ones) %*% G # or colSums(G) -->
+<!-- ``` -->
+<!-- Let's visualize living kin by Focal's age for the cases computed: -->
+<!-- ```{r} -->
+<!-- plot(age, d, t = "b", ylab = "k", ylim = c(0, 2)) -->
+<!-- lines(age, a, t = "b", col = 2) -->
+<!-- lines(age, m_n, t = "b", col = 3) -->
+<!-- lines(age, g, t = "b", col = 4) -->
+<!-- legend("bottomright", c("m","d","s","gm"), col = 1:4, lty = 1) -->
+<!-- ``` -->
+<!-- That's the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don't change), and pretty much the essence for every variant that we will see in next days. -->
+<!-- In the `Demokin` package we have this automatized. Let's take a look on how to use it. -->
+<!-- ### Using DemoKin {#using_demokin_mon8} -->
+<!-- First please load these libraries: -->
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+<!-- library(DemoKin) -->
+<!-- library(dplyr) -->
+<!-- library(tidyr) -->
+<!-- library(ggplot2) -->
+<!-- ``` -->
+<!-- #### 1. Built-in data -->
+<!-- The `DemoKin` package includes data from Sweden as an example. This comes from the [Human Mortality Database](https://www.mortality.org/) and [Human Fertility Database](https://www.humanfertility.org/). -->
+<!-- This is how data of survival probabilities by age looks like: -->
+<!-- ```{r} -->
+<!-- data("swe_px", package="DemoKin") -->
+<!-- swe_px[1:5, 1:5] -->
+<!-- ``` -->
+<!-- It has years in columns and age in rows. Plotting $q_x$ ($´s complement) over age in a year, for example 2015, looks like this: -->
+<!-- ```{r, warning=F, message=F} -->
+<!-- swe_px %>% -->
+<!--     as.data.frame() %>% -->
+<!--     select(px = `2015`) %>% -->
+<!--     mutate(ages = 1:nrow(swe_px)-1) %>% -->
+<!--     ggplot() + -->
+<!--     geom_line(aes(x = ages, y = 1-px)) + -->
+<!--     scale_y_log10() -->
+<!-- ``` -->
+<!-- And age-specific fertility rates: -->
+<!-- ```{r} -->
+<!-- data("swe_asfr", package="DemoKin") -->
+<!-- swe_asfr[26:30, 1:5] -->
+<!-- ``` -->
+<!-- Plotted over time and age: -->
+<!-- ```{r} -->
+<!-- swe_asfr %>% as.data.frame() %>% -->
+<!--       as.data.frame() %>% -->
+<!--       select(fx = `2015`) %>% -->
+<!--       mutate(age = 1:nrow(swe_asfr)-1) %>% -->
+<!--       ggplot() + -->
+<!--       geom_line(aes(x = age, y = fx)) -->
+<!-- ``` -->
+<!-- #### 2. The function `kin()` -->
+<!-- `DemoKin` can be used to compute the number and age distribution of Focal's relatives under a range of assumptions, for living and deceased kin. -->
+<!-- The function `DemoKin::kin()` currently does most of the heavy lifting in terms of implementing the models. This is what it looks like in action, in this case assuming time-invariant demographic rates of year 2015: -->
+<!-- ```{r} -->
+<!-- # First, get vectors for a given year -->
+<!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
+<!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
+<!-- # Run kinship models -->
+<!-- swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
+<!-- ``` -->
+<!-- Main **arguments** are: -->
+<!-- -   **p** numeric. A vector or matrix of survival probabilities with rows as ages (and columns as years in case of matrix). -->
+<!-- -   **f** numeric. Same as **p** but for age-specific fertility rates. -->
+<!-- -   **time_invariant** logical. Assume time-invariant rates. Default TRUE. -->
+<!-- -   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ... -->
+<!-- Other relevant argument is **birth_female**, which is set as $1/2.04$ by default. This multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only, this parameter needs to be set to 1. -->
+<!-- Relatives for the `output_kin` argument are identified by a unique code. -->
+<!-- > Note: relationship codes used in `DemoKin` differ from those in Caswell [-@caswell_formal_2019]. The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion: -->
+<!-- ```{r} -->
+<!-- demokin_codes() -->
+<!-- ``` -->
+<!-- The output from `DemoKin::kin()` returns a list containing two data frames: `kin_full` and `kin_summary`. -->
+<!-- ```{r} -->
+<!-- str(swe_2015) -->
+<!-- ``` -->
+<!-- -   `kin_full` : This data frame contains expected kin counts by year (or cohort), age of Focal, and age of kin. The number of rows is because we have *14 kin types*, *101 Focal ages* and *101 kin ages*. -->
+<!-- ```{r} -->
+<!-- head(swe_2015$kin_full) -->
+<!-- ``` -->
+<!-- -   `kin_summary` : This is a 'summary' data frame derived from `kin_full`. To produce it, we sum over all ages of kin to produce a data frame of expected kin counts by year or cohort and age of Focal (but *not* by age of kin). This is how the `kin_summary` object is derived: -->
+<!-- ```{r, message=F} -->
+<!-- kin_by_age_Focal <- -->
+<!--   swe_2015$kin_full %>% -->
+<!--   group_by(cohort, kin, age_focal) %>% -->
+<!--   summarise(count = sum(living)) %>% -->
+<!--   ungroup() -->
+<!-- # Check that they are identical (for living kin only here) -->
+<!-- kin_by_age_Focal %>% -->
+<!--   select(cohort, kin, age_focal, count) %>% -->
+<!--   identical( -->
+<!--     swe_2015$kin_summary %>% -->
+<!--       select(cohort, kin, age_focal, count = count_living) %>% -->
+<!--       arrange(cohort, kin, age_focal) -->
+<!--   ) -->
+<!-- ``` -->
+<!-- A lot of interesting data to explore. Take a moment to interpret what information is returned in those tables. All comes from the matrices that we calculated in the *by hand* section. -->
+<!-- Let's give more context with some possible research questions as an example. -->
+<!-- #### 3. Example: kin counts in time-invariant populations for Sweden 2015 -->
+<!-- Following Caswell [-@caswell_formal_2019], we assume a female closed population in which everyone experiences the Swedish 2015 mortality and fertility rates at each age throughout their life. We then ask: -->
+<!-- > How can we characterize the kinship network of an average member of the population (call her 'Focal')? -->
+<!-- Let's use the pre-loaded Swedish data and re-run model. -->
+<!-- ```{r} -->
+<!-- # First, get vectors for a given year -->
+<!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
+<!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
+<!-- # Run kinship model -->
+<!-- swe_2015 <- kin(U = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
+<!-- ``` -->
+<!-- ##### 3.1. Living kin -->
+<!-- Now, let's visualize how the expected number of daughters, siblings, cousins, etc., changes over the life-course of Focal. Use  `DemoKin::rename_kin()` with full names to identify each relative type. Some guiding questions: Why some kin increase and other decrease in first ages? Why not all types decrease in oldest ages? -->
+<!-- ```{r, fig.height=6, fig.width=8} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   rename_kin() %>% -->
+<!--   ggplot() + -->
+<!--   geom_line(aes(age_focal, count_living))  + -->
+<!--   theme_bw() + -->
+<!--   labs(x = "Focal's age") + -->
+<!--   facet_wrap(~kin) -->
+<!-- ``` -->
+<!-- > You can think of the results as analogous to life expectancy (i.e., expected years of life for a synthetic cohort experiencing a given set of mortality rates), a period indicator. The only difference is that with $e_x$ you don't care what happened before that year, but with kinship yes (you need to give an age distribution to Focal's mother, for example). -->
+<!-- Let's get together all previous lines in an area plot to study kin composition by age. How does overall family size (and family composition) vary over life for an average woman at each age? -->
+<!-- ```{r} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   select(age_focal, kin, count_living) %>% -->
+<!--   rename_kin(., consolidate_column = "count_living") %>% -->
+<!--   ggplot(aes(x = age_focal, y = count)) + -->
+<!--   geom_area(aes(fill = kin), colour = "black") + -->
+<!--   labs(x = "Focal's age", y = "Number of living female relatives") + -->
+<!--   theme_bw() + -->
+<!--   scale_x_continuous(labels = seq(0, 100, 10), breaks = seq(0, 100, 10)) + -->
+<!--   theme(legend.position = "bottom") -->
+<!-- ``` -->
+<!-- Some additional questions can be formulated: is there a pick in the total? How about composition, which colors prevails in each life stage? -->
+<!-- ##### 3.2. Age distribution of living kin when Focal has some age -->
+<!-- How old are Focal's relatives at some point's of Focal's life course? What does she see around when stops a moment of climbing over her diagonal-Lexis line? Using the `kin_full` data frame (with extended results), we can visualize the age distribution of Focal's relatives throughout Focal's life. -->
+<!-- For example when Focal is 35, the age pattern of her relatives is: -->
+<!-- ```{r, fig.height=6, fig.width=8} -->
+<!-- swe_2015$kin_full %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   ggplot() + -->
+<!--   geom_line(aes(age_kin, living)) + -->
+<!--   geom_vline(xintercept = 35, color=2) + -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin) -->
+<!-- ``` -->
+<!-- Is coherent the mode of each kin distribution with Focal's age? Take amoment and do this bivariate comparison by intuition reviewing each type. -->
+<!-- If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value. -->
+<!-- ```{r, fig.height=10, fig.width=12} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   select(kin, count = count_living) %>% -->
+<!--   plot_diagram(rounding = 2) -->
+<!-- ``` -->
+<!-- ##### 3.3. Deceased kin -->
+<!-- We have focused on living kin, but what about relatives who have died during her life? -->
+<!-- The output of `kin` also includes information of kin deaths experienced by Focal. We did not see the code implementation in R, but it requires minimum additional modification to get the experienced death (basically implement equation 49 and 50 in @caswell_formal_2019, take a look to `DemoKin` in any case or ask us if you are curious). -->
+<!-- We start by considering the number of kin deaths that can expect to experience at each age. -->
+<!-- In other words, the non-cumulative number of deaths in the family that Focal experiences at a given age. At which age Focal would experience more kin deaths? From what types? What do you think is the reason for having *waves of bereavement*? -->
+<!-- ```{r} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   filter(age_focal>0) %>% -->
+<!--   group_by(age_focal, kin) %>% -->
+<!--   summarise(count = sum(count_dead)) %>% -->
+<!--   ungroup() %>% -->
+<!--   rename_kin(., consolidate_column = "count") %>% -->
+<!--   ggplot(aes(x = age_focal, y = count)) + -->
+<!--   geom_area(aes(fill = kin), colour = "black") + -->
+<!--   labs(x = "Focal's age", y = "Number of kin deaths experienced at each age") + -->
+<!--   coord_cartesian(ylim = c(0, 0.086)) + -->
+<!--   theme_bw() + -->
+<!--   theme(legend.position = "bottom") -->
+<!-- ``` -->
+<!-- Now, we combine all kin types to show the cumulative burden of kin death for an average member of the population surviving to each age: -->
+<!-- ```{r} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   group_by(age_focal, kin) %>% -->
+<!--   summarise(count = sum(count_cum_dead)) %>% -->
+<!--   ungroup() %>% -->
+<!--   rename_kin(., consolidate = "count") %>% -->
+<!--   ggplot(aes(x = age_focal, y = count)) + -->
+<!--   geom_area(aes(fill = kin), colour = "black") + -->
+<!--   labs(x = "Focal's age", y = "Number of kin deaths experienced (cumulative)") + -->
+<!--   theme_bw() + -->
+<!--   theme(legend.position = "bottom") -->
+<!-- ``` -->
+<!-- A member of the population aged 15, 50, and 65yo will have experienced, on average, this burden of death experience (considering all kin type with same weight): -->
+<!-- ```{r} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   group_by(age_focal) %>% -->
+<!--   summarise(count = sum(count_cum_dead)) %>% -->
+<!--   filter(age_focal %in% c(15, 50, 65)) -->
+<!-- ``` -->
+<!-- We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell's paper. Let's try some exercises. -->
+<!-- ### Exercises {#exercises_mon8} -->
+<!-- > All exercises can be completed using datasets included in DemoKin. -->
+<!-- #### E1. Kin availability and loss -->
+<!-- Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population, answer: -->
+<!-- **E1.1**: What is the expected number of surviving offspring for an average woman aged 35? -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- swe_surv_1910 <- DemoKin::swe_px[,"1910"] -->
+<!-- swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"] -->
+<!-- swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE) -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
+<!--   filter(age_focal == 35, kin == "d") -->
+<!-- ``` -->
+<!-- **E3.2**: What is the expected number of surviving mother for the same woman? -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
+<!--   filter(age_focal == 35, kin == "m") -->
+<!-- ``` -->
+<!-- **E3.3**: Plot the 'Keyfitz' diagram for that woman and compare with the one from previous section (based on rates from year 2015). -->
+<!-- ```{r, fig.height=10, fig.width=12} -->
+<!-- # Write your code here -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   select(kin, count = count_living) %>% -->
+<!--   plot_diagram(rounding = 2) -->
+<!-- ``` -->
+<!-- **E1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
+<!--   rename_kin(., consolidate = "count") %>% -->
+<!--   filter(age_focal == 65) %>% -->
+<!--   rename(loss_1910 = count) %>% -->
+<!--   inner_join( -->
+<!--     swe_2015$kin_summary %>% -->
+<!--       summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
+<!--       rename_kin(., consolidate = "count") %>% -->
+<!--       filter(age_focal == 65) %>% -->
+<!--       rename(loss_2015 = count)) -->
+<!-- ``` -->
+<!-- #### E2. Kin age distribution -->
+<!-- Let's back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal's life-course: -->
+<!-- ```{r, warning=F, message=F} -->
+<!-- swe_2015$kin_summary %>% -->
+<!--   filter(kin %in% c("os", "ys")) %>% -->
+<!--   rename_kin() %>% -->
+<!--   select(kin, age_focal, mean_age, sd_age) %>% -->
+<!--   mutate(`sd_age/mean_age` = sd_age/mean_age) %>% -->
+<!--   pivot_longer(mean_age:`sd_age/mean_age`) %>% -->
+<!--   ggplot(aes(x = age_focal, y = value, colour = kin)) + -->
+<!--   geom_line() + -->
+<!--   facet_wrap(~name, scales = "free") + -->
+<!--   labs(y = "Mean age of sister(s)") + -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- Compute the mean and SD of the age of Focal's sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`). Plot separately (1) for younger and older sisters, (2) and for all sisters. -->
+<!-- **E2.1**: get then mean age of living mother, daughter and sisters for a female aged 35. -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- mean_ages_2015 <- swe_2015$kin_full %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
+<!--             .by = c(kin)) -->
+<!-- ``` -->
+<!-- **E2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize that and try it. -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- mean_ages_1910 <- swe_1910$kin_full %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
+<!--             .by = c(kin)) -->
+<!-- # one posible plot -->
+<!-- mean_ages_1910 %>% -->
+<!--   mutate(year = 1910) %>% -->
+<!--   bind_rows( -->
+<!--     mean_ages_2015 %>% mutate(year = 2015)) %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(kin, mean_age, fill=factor(year)), -->
+<!--            stat = "identity", position = "dodge") -->
+<!-- ``` -->
+<!-- **E2.3** -->
+<!-- The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [-@alburezgutierrez_sandwich_2021]. -->
+<!-- For this exercise, we consider an individual to be 'sandwiched' if they have at least one child aged $15$ or younger and a mother older than $75$ (actually in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015, assuming time-invariant rates and a female-only population. -->
+<!-- #### E3. By hand calculation -->
+<!-- **E3.1**: use vectors $p$ and $f$ from the toy example in *By Hand* section, but this time with `DemoKin`. Do you have the same results? How many grandmothers have Focal during her life? -->
+<!-- ```{r} -->
+<!-- by_hand_example <- kin(p, f, birth_female = 1) -->
+<!-- # some checks -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) == g -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) == d -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) == a -->
+<!-- # grandmothers -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) -->
+<!-- ``` -->
+<!-- ## Tues 9 -->
+<!-- Here, we will implement the theory of Age-classified time-**variant** one-sex kinship models in R, show how to use the `DemoKin` package for that goal, and do some exercises. -->
+<!-- - [By hand](#by_hand_tues9) -->
+<!-- - [Using DemoKin](#using_demokin_tues9) -->
+<!-- - [Exercises](#exercises_tues9) -->
+<!-- ### By hand {#by_hand_tues9} -->
+<!-- Let's keep studying our female closed population with 5 age-classes, but now we know that in the next 9 years ($T=9$) the probability of death will decline 1% yearly for all age-classes. Fertility rates will also decline by 1% each year. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows). -->
+<!-- ```{r} -->
+<!-- age <- 0:4 -->
+<!-- ages <- length(age) -->
+<!-- T. <- 9 # again T is reserved for logical TRUE value, so we add a point -->
+<!-- years <- length(0:T.) -->
+<!-- p <- c(.9, .7, .4, .1, 0) -->
+<!-- Pt <- 1 - sapply(0:T., function(t) (1-p)*(.99)^t) -->
+<!-- f <- c(0, .5, .5, .3, 0) -->
+<!-- Ft <- sapply(0:T., function(t) f *(.99)^t) -->
+<!-- plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female offspring only -->
+<!-- plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5 -->
+<!-- ``` -->
+<!-- Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon. -->
+<!-- ```{r} -->
+<!-- Ut_list <- list() # eq 6 Caswell (2021) -->
+<!-- Ft_list <- list() # eq 7 Caswell (2021) -->
+<!-- U_temp <- F_temp <- matrix(0, ages, ages) -->
+<!-- for(t in 1:years){ -->
+<!--   # create matrices -->
+<!--   U_temp[row(U_temp)-1 == col(U_temp)] <- Pt[-ages,t] -->
+<!--   F_temp[1,] <- Ft[,t] -->
+<!--   # save as element -->
+<!--   Ut_list[[t]] <- U_temp -->
+<!--   Ft_list[[t]] <- F_temp -->
+<!-- } -->
+<!-- # see survival matrix at t=1 (second element) -->
+<!-- Ut_list[[2]] -->
+<!-- ``` -->
+<!-- In this case we have a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones: -->
+<!-- ```{r} -->
+<!-- # initial population count -->
+<!-- pop <- c(300, 250, 100, 15, 0) -->
+<!-- # distribution by age -->
+<!-- z <- pop / sum(pop) -->
+<!-- # project population Z and get pi at each year -->
+<!-- Z <- Pi <- matrix(0, ages, years) -->
+<!-- Z[,1] <- z -->
+<!-- Pi[,1] <- Z[,1] * Ft[,1] / sum(Z[,1] * Ft[,1]) -->
+<!-- for(t in 1:T.){ -->
+<!--   At <- Ut_list[[t]] + Ft_list[[t]] -->
+<!--   Z[,t+1] <- At %*% Z[,t] # eq 13 Caswell (2021) -->
+<!--   Pi[,t+1] <- Z[,t+1] * Ft[,t+1] / sum(Z[,t+1] * Ft[,t+1]) # eq 14 Caswell (2021) -->
+<!-- } -->
+<!-- plot(0:T., colSums(Z), ylab = "%pop", xlab = "t") -->
+<!-- ``` -->
+<!-- Basically this is what we are going to do for kinship *populations*: make dynamic matrices by time with those lists. -->
+<!-- For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*time boundary*), and what is the initial kin availability for Focal born on next $T$ years (eq. 15 and 16 from @caswell_formal_2021). -->
+<!-- ![Caswell, 2021. Fig 2.](time_var_boundaries.png) -->
+<!-- - **Mother** -->
+<!-- One solution to the time boundary restriction comes with assuming a stable population behavior before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution? -->
+<!-- The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that's the reason why we saved $\pi$ for all the years. -->
+<!-- Let's start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal's age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption: -->
+<!-- ```{r} -->
+<!-- Dt_list <- list() -->
+<!-- D0 <- matrix(0, ages, ages) -->
+<!-- D0[,1] <- Pi[,1] # from stable assumption -->
+<!-- for(x in 2:ages){ -->
+<!--   D0[,x] <- Ut_list[[1]] %*% D0[,x-1] # look that we are using akways the base year -->
+<!-- } -->
+<!-- ``` -->
+<!-- > As with age classes, try to not confuse $t$ value with the order of elements in the list: for $t=0$ is the first element, for $t=1$ is the second..., for $t=9$ is the tenth. -->
+<!-- So this is the initial snapshot of mothers by age of Focal in base year. Every average woman by age in that year experimented what Focal did in the time-invariant scenario. -->
+<!-- ```{r} -->
+<!-- plot(age, D0[,1], t = "b",ylab = "Mother by focal age in base year") -->
+<!-- for(x in 2:ages){ -->
+<!--   lines(age, D0[,x], t = "b", col = x) -->
+<!-- } -->
+<!-- legend("topright", c("0","1","2","3","4"), col = 1:5, lty = 1) -->
+<!-- ``` -->
+<!-- Let's project over time. Create a list for saving each $Dt$ matrix of living mothers at each year: -->
+<!-- ```{r} -->
+<!-- Dt_list[[1]] <- D0 -->
+<!-- ``` -->
+<!-- After 1 year, the mother of each Focal will survive, and new Focals (just born) will have mothers with $\Pi(t+1)$ distribution: -->
+<!-- ```{r} -->
+<!-- # D1 for t=1 -->
+<!-- D1 <- matrix(0, ages, ages) -->
+<!-- D1[,1] <- Pi[,1] -->
+<!-- for(x in 2:ages){ -->
+<!--   D1[,x] <- Ut_list[[1]] %*% D0[,x-1] # we look the distribution in the previous year -->
+<!-- } -->
+<!-- Dt_list[[2]] <- D1 -->
+<!-- ``` -->
+<!-- After 1 more year... -->
+<!-- ```{r} -->
+<!-- # D2 for t=2 -->
+<!-- D2 <- matrix(0, ages, ages) -->
+<!-- D2[,1] <- Pi[,2] -->
+<!-- for(x in 2:ages){ -->
+<!--   D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year -->
+<!-- } -->
+<!-- Dt_list[[3]] <- D2 -->
+<!-- ``` -->
+<!-- At the end we will have living mothers by age for each Focal's age, at each year: -->
+<!-- ```{r, eval = F} -->
+<!-- for(t in 3:years){ -->
+<!-- Dt <- matrix(0, 5, 5) -->
+<!-- Dt[,1] <- Pi[,t]  # eq 32 in Caswell (2021) -->
+<!--   for(x in 2:ages){ -->
+<!--     Dt[,x] <- Ut_list[[t]] %*% Dt_list[[t-1]][,x-1] # eq 31 in Caswell (2021) -->
+<!--   } -->
+<!-- Dt_list[[t]] <- Dt -->
+<!-- } -->
+<!-- ``` -->
+<!-- > Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 5 Focals, one at each age-class with living kin distribution by age and type that depends of experienced rates. -->
+<!-- Let's bind results in a table, so we can see what we have. -->
+<!-- ```{r} -->
+<!-- D_table <-lapply(1:length(Dt_list), function(t){ -->
+<!--    data.frame(age_focal = age, year = t-1, count_living = colSums(Dt_list[[t]]))}) %>% -->
+<!--   dplyr::bind_rows() -->
+<!-- ``` -->
+<!-- We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal's age, in each year, depending kin's age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame. -->
+<!-- Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in $t=3$ will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$. -->
+<!-- ![Caswell, 2021](time_var_summary.png) -->
+<!-- Let's play with real data! -->
+<!-- ### Using DemoKin {#using_demokin_tues9} -->
+<!-- #### 1. Living kin -->
+<!-- We saw yesterday the case of Sweden in 2015 assuming constant rates. But the demography of Sweden is, as you know, changing every year. This means that Focal and her relatives will have experienced changing mortality and fertility rates over time. Data has year in columns and age in rows, and plotted $q_x$ (p's complement) over age and time, looks like this: -->
+<!-- ```{r} -->
+<!-- data("swe_px", package="DemoKin") -->
+<!-- swe_px %>% -->
+<!--     as.data.frame() %>% -->
+<!--     mutate(age = 1:nrow(swe_asfr)-1) %>% -->
+<!--     pivot_longer(-age, names_to = "year", values_to = "px") %>% -->
+<!--     mutate(qx = 1-px) %>% -->
+<!--     ggplot() + -->
+<!--     geom_line(aes(x = age, y = qx, col = year)) + -->
+<!--     scale_y_log10() + -->
+<!--     theme(legend.position = "none") -->
+<!-- ``` -->
+<!-- Age-specific fertility rates: -->
+<!-- ```{r} -->
+<!-- data("swe_asfr", package="DemoKin") -->
+<!-- swe_asfr %>% as.data.frame() %>% -->
+<!--      mutate(age = 1:nrow(swe_asfr)-1) %>% -->
+<!--      pivot_longer(-age, names_to = "year", values_to = "asfr") %>% -->
+<!--      mutate(year = as.integer(year)) %>% -->
+<!--      ggplot() + geom_tile(aes(x = year, y = age, fill = asfr)) + -->
+<!--      scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10)) -->
+<!-- ``` -->
+<!-- And female population by age: -->
+<!-- ```{r} -->
+<!-- data("swe_pop", package="DemoKin") -->
+<!-- swe_pop %>% as.data.frame() %>% -->
+<!--      mutate(age = 1:nrow(swe_asfr)-1) %>% -->
+<!--      pivot_longer(-age, names_to = "year", values_to = "pop") %>% -->
+<!--      mutate(year = as.integer(year)) %>% -->
+<!--      ggplot() + geom_tile(aes(x = year, y = age, fill = pop)) + -->
+<!--      scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10)) -->
+<!-- ``` -->
+<!-- We account for this, by using the time-variant models introduced by @caswell_formal_2021. Let's take a look at the resulting kin counts for a Focal born in 1960, limiting the output to the relative types given in the argument `output_kin`. -->
+<!-- ```{r, fig.height=6, fig.width=8} -->
+<!-- swe_time_varying_1960_cohort <- -->
+<!--   kin( -->
+<!--     p = swe_px, -->
+<!--     f = swe_asfr, -->
+<!--     n = swe_pop, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_cohort = 1960, -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
+<!--     ) -->
+<!-- # plot -->
+<!-- swe_time_varying_1960_cohort$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot(aes(age_focal,count_living)) + -->
+<!--   geom_line()+ -->
+<!--   scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+ -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   facet_wrap(~kin,scales = "free")+ -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here it is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018. -->
+<!-- > Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)). -->
+<!-- But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot). -->
+<!-- ```{r, fig.height=6, fig.width=8} -->
+<!-- swe_time_varying_1960_1910_cohort <- -->
+<!--   kin( -->
+<!--     p = swe_px, -->
+<!--     f = swe_asfr, -->
+<!--     n = swe_pop, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_cohort = c(1910, 1960), -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
+<!--     ) -->
+<!-- # plot -->
+<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot(aes(age_focal,count_living,color=factor(cohort))) + -->
+<!--   geom_line()+ -->
+<!--   scale_y_continuous(name = "",labels = seq(0,3,.2), breaks = seq(0,3,.2))+ -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   facet_wrap(~kin, scales = "free")+ -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- Maybe you are interested in take a snapshot of kin distribution in some year, for example 1990, setting argument`output_period = 1990`. What can you describe and not with this period approach, and what with the cohort approach? -->
+<!-- ```{r, fig.height=6, fig.width=8} -->
+<!-- swe_time_varying_1990_period <- -->
+<!--   kin( -->
+<!--     p = swe_px, -->
+<!--     f = swe_asfr, -->
+<!--     n = swe_pop, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_period = 1990, -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
+<!--     ) -->
+<!-- # plot -->
+<!-- swe_time_varying_1990_period$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot(aes(age_focal,count_living)) + -->
+<!--   geom_line() + -->
+<!--   scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+ -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   facet_wrap(~kin,scales = "free")+ -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- #### 2. Kin deaths -->
+<!-- Kin loss can have severe consequences for bereaved relatives. It can also affect the provision of care support and intergenerational transfers over the life course. -->
+<!-- The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison: what types looks with the biggest differences? See absolute and relative terms (scale in this grid plots can be confusing some times)? -->
+<!-- ```{r, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, eval=F} -->
+<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot() + -->
+<!--   geom_line(aes(age_focal, count_cum_dead, col = factor(cohort))) + -->
+<!--   labs(y = "Expected number of deceased relatives") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin,scales="free") -->
+<!-- ``` -->
+<!-- Given these population-level measures, we can compute Focal's mean age at the time of her relative's death. For a Focal aged 50 yo, what kind of conclusions can you get? -->
+<!-- ```{r} -->
+<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
+<!--   rename_kin() %>% -->
+<!--   filter(age_focal == 50) %>% -->
+<!--   select(kin,cohort,mean_age_lost) %>% -->
+<!--   pivot_wider(names_from = cohort, values_from = mean_age_lost) %>% -->
+<!--   mutate_if(is.numeric, round, 1) -->
+<!-- ``` -->
+<!-- ### Exercises {#exercises_tues9} -->
+<!-- **E.1** Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located at same folder than with this *Rmd*,  [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)). -->
+<!-- ```{r} -->
+<!-- # load function -->
+<!-- source("get_UNWPP_inputs.R") -->
+<!-- # pick country -->
+<!-- country <- c("Argentina") -->
+<!-- # Year range -->
+<!-- my_startyr   <- 1950 -->
+<!-- my_endyr     <- 2021 -->
+<!-- # data downloaded -->
+<!-- data <- get_UNWPP_inputs( -->
+<!--   countries = country,  -->
+<!--   my_startyr = my_startyr,  -->
+<!--   my_endyr = my_endyr -->
+<!--   ) -->
+<!-- # reshape fertility -->
+<!-- country_fert <- data %>% -->
+<!--   select(age, year, fx) %>% -->
+<!--   pivot_wider(names_from = year, values_from = fx) %>% -->
+<!--   select(-age) %>% -->
+<!--   as.matrix() -->
+<!-- ``` -->
+<!-- **E.1.1** Reshape data for survival in the same way and visualize it. -->
+<!-- ```{r} -->
+<!-- # reshape survival -->
+<!-- country_surv <- data %>% -->
+<!--   select(age, year, px) %>% -->
+<!--   pivot_wider(names_from = year, values_from = px) %>% -->
+<!--   select(-age) %>% -->
+<!--   as.matrix() -->
+<!-- country_surv %>% -->
+<!--     as.data.frame() %>% -->
+<!--     mutate(age = 1:nrow(swe_asfr)-1) %>% -->
+<!--     pivot_longer(-age, names_to = "year", values_to = "px") %>% -->
+<!--     mutate(qx = 1-px) %>% -->
+<!--     ggplot() + -->
+<!--     geom_line(aes(x = age, y = qx, col = year)) + -->
+<!--     scale_y_log10() + -->
+<!--     theme(legend.position = "none") -->
+<!-- ``` -->
+<!-- **E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings. -->
+<!-- ```{r} -->
+<!-- E.1.2 <- -->
+<!--   kin( -->
+<!--     p = country_surv, -->
+<!--     f = country_fert, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_period = c(1990, 2015), -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
+<!--     ) -->
+<!-- E.1.2$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot(aes(age_focal,count_living,color=factor(year))) + -->
+<!--   geom_line() + -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   facet_wrap(~kin,scales = "free")+ -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- **E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters.  -->
+<!-- > Take a look to the graphic from @Song2019, we are in the definition 2 of years lived but with a simpler approach for sisters in our case. -->
+<!-- ![Fig. 1 in Song (2019)](song_shared.png) -->
+<!-- ```{r} -->
+<!-- E.1.3 <- -->
+<!--   kin( -->
+<!--     p = country_surv, -->
+<!--     f = country_fert, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_cohort = c(1990), -->
+<!--     output_kin = c("os", "ys") -->
+<!--     ) -->
+<!-- # E.1.3$kin_summary %>% -->
+<!-- #   DemoKin::rename_kin() %>% -->
+<!-- #   ggplot(aes(age_focal,count_living)) + -->
+<!-- #   geom_line() + -->
+<!-- #   labs(y = "Expected number of living relatives") + -->
+<!-- #   facet_wrap(~kin)+ -->
+<!-- #   theme_bw() -->
+<!-- E.1.3$kin_summary %>%  -->
+<!--   group_by(kin, cohort) %>%  -->
+<!--   mutate(shared_years = cumsum(count_living)) %>%  -->
+<!--   filter(age_focal == 30) %>%  -->
+<!--   group_by(cohort, kin) %>%  -->
+<!--   summarise(sister_years =sum(shared_years)) -->
+<!-- ``` -->
+<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect.  -->
+<!-- ```{r} -->
+<!-- country_surv_counterfactual <- country_surv -->
+<!-- country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"] -->
+<!-- country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"] -->
+<!-- E.1.4 <- -->
+<!--   kin( -->
+<!--     p = country_surv, -->
+<!--     f = country_fert, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_period = c(2021) -->
+<!--     ) -->
+<!-- E.1.4_counterfactual <- -->
+<!--   kin( -->
+<!--     p = country_surv_counterfactual, -->
+<!--     f = country_fert, -->
+<!--     time_invariant =FALSE, -->
+<!--     output_period = c(2021) -->
+<!--     ) -->
+<!-- c(E.1.4$kin_full %>%  -->
+<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])), -->
+<!-- E.1.4_counterfactual$kin_full %>%  -->
+<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])) -->
+<!-- ) -->
+<!-- ``` -->
+<!-- E.3 Run the toy example with DemoKin and check if you have the same results for type *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$. -->
+<!-- ```{r} -->
+<!-- rownames(Pt) <- rownames(Ft) <- rownames(Pi) <- 0:4 -->
+<!-- colnames(Pt) <- colnames(Ft) <- colnames(Ft) <- 0:9 -->
+<!-- by_hand_example <- kin(p = Pt, f = Ft, pi = Pi, time_invariant = FALSE, birth_female = 1) -->
+<!-- by_hand_example -->
+<!-- D_table -->
+<!-- by_hand_example$kin_summary %>% -->
+<!--   filter(kin == "m") %>% -->
+<!--   summarise(living = sum(count_living), .by = c(year, age_focal)) %>% -->
+<!--   arrange(year, age_focal) -->
+<!-- ``` -->
+<!-- ## Wed 10 -->
+<!-- During this section, we will implement the theory of Age-classified time-**invariant** two-sex** kinship models In R, use `DemoKin` package and do some exercises. -->
+<!-- - [By hand](#by_hand_wed10) -->
+<!-- - [Using DemoKin](#using_demokin_wed10) -->
+<!-- - [Exercises](#exercises_wed10) -->
+<!-- ### By hand {#by_hand_wed10} -->
+<!-- Now our population has two sex, each of them has its own mortality and fertility pattern by age, given by: -->
+<!-- ```{r} -->
+<!-- age <- 0:4 -->
+<!-- # female -->
+<!-- p_female <- c(.9, .7, .4, .1, 0) -->
+<!-- f_female <- c(0, .5, .5, .3, 0) -->
+<!-- # male -->
+<!-- p_male <- c(.9, .6, .3, .05, 0) # higher mortality -->
+<!-- f_male <- f_female * seq(1, 1.1, length.out = 5) # increase a bit level and mean age -->
+<!-- plot(age, f_male, t="b", col = 4, ylab = "Parents distribution by age in the 2-sex stable population") -->
+<!-- lines(age, f_female, t="b", col = 2) -->
+<!-- legend("topright", c("males","females"), col=c(4,2), lty = 1) -->
+<!-- ``` -->
+<!-- Let's build the survival and fertility matrices $U$ and $F$ for each sex. -->
+<!-- ```{r} -->
+<!-- ages <- length(age) -->
+<!-- # female -->
+<!-- U_female <- F_female <- matrix(0, nrow=ages, ncol=ages) -->
+<!-- U_female[row(U_female)-1 == col(U_female)] <- p_female[-ages] -->
+<!-- U_female[ages, ages] <- p_female[ages] -->
+<!-- F_female[1,] = f_female -->
+<!-- # male -->
+<!-- U_male = F_male = matrix(0, nrow=ages, ncol=ages) -->
+<!-- U_male[row(U_male)-1 == col(U_male)] <- p_male[-ages] -->
+<!-- U_male[ages, ages] = p_male[ages] -->
+<!-- F_male[1,] = f_male -->
+<!-- ``` -->
+<!-- @caswell_formal_2021 suggests to mix female and male patterns in a block matrices  $Ub$ and $Fb$ (or $\tilde{U}$ and $\tilde{F}$in the paper), which let us to project a population vector with first 5 elements with female population by age and last 5 for males by age (a block-structured vector, see eq. 16 in @caswell_formal_2022). -->
+<!-- `Matrix` package will help us to construct those block matrices (the function `bdiag` returns a [sparse](https://en.wikipedia.org/wiki/Sparse_matrix) matrix, so need to get back to a common matrix). -->
+<!-- ```{r} -->
+<!-- alpha <- .5 # portion of males among offspring () -->
+<!-- Ub <- Matrix::bdiag(U_female, U_male) %>% as.matrix() # Ub in eq 9 Caswell (2021) -->
+<!-- Fb <- rbind(cbind(alpha * F_female,      alpha * F_male), # Fb in eq 9 Caswell (2021) -->
+<!--             cbind((1-alpha) * F_female, (1-alpha) * F_male)) -->
+<!-- Ab <- Ub + Fb -->
+<!-- ``` -->
+<!-- > We are in a scenario where survival and fertility don't depend of line of descendence (itis the same for a grandson that comes from daughters than from sons). The same is true for grandmothers: we won't keep track if she is the father's or mother's mom. This is done to simplify matrix calculation. You can change it according to your research question. -->
+<!-- Let's project some fictitious population to see how block-structured matrices and vectors works: -->
+<!-- ```{r} -->
+<!-- set.seed(100) -->
+<!-- pop_females <- rpois(5, 100) -->
+<!-- pop_males <- rpois(5, 100) -->
+<!-- # block str vector -->
+<!-- popb <- c(pop_females, pop_males) -->
+<!-- # project -->
+<!-- pop_proj <- Ab %*% popb # still a cycle graph conected -->
+<!-- pop_proj -->
+<!-- ``` -->
+<!-- The positions 1 and 6 in vector `pop_proj` corresponds to new offspring, and are equal because no matter how many new individuals comes from male fertility and how many from female fertility, all are split by `$\alpha$`. This was how to project a 2-sex population.  -->
+<!-- Now let's find stable distribution by age $w$, and then the ones for parents $pi$, for each sex: -->
+<!-- ```{r} -->
+<!-- A_eigen = eigen(Ab) -->
+<!-- A_eigen_value = as.double(A_eigen$values[1]) -->
+<!-- A_eigen_vector = as.double(A_eigen$vectors[,1]) -->
+<!-- w_female = A_eigen_vector[1:ages] -->
+<!-- w_male = A_eigen_vector[c((ages+1):(ages*2))] # remember sex position -->
+<!-- pi_female = w_female * f_female / sum(w_female * f_female) -->
+<!-- pi_male = w_male * f_male / sum(w_male * f_male) -->
+<!-- pib <- c(pi_female, pi_male) -->
+<!-- plot(age, pi_male, t="b", col = 4, ylab = "Parents distribution by age in the 2-sex stable population") -->
+<!-- lines(age, pi_female, t="b", col = 2) -->
+<!-- legend("topright", c("males","females"), col=c(4,2), lty = 1) -->
+<!-- ``` -->
+<!-- - **Mother** -->
+<!-- We have the age distribution of parents when Focal born $\tilde{d}(0)=\tilde{\pi}$ (eq 44), `pib` in our code, which is the initial distribution when Focal is born (so first column of `Db`), and we need to project them as we did with the fictitious population.  -->
+<!-- ```{r} -->
+<!-- # project mothers -->
+<!-- Db <- matrix(0, ages*2, ages) -->
+<!-- Db[,1] <- pib # eq 44 in Caswell (2022) -->
+<!-- for(x in 2:ages){ -->
+<!--   Db[,x] <- Ub %*% Db[,x-1] # eq 43 in Caswell (2022) -->
+<!-- } -->
+<!-- # we can calculate total parents -->
+<!-- ones = rep(1,ages*2) # row vector by deafult -->
+<!-- db <- ones %*% Db -->
+<!-- # or sex-specific -->
+<!-- ones = rep(1,ages) # row vector by deafult -->
+<!-- db_mothers <- ones %*% Db[1:ages,] -->
+<!-- db_fathers <- ones %*% Db[-(1:ages),] -->
+<!-- # how many living fathers and mothers has Focal during her life -->
+<!-- plot(age, db_fathers, t = "b", col = 4, xlab = "d") -->
+<!-- lines(age, db_mothers, t = "b", col = 2) -->
+<!-- legend("topright", c("father","mother"), col = c(4,2), lty = 1) -->
+<!-- ``` -->
+<!-- > Arranging in a convenient way matrices and vectors made calculations equal to the one sex model! -->
+<!-- - **Children** -->
+<!-- For projecting children we need a modified version of $E$ from the one-sex variant, tracking the age of Focal in a block-structured vector: we call $Phi$ (eq. 34). Because Focal is a female she starts in position [1,1] (if not he would start in [6,1]). The matrix $Gb$ moves Focal with age with subdiagonal depending also of Focal`s sex. -->
+<!-- ```{r} -->
+<!-- Phi <- matrix(0, ages*2, ages) -->
+<!-- Phi[1, 1] <- 1  -->
+<!-- # G matrix moves Focal by age -->
+<!-- G <- matrix(0, ages, ages) -->
+<!-- G[row(G)-1 == col(G)] <- 1 -->
+<!-- Gb <- Matrix::bdiag(G, matrix(0, ages, ages)) %>% as.matrix() -->
+<!-- ``` -->
+<!-- Remember that for children we use $Fb$, so all daughters comes from Focal line.  -->
+<!-- ```{r} -->
+<!-- # inital -->
+<!-- Ab <- matrix(0, ages*2, ages) # eq 36 -->
+<!-- for(x in 2:ages){ -->
+<!--   Ab[,x]  = Ub %*% Ab[,x-1] + Fb %*% Phi[,x-1] # eq 35 -->
+<!--   Phi[,x] = Gb %*% Phi[,x-1] -->
+<!-- } -->
+<!-- ones <- rep(1,5) -->
+<!-- a_daughter <- ones %*% Ab[1:ages,] -->
+<!-- a_son <- ones %*% Ab[-(1:ages),] -->
+<!-- # how many living son and daughter has Focal during her life -->
+<!-- plot(age, a_daughter, t = "b", col=2) -->
+<!-- lines(age, a_son, t = "b", col = 4) -->
+<!-- legend("topleft", c("daughter","son"), col = c(2, 4), lty = 1) -->
+<!-- ``` -->
+<!-- Continuing with other kin has the same logic than the one-sex model but with block-structured vectors and matrices but with two exceptions. For the case of descendants we need to assign births to one of the parents, because if not we would be counting twice young siblings, for example (fertility rates are independent between sex). By convention is assigned to the mother, replacing male fertility from $\tilde{F}$ for $\tilde{F}^*$ (eq 57). The other exception is that for ancestors, $\pi$ is the sum of female and male distribution, due to the no identification of grandparents by sex from which parent line. See table from @caswell_formal_2022 for a summary. -->
+<!-- [Caswell (2022)](time_inv_2sex_summary.png) -->
+<!-- ### Using DemoKin {#using_demokin_wed10} -->
+<!-- Human males generally live longer and reproduce later than females. -->
+<!-- These sex-specific processes affect kinship dynamics in a number of ways. -->
+<!-- For example, the degree to which an average member of the population, call her Focal, has a living grandparent is affected by differential mortality affecting the parental generation at older ages. -->
+<!-- We may also be interested in considering how kinship structures vary by Focal's sex: a male Focal may have a different number of grandchildren than a female Focal given differences in fertility by sex. -->
+<!-- Documenting these differences matters since women often face greater expectations to provide support and informal care to relatives. -->
+<!-- As they live longer, they may find themselves at greater risk of being having no living kin. -->
+<!-- The function `kin2sex` implements two-sex kinship models as introduced by Caswell (2022). -->
+<!-- This vignette show how to run two-sex models and highlights some of the advantages of this model over one-sex models in populations with time-invariant and time-variant rates. -->
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- library(DemoKin) -->
+<!-- library(tidyr) -->
+<!-- library(dplyr) -->
+<!-- library(ggplot2) -->
+<!-- library(knitr) -->
+<!-- ``` -->
+<!-- #### 1. Demographic rates by sex -->
+<!-- Data on female fertility by age is less common than female fertility. Schoumaker (2019) shows that male TFR is almost always higher than female Total Fertility Rates (TFR) using a sample of 160 countries. -->
+<!-- For this example, we use data from 2012 France to exemplify the use of the two-sex function. -->
+<!-- Data on female and male fertility and mortality are included in `DemoKin`. In this population, male and female TFR is almost identical (1.98 and 1.99) but the distributions of fertility by sex varies over age: -->
+<!-- ```{r} -->
+<!-- fra_fert_f <- fra_asfr_sex[,"ff"] -->
+<!-- fra_fert_m <- fra_asfr_sex[,"fm"] -->
+<!-- fra_surv_f <- fra_surv_sex[,"pf"] -->
+<!-- fra_surv_m <- fra_surv_sex[,"pm"] -->
+<!-- sum(fra_fert_m)-sum(fra_fert_f) -->
+<!-- data.frame(value = c(fra_fert_f, fra_fert_m, fra_surv_f, fra_surv_m), -->
+<!--            age = rep(0:100, 4), -->
+<!--            sex = rep(c(rep("f", 101), rep("m", 101)), 2), -->
+<!--            risk = c(rep("fertility rate", 101 * 2), rep("survival probability", 101 * 2))) %>% -->
+<!--   ggplot(aes(age, value, col=sex)) + -->
+<!--   geom_line() + -->
+<!--   facet_wrap(~ risk, scales = "free_y") + -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- #### 2. Time-invariant two-sex kinship models -->
+<!-- We now introduce the functions `kin2sex`, which is similar to the one-sex function `kin` (see `?kin`) with two exceptions. -->
+<!-- First, the user needs to specify mortality and fertility by sex. -->
+<!-- Second, the user must indicate the sex of Focal (which was assumed to be female in the one-sex model). -->
+<!-- Let us first consider the application for time-invariant populations: -->
+<!-- ```{r} -->
+<!-- kin_result <- kin2sex( -->
+<!--   pf = fra_surv_f, -->
+<!--   pm = fra_surv_m, -->
+<!--   ff = fra_fert_f, -->
+<!--   fm = fra_fert_m, -->
+<!--   time_invariant = TRUE, -->
+<!--   sex_focal = "f", -->
+<!--   birth_female = .5 -->
+<!--   ) -->
+<!-- ``` -->
+<!-- The output of `kin2sex` is equivalent to that of `kin`, except that it includes a column `sex_kin` to specify the sex of the given relatives. -->
+<!-- Let's group aunts and siblings to visualize the number of living kin by Focal's age. -->
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- kin_out <- kin_result$kin_summary %>% -->
+<!--   mutate(kin = case_when(kin %in% c("s", "s") ~ "s", -->
+<!--                          kin %in% c("ya", "oa") ~ "a", -->
+<!--                          T ~ kin)) %>% -->
+<!--   filter(kin %in% c("d", "m", "gm", "ggm", "s", "a")) -->
+<!-- kin_out %>% -->
+<!--   group_by(kin, age_focal, sex_kin) %>% -->
+<!--   summarise(count=sum(count_living)) %>% -->
+<!--   ggplot(aes(age_focal, count, fill=sex_kin))+ -->
+<!--   geom_area()+ -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin) -->
+<!-- ``` -->
+<!-- **A note on terminology** -->
+<!-- The function `kin2sex` uses the same codes as `kin` to identify relatives (see `demokin_codes()`). -->
+<!-- Note that when running a two-sex model, the code 'm' refers to either mothers or fathers! -->
+<!-- Use the column `sex_kin` to determine the sex of a given relatives. -->
+<!-- For example, in order to consider only sons and ignore daughters, use: -->
+<!-- ```{r} -->
+<!-- kin_result$kin_summary %>% -->
+<!--   filter(kin == "d", sex_kin == "m") %>% -->
+<!--   head() -->
+<!-- ``` -->
+<!-- Information on kin availability by sex allows us to consider sex ratios, a traditional measure in demography, with females often in denominator. The following figure, for example, shows that a 25yo French woman in our hypothetical population can expect to have 0.5 grandfathers for every grandmother: -->
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- kin_out %>% -->
+<!--   group_by(kin, age_focal) %>% -->
+<!--   summarise(sex_ratio=sum(count_living[sex_kin=="m"], na.rm=T)/sum(count_living[sex_kin=="f"], na.rm=T)) %>% -->
+<!--   ggplot(aes(age_focal, sex_ratio))+ -->
+<!--   geom_line()+ -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin, scales = "free") -->
+<!-- ``` -->
+<!-- The experience of kin loss for Focal depends on differences in mortality between sexes. -->
+<!-- A female Focal starts losing fathers earlier than mothers. -->
+<!-- We see a slightly different pattern for grandparents since Focal's experience of grandparental loss is dependent on the initial availability of grandparents (i.e. if Focal's grandparent died before her birth, she will never experience his death). -->
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- # sex ratio -->
+<!-- kin_out %>% -->
+<!--   group_by(kin, sex_kin, age_focal) %>% -->
+<!--   summarise(count=sum(count_dead)) %>% -->
+<!--   ggplot(aes(age_focal, count, col=sex_kin))+ -->
+<!--   geom_line()+ -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin) -->
+<!-- ``` -->
+<!-- #### 3. Time-variant two-sex kinship models -->
+<!-- We look at populations where demographic rates are not static but change on a yearly basis. -->
+<!-- For this, we consider the case of Sweden using data pre-loaded in `DemoKin`. -->
+<!-- For this example, we will create 'pretend' male fertility rates by slightly perturbing the existing female rates. -->
+<!-- This is a toy example, since a real two-sex model should use actual female and male rates as inputs. -->
+<!-- ```{r} -->
+<!-- years <- ncol(swe_px) -->
+<!-- ages <- nrow(swe_px) -->
+<!-- swe_surv_f_matrix <- swe_px -->
+<!-- swe_surv_m_matrix <- swe_px ^ 1.5 # artificial perturbation for this example -->
+<!-- swe_fert_f_matrix <- swe_asfr -->
+<!-- swe_fert_m_matrix <- rbind(matrix(0, 5, years), -->
+<!--             swe_asfr[-((ages-4):ages),]) * 1.05 # artificial perturbation for this example -->
+<!-- par(mfrow=c(1,2)) -->
+<!-- plot(swe_surv_f_matrix[,"1900"], t="l", xlab = "Age", ylab = "Survival probability") -->
+<!-- lines(swe_surv_m_matrix[,"1900"], col=2) -->
+<!-- plot(swe_fert_f_matrix[,"1900"], t="l", xlab = "Age", ylab = "Fertility rate") -->
+<!-- lines(swe_fert_m_matrix[,"1900"], col=2) -->
+<!-- ``` -->
+<!-- We now run the time-variant two-sex models (note the `time_invariant = FALSE` argument): -->
+<!-- ```{r} -->
+<!-- kin_out_time_variant <- kin2sex( -->
+<!--                       pf = swe_surv_f_matrix, -->
+<!--                       pm = swe_surv_m_matrix, -->
+<!--                       ff = swe_fert_f_matrix, -->
+<!--                       fm = swe_fert_m_matrix, -->
+<!--                       sex_focal = "f", -->
+<!--                       time_invariant = FALSE, -->
+<!--                       birth_female = .5, -->
+<!--                       output_cohort = 1900 -->
+<!--                       ) -->
+<!-- ``` -->
+<!-- We can plot data on kin availability alongside values coming from a time-invariant model to show how demographic change matters: the time-variant models take into account changes derived from the demographic transition, whereas the time-invariant models assume never-changing rates. -->
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- kin_out_time_invariant <- kin2sex( -->
+<!--                       swe_surv_f_matrix[,"1900"], swe_surv_m_matrix[,"1900"], -->
+<!--                       swe_fert_f_matrix[,"1900"], swe_fert_m_matrix[,"1900"], -->
+<!--                       sex_focal = "f", birth_female = .5) -->
+<!-- kin_out_time_variant$kin_summary %>% -->
+<!--   filter(cohort == 1900) %>% mutate(type = "variant") %>% -->
+<!--   bind_rows(kin_out_time_invariant$kin_summary %>% mutate(type = "invariant")) %>% -->
+<!--   mutate(kin = case_when(kin %in% c("ys", "os") ~ "s", -->
+<!--                          kin %in% c("ya", "oa") ~ "a", -->
+<!--                          T ~ kin)) %>% -->
+<!--   filter(kin %in% c("d", "m", "gm", "ggm", "s", "a")) %>% -->
+<!--   group_by(type, kin, age_focal, sex_kin) %>% -->
+<!--   summarise(count=sum(count_living)) %>% -->
+<!--   ggplot(aes(age_focal, count, linetype=type))+ -->
+<!--   geom_line()+ theme_bw() + -->
+<!--   facet_grid(cols = vars(kin), rows=vars(sex_kin), scales = "free") -->
+<!-- ``` -->
+<!-- ### Exercises {#exercises_wed10} -->
+<!-- **E1** You will use data on kinship structures [@kolk_swedish_2021] to benchmark formal models of kinship. -->
+<!-- ```{r} -->
+<!-- kolk <- read.csv("../data/kolk_all_kin.csv", stringsAsFactors = F, skip = 0) -->
+<!-- head(kolk) -->
+<!-- ``` -->
+<!-- ```{r, fig.cap='Average number of kin for the entire 2017 population of Sweden according to Kolk et al. (2021) using data from population registers. Kin counts refer to female and male relatives.'} -->
+<!-- levs <- c("grandchildren", "children", "nephews/nieces", "siblings", -->
+<!--           "cousins", "uncles/aunts", "grandparents", "parents") -->
+<!-- kolk %>% -->
+<!--   mutate(kin = factor(kin, levels = levs)) %>% -->
+<!--   ggplot(aes(x = cohort, y = mean, group = kin, fill = kin)) + -->
+<!--   geom_area(colour = "black") + -->
+<!--   scale_x_continuous(labels = function(x) paste0(x, "\n (", 2017 - x, ")")) + -->
+<!--   labs( -->
+<!--     y = "Mean number of kin (both sexes)" -->
+<!--     , x = "Focal's Birth Cohort (Sweden, both sexes) \n (Age in 2017)" -->
+<!--     ) + -->
+<!--   theme_bw() + -->
+<!--   theme(legend.position = "bottom") -->
+<!-- ``` -->
+<!-- The figure above shows the empirical distribution of kin for the 2017 population of Sweden based on registry data. -->
+<!-- Note that the figure includes female and male kin and that the sex of Focal is not specified (i.e., it is the average of all male and female individuals in the registers). -->
+<!-- For this first exercise, you should use `DemoKin` to replicate this figure. Concretely: -->
+<!-- - Run three iterations of the kinship model: -->
+<!--    1. One-sex model; time-invariant rates; approximate male kin using GKP factors -->
+<!--    1. Two-sex model; time-variant rates; approximate male kin using the androgynous assumption (i.e., male fertility is equivalent to female fertility); use mortality rates for males and females -->
+<!--    1. Two-sex model; time-variant rates; use real male and female fertility rates  -->
+<!-- Here is a summary of the model specifications: -->
+<!-- ```{r} -->
+<!-- data.frame( -->
+<!-- `Model ID` = 1:3 -->
+<!--   , `Model Time` = c("invariant", "variant", "variant") -->
+<!--   , `Model sex` = c("one-sex", "two-sex", "two-sex") -->
+<!--   , `Two-sex approximation` = c("GKP factors", "Androgynous fertility", "None") -->
+<!-- ) %>%  -->
+<!--   knitr::kable() -->
+<!-- ``` -->
+<!-- Using the model outputs, answer: -->
+<!-- **E1.1** How well do your models approximate the kin counts reported by Kolk et al. (2021)? Justify your answer using quantitative measures (max 250 words and 4 figures) -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- ``` -->
+<!-- **E1.1** Based on this exercise, discuss the advantages and drawbacks of using formal models to quantify kinship (max 250 words) -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- ``` -->
+<!-- **E2** Run the toy example but with `DemoKin` and check if you have same results for mother and daughters. -->
+<!-- ```{r} -->
+<!-- # Write your code here -->
+<!-- ``` -->
+<!-- ## Thurs 11 -->
+<!-- During this section we will implement the theory of **stage-age-classified time-invariant one-sex kinship models** in R, use the `DemoKin` package and do some exercises. -->
+<!-- - [By hand](#by_hand_thurs11) -->
+<!-- - [Using DemoKin](#using_demokin_thurs11) -->
+<!-- - [Exercises](#exercises_thurs11) -->
+<!-- ### By hand {#by_hand_thurs11} -->
+<!-- We keep studying the same female population but now we have access to their educational status, and its differential fertility and mortality. This population has 2 stages in education ($s=2$): low and high. -->
+<!-- ```{r} -->
+<!-- age <- 0:4 -->
+<!-- ages <- length(age) -->
+<!-- s = 2 -->
+<!-- p_low <- c(.9, .7, .4, .1, 0) -->
+<!-- p_high <- p_low * 9/10 -->
+<!-- plot(age, p_low, t ="b", ylab = "px") -->
+<!-- lines(age, p_high, col=2, t="b") -->
+<!-- legend("topright", c("low","high"), col = 1:2, lty = 1) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- f_low <- c(0, .5, .5, .3, 0) -->
+<!-- f_high <- f_low * 4/5 -->
+<!-- plot(age, f_low,  t="b", ylab = "") -->
+<!-- lines(age, f_high, col=2,  t="b") -->
+<!-- legend("topright", c("low","high"), col = 1:2, lty = 1) -->
+<!-- ``` -->
+<!-- We need to specify transitions between educational stages within each age, with matrices where element $ij$ is the probability transition between $j \rightarrow i$. In our case a individual can transit from low to high but not in the other way. Let's create a list in line with equations 7 to 10 in @caswell_formal_2020 (number of elements of a list can be obtained with function `length(x)`, as vectors). -->
+<!-- ```{r} -->
+<!-- # transition between states within each age class. Transition occurs only in ages 1 and 2 -->
+<!-- U_0 <- U_3 <- U_4 <- matrix(c(1,0,0,1), nrow = 2, ncol = 2) -->
+<!-- U_1 <- matrix(c(.9,.1,0,1), nrow = 2, ncol = 2) -->
+<!-- U_2 <- matrix(c(.5,.5,0,1), nrow = 2, ncol = 2) -->
+<!-- U <- list(U_0, U_1, U_2, U_3, U_4)  -->
+<!-- # age advancing with mortality in each state -->
+<!-- D_low <- D_high <- matrix(0, ages, ages) -->
+<!-- D_low[row(D_low)-1 == col(D_low)] <- p_low[-ages] -->
+<!-- D_high[row(D_high)-1 == col(D_high)] <- p_high[-ages] -->
+<!-- D <- list(D_low, D_high) -->
+<!-- # fertility offspring in each age. Every new born is low educated, no matter Focal's status -->
+<!-- F. <- lapply(1:ages, function(x){ -->
+<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
+<!--   }) -->
+<!-- # all offspring starts at first age-class -->
+<!-- H_low <- H_high <- matrix(0, ages, ages) -->
+<!-- H_low[1,] <- H_high[1,] <- 1  -->
+<!-- H <- list(H_low, H_high) -->
+<!-- ``` -->
+<!-- Building block-matrices we should have same dimension ages times stages for rows and cols. -->
+<!-- ```{r} -->
+<!-- # block matrix (eq 11) -->
+<!-- library(Matrix) -->
+<!-- Ub = bdiag(U) %>% as.matrix() -->
+<!-- Db = bdiag(D) %>% as.matrix() -->
+<!-- Fb = bdiag(F.) %>% as.matrix() -->
+<!-- Hb = bdiag(H) %>% as.matrix() -->
+<!-- dim(Ub); dim(Db); dim(Fb); dim(Hb) -->
+<!-- ``` -->
+<!-- The key in projectiong age-stage classified populations is the following: constructing vec-permutation matrices appropriate to the numbers of stages and age classes, which handle in a very smart way this transitions. -->
+<!-- ```{r} -->
+<!-- # vec-permutation matrix -->
+<!-- K <- matrixcalc::commutation.matrix(s, ages) -->
+<!-- # survival and fertility in an age-stage framework -->
+<!-- Ut <- t(K) %*% Db %*% K %*% Ub  # eq 12 -->
+<!-- Ft <-  t(K) %*% Hb %*% K %*% Fb # eq 13 -->
+<!-- # How makes Focal transits age and education conditioned on being alive. -->
+<!-- Gt <-  Ut%*% MASS::ginv(diag(colSums(Ut))) # eq 21-22 -->
+<!-- ``` -->
+<!-- Again, initial distribution of mothers must be set. In this case the stable assumption is on the age-stage structured population. -->
+<!-- ```{r} -->
+<!-- # stable distribution mothers: age x stage -->
+<!-- At <- Ut + Ft -->
+<!-- A_eigen <- eigen(At) -->
+<!-- A_eigen_value <- as.double(A_eigen$values[1]) -->
+<!-- A_eigen_vector <- as.double(A_eigen$vectors[,1]) -->
+<!-- w <- A_eigen_vector/sum(A_eigen_vector) -->
+<!-- pi <- w * t(rep(1,s*ages))%*%Ft / sum(w * t(rep(1,s*ages))%*%Ft) -->
+<!-- ``` -->
+<!-- And now we have the same procedure than in the age-classified model, so let's project mothers and daughters. -->
+<!-- - **Mother** and **daughter** -->
+<!-- ```{r} -->
+<!-- phi <-A <- D <- matrix(0, ages*s, ages) -->
+<!-- # when Focal born she is aged 0 and andlow educated, so -->
+<!-- phi[1,1] <- 1 -->
+<!-- #initial distr of mothers -->
+<!-- D[,1] <- pi -->
+<!-- # project -->
+<!-- for(x in 2:ages){ -->
+<!--   phi[,x] = Gt %*% phi[,x-1] -->
+<!--   A[,x]   = Ut %*% A[,x-1] + Ft %*% phi[,x-1] -->
+<!--   D[,x]   = Ut %*% D[,x-1] -->
+<!-- } -->
+<!-- ``` -->
+<!-- Let's explore marginals, by stage or by age: -->
+<!-- ```{r} -->
+<!-- I_ages <- diag(1, ages) -->
+<!-- ones_s <- rep(1, s) -->
+<!-- I_s <- diag(1, s) -->
+<!-- ones_ages <- rep(1, ages) -->
+<!-- ones_s_ages <- rep(1, s*ages) -->
+<!-- # distribution of daughters by education, for each Focal'sage  -->
+<!-- D_age = kronecker(I_ages, t(ones_s)) %*% D -->
+<!-- A_age; D_age -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- # distribution of daughters by age, for each Focal'sage  -->
+<!-- A_stage = kronecker(t(ones_ages), I_s) %*% A -->
+<!-- D_stage = kronecker(t(ones_ages), I_s) %*% D -->
+<!-- A_stage; D_stage -->
+<!-- ``` -->
+<!-- ### Using DemoKin {#using_demokin_thurs11} -->
+<!-- `DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age. -->
+<!-- Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states. -->
+<!-- `DemoKin` includes the data to replicate this analysis for the year 1980: -->
+<!-- - The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$. -->
+<!-- - The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example). -->
+<!-- - The data.frame `svk_pxs` has the same structure and represents survival probabilities. -->
+<!-- - The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival. -->
+<!-- Following Caswell (2020), we can obtain the joint age-parity kin structure: -->
+<!-- ```{r} -->
+<!-- # use birth_female=1 because fertility is for female only -->
+<!-- demokin_svk1980_caswell2020 <- -->
+<!--   kin_multi_stage( -->
+<!--     U = svk_Uxs, -->
+<!--     f = svk_fxs, -->
+<!--     D = svk_pxs, -->
+<!--     H = svk_Hxs, -->
+<!--     birth_female=1 -->
+<!--     ) -->
+<!-- ``` -->
+<!-- Note that the function ask for risks already in a certain matrix format. As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is equivalent to Figure 4 in Caswell [2021]). -->
+<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
+<!-- demokin_svk1980_caswell2020 %>% -->
+<!--   filter(kin %in% c("oa","ya"), age_focal %in% c(20,60)) %>% -->
+<!--   mutate(parity = as.integer(stage_kin)-1, -->
+<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
+<!--          parity = forcats::fct_rev(parity)) %>% -->
+<!--   group_by(age_focal, age_kin, parity) %>% -->
+<!--   summarise(count= sum(living)) %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") + -->
+<!--   geom_vline(aes(xintercept = age_focal), col=2) + -->
+<!--   labs(y = "Number of aunts") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~age_focal, nrow = 2) -->
+<!-- ``` -->
+<!-- We can also see the portion of living daughters and mothers at different parity stages over Focal's lie-course (this is equivalent to Figure 9 and 10 in Caswell [2021]). -->
+<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
+<!-- demokin_svk1980_caswell2020 %>% -->
+<!--   filter(kin %in% c("d","m")) %>% -->
+<!--   mutate(parity = as.integer(stage_kin)-1, -->
+<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
+<!--          parity = forcats::fct_rev(parity)) %>% -->
+<!--   group_by(age_focal, kin, parity) %>% -->
+<!--   summarise(count= sum(living)) %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(x=age_focal, y = count, fill=parity), stat = "identity") + -->
+<!--   labs(y = "Kin count") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin, nrow = 2) -->
+<!-- ``` -->
+<!-- ### Exercises {#exercises_thurs11} -->
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Caswell2001" class="csl-entry">
 Caswell, Hal. 2001. <span>“<span>Matrix Population Models - Paperback -
 Hal Caswell - Oxford University Press</span>.”</span> Oxford University
 Press.
-</div>
 </div>
 </div>
 </div>
