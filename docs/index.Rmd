@@ -61,7 +61,7 @@ We will start soon the computer lab sessions, so would be great if in advance we
 First, you will need [R](https://www.r-project.org/) and [Rstudio](https://posit.co/download/rstudio-desktop/) installed.
 
 Second, install the [DemoKin](https://github.com/IvanWilli/DemoKin) development version from GitHub (could take \~1 minute).
-We made changes to the package ahead of this workshop If you had already installed the package, please uninstall it and and install it again.
+We made changes to the package ahead of this workshop, so if you had already installed the package, please uninstall it and and install it again.
 
 ```{r, eval=FALSE}
 # remove.packages("DemoKin")
@@ -83,12 +83,12 @@ Data for examples and exercises may come from UN population estimates and projec
 
 ### Operations with vectors and matrices in R
 
-The intention of this section is to introduce some basic operators of matrices and vectors, in line with appendix A of @Caswell2001. There is a lot of online resources on matrix algebra with R ([This](https://www.taylorfrancis.com/books/mono/10.1201/9781315370200/basics-matrix-algebra-statistics-nick-fieller) is a comprehensive one). Here we are going to show some relevant ones for our purposes. In case you have some experience with matrix operations in R, this won't add you too much. See @Caswell2001 for mathematical details. 
+The intention of this section is to introduce some basic operators of matrices and vectors, in line with appendix A of @Caswell2001. There is a lot of online resources on matrix algebra with R (see @Fieller2016 for a comprehensive one). Here we are going to show some relevant ones for our purposes. In case you have some experience with matrix operations in R, this won't add you too much. See @Caswell2001 for mathematical details. 
 
 - Creation
 
 ```{r}
-# column vector as default
+# column vector with 4 elements of value 1
 a_vector <- c(1, 1, 1, 1)
 a_vector
 ```
@@ -98,18 +98,21 @@ same_vector <- rep(1, 4) # repeat a value!
 same_vector
 ```
 
-The function `matrix` needs a vector and the way it should be arranged by row and col, in column-direction by default (can goes in row-direction with `byrow = TRUE`).
+The function `matrix` needs an input vector and how it should be arranged by rows and cols, in column-direction by default (can goes in row-direction with `byrow = TRUE`).
 
 ```{r}
 a_matrix <- matrix(1:16, nrow = 4, ncol = 4)
 a_matrix
 ```
 
-Identity matrix, a diagonal matrix with ones in the diagonal and zeros elsewhere.
+A special matrix is the *Identity* matrix, a diagonal matrix with ones in the diagonal and zeros elsewhere.
+
 ```{r}
 identity_matrix <- diag(1, 4)
 a_matrix %*% identity_matrix == a_matrix
 ```
+
+Usually a sub index indicates dimension: $I_n$ of dimension $n$.
 
 - Dimensions
 
@@ -121,8 +124,11 @@ dim(a_matrix)
 # with vectors:
 # dim(a_vector) gives error. 
 # Vectors in R are dimensionless, don't have a dimension by default but have a length. 
-# Operationally it works as a column vector.
+# Operationally for our purposes we can consider it as a column vector. 
+# For showing in matrix way must convert to a matrix object. See 2.10.1 section of Fieller (2016) for more.
 length(a_vector)
+as.matrix(a_vector)
+dim(as.matrix(a_vector))
 ```
 
 > Checking dimensions is a good practice for validating if two objects can be summed or multiplied (and in which order). You know something related to that is going on wrongly when you see this message "non-conformable arguments".
@@ -142,16 +148,15 @@ a_matrix + other_matrix
 
 - Multiplication
 
-We'll use this in the *By hand* sections, and it is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$ (dimensions 4x2 by 2x3 gets dimension 4x3): 
+We'll use this a lot in the *By hand* sections, and it is used a lot inside `DemoKin`. Here a very intuitive figure multiplying $A$ by $B$ (dimensions 4x2 by 2x3 gets dimension 4x3): 
 
 
 ![https://en.wikipedia.org/wiki/Matrix_multiplication](Matrix_multiplication_diagram.png)
 
-You can multiply a matrix by another matrix, a vector with another vector, or a matrix with a vector. The symbol in R is the same for multiply scalars but surrounded by `%`.
+Is not the same doing $A$ times $B$ rather than $B$ by $A$. You can multiply a matrix by another matrix, or a matrix with a vector. The symbol in R is the same for multiply scalars but surrounded by `%`.
 
 ```{r}
 a_matrix %*% other_matrix
-a_vector %*% other_vector
 a_matrix %*% a_vector
 ```
 
@@ -169,7 +174,6 @@ Flips a matrix over its diagonal.
 ```{r}
 t(a_matrix)
 ```
-
 
 - Determinant:
 
@@ -205,14 +209,16 @@ eigen_values
 eigen_vectors
 ```
 
+The dominant value is in the first position `eigen_values[1]`, and its associated vector in the first column of the `eigen_vectors` matrix, `eigen_vectors[1,]`.
+
 - Kronecker product
 
-From `Matrix` package we have the [Kronecker](https://en.wikipedia.org/wiki/Kronecker_product) product between matrices, useful for example when calculating marginals distributions in multi-state context:
+From `Matrix` package we have the [Kronecker](https://en.wikipedia.org/wiki/Kronecker_product) product between matrices, with symbol $\otimes$ ($A\otimes B$ for example), useful for example when calculating marginals distributions in a multi-state context:
 
 ```{r}
 library(Matrix)
-A <- matrix(1:4,2,2)
-B <- matrix(11:14,2,2)
+A <- matrix(1:4, nrow = 2, ncol = 2)
+B <- matrix(11:14, nrow = 2, ncol = 2)
 A
 B
 kronecker(A, B)
@@ -223,7 +229,7 @@ kronecker(A, B)
 Also from `Matrix` package we have a function to construct a blog-structured matrix from a series of matrices (output is a [sparse](https://en.wikipedia.org/wiki/Sparse_matrix) matrix by default, so we can convert to matrix again to see the zeros):
 
 ```{r}
-Matrix::bdiag(A, B) %>% as.matrix()
+bdiag(A, B) %>% as.matrix()
 ```
 
 - Vec-permutation matrix
@@ -231,7 +237,6 @@ Matrix::bdiag(A, B) %>% as.matrix()
 Let´s vectorize a matrix with dimension of $s=2$ (rows, could be health states) by $w=4$ (columns, age-classes), and see what means to apply the vec-permutation (or commutation) matrix.
 
 ```{r}
-library(matrixcalc)
 # create matrix A with 2 stages and 4 ages 
 s <- 2
 w <- 4
@@ -239,6 +244,7 @@ A <- matrix(c(10, 2, 5, 2,
               4,  1, 2, 0), nrow = s, ncol = w, byrow = T)
 
 # vectorize A: re-organize matrix as a vector by grouping stages within age classes
+library(matrixcalc)
 a <- vec(A) 
 a
 ```
@@ -272,7 +278,7 @@ Answer: I have `r x[1]` brothers and `r x[2]` sisters.
 
 > During the course we will try to name vectors and matrix with one or two letters maximum, vectors with lower case and matrix with upper case. 
 
-### `dplyr` and `tidyr`
+### `dplyr`, `tidyr` and `ggplot`
 
 In some exercises we will have a long table with many variables and we will need to get indicators from that, like for example the mean age of daughters when Focal is 30 yo. `dplyr` and `tidyr` packages are really good for that. Let's use `mtcars` data, getting the mean of `wt` by `cyl` and `am`, but later showing `am` categories in columns:
 
@@ -313,7 +319,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- ### By hand {#by_hand_mon8} -->
 
-<!-- Imagine you are studying a female population with 5 age-classes (0 to 1, 1 to 2, ...) and fixed survival probabilities and fertility rates, given by: -->
+<!-- Imagine you are studying a female population with 5 age-classes and fixed survival probabilities and fertility rates (only female offspring), given by: -->
 
 <!-- ```{r} -->
 <!-- age <- 0:4 -->
@@ -335,7 +341,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- ages <- length(age) -->
 <!-- U <- F. <- matrix(0, nrow = ages, ncol = ages) -->
 <!-- U[row(U)-1 == col(U)] <- p[-ages] -->
-<!-- U[ages, ages] <- p[ages] # in this case is 0 -->
+<!-- U[ages, ages] <- p[ages] # in this case is 0, omega = 5 -->
 <!-- F.[1,] <- f -->
 <!-- ``` -->
 
@@ -459,7 +465,6 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- lines(age, g, t = "b", col = 4) -->
 <!-- legend("bottomright", c("m","d","s","gm"), col = 1:4, lty = 1) -->
 <!-- ``` -->
-
 
 <!-- That's the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don't change), and pretty much the essence for every variant that we will see in next days. -->
 
@@ -854,7 +859,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- f <- c(0, .5, .5, .3, 0) -->
 <!-- Ft <- sapply(0:T., function(t) f *(.99)^t) -->
 <!-- plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female offspring only -->
-<!-- plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5 -->
+<!-- # plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5 -->
 <!-- ``` -->
 
 <!-- Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon. -->
@@ -1152,8 +1157,8 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- # data downloaded -->
 <!-- data <- get_UNWPP_inputs( -->
-<!--   countries = country,  -->
-<!--   my_startyr = my_startyr,  -->
+<!--   countries = country, -->
+<!--   my_startyr = my_startyr, -->
 <!--   my_endyr = my_endyr -->
 <!--   ) -->
 
@@ -1207,7 +1212,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--   theme_bw() -->
 <!-- ``` -->
 
-<!-- **E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters.  -->
+<!-- **E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters. -->
 
 <!-- > Take a look to the graphic from @Song2019, we are in the definition 2 of years lived but with a simpler approach for sisters in our case. -->
 <!-- ![Fig. 1 in Song (2019)](song_shared.png) -->
@@ -1230,16 +1235,16 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- #   facet_wrap(~kin)+ -->
 <!-- #   theme_bw() -->
 
-<!-- E.1.3$kin_summary %>%  -->
-<!--   group_by(kin, cohort) %>%  -->
-<!--   mutate(shared_years = cumsum(count_living)) %>%  -->
-<!--   filter(age_focal == 30) %>%  -->
-<!--   group_by(cohort, kin) %>%  -->
+<!-- E.1.3$kin_summary %>% -->
+<!--   group_by(kin, cohort) %>% -->
+<!--   mutate(shared_years = cumsum(count_living)) %>% -->
+<!--   filter(age_focal == 30) %>% -->
+<!--   group_by(cohort, kin) %>% -->
 <!--   summarise(sister_years =sum(shared_years)) -->
 <!-- ``` -->
 
 
-<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect.  -->
+<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect. -->
 
 <!-- ```{r} -->
 <!-- country_surv_counterfactual <- country_surv -->
@@ -1261,9 +1266,9 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--     output_period = c(2021) -->
 <!--     ) -->
 
-<!-- c(E.1.4$kin_full %>%  -->
+<!-- c(E.1.4$kin_full %>% -->
 <!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])), -->
-<!-- E.1.4_counterfactual$kin_full %>%  -->
+<!-- E.1.4_counterfactual$kin_full %>% -->
 <!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])) -->
 <!-- ) -->
 
