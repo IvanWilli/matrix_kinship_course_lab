@@ -36,7 +36,7 @@ In the `Setup` tab above, we have a added a brief instruction for setting things
 Some useful things to know:
 
 - The updated syllabus can be found here: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus.
-- The required readings and from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in the syllabus.
+- The required readings and from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in the syllabus. More readings in this folder (that Hal will be updating during the course): https://www.dropbox.com/transfer/AAAAADHvknkaWSj2fSAOIxVF_YStAYFgv2j3CCUNY7DBX-h3yBJwi9c.
 - Course's slides can be downloaded from: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/slides.
 - Find this website's source code on GitHub: https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd.
 - Data for exercises can be found in previous dropbox folder and at https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data.
@@ -209,7 +209,7 @@ eigen_values
 eigen_vectors
 ```
 
-The dominant value is in the first position `eigen_values[1]`, and its associated vector in the first column of the `eigen_vectors` matrix, `eigen_vectors[1,]`.
+The dominant value is in the first position `eigen_values[1]`, and its associated vector in the first column of the `eigen_vectors` matrix, `eigen_vectors[1,]`. To split the real and the imaginary part of the complex numbers you can use functions `Re` and `Im`.
 
 - Kronecker product
 
@@ -492,7 +492,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- swe_px[1:5, 1:5] -->
 <!-- ``` -->
 
-<!-- It has years in columns and age in rows. Plotting $q_x$ ($´s complement) over age in a year, for example 2015, looks like this: -->
+<!-- It has years in columns and age in rows. We thought that from an user perspective it could be more easy to organize the input rather than include $U$. Plotting $q_x$ ($´s complement) over age in a year, for example 2015, looks like this: -->
 
 <!-- ```{r, warning=F, message=F} -->
 <!-- swe_px %>% -->
@@ -511,7 +511,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- swe_asfr[26:30, 1:5] -->
 <!-- ``` -->
 
-<!-- Plotted over time and age: -->
+<!-- Plotted over time and age the same year: -->
 
 <!-- ```{r} -->
 <!-- swe_asfr %>% as.data.frame() %>% -->
@@ -531,7 +531,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- # First, get vectors for a given year -->
 <!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
 <!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
-<!-- # Run kinship models -->
+<!-- # Run  -->
 <!-- swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
 <!-- ``` -->
 
@@ -539,7 +539,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- -   **p** numeric. A vector or matrix of survival probabilities with rows as ages (and columns as years in case of matrix). -->
 <!-- -   **f** numeric. Same as **p** but for age-specific fertility rates. -->
-<!-- -   **time_invariant** logical. Assume time-invariant rates. Default TRUE. -->
+<!-- -   **time_invariant** logical. Assume time-invariant rates. Default `TRUE`. -->
 <!-- -   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ... -->
 
 <!-- Other relevant argument is **birth_female**, which is set as $1/2.04$ by default. This multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only, this parameter needs to be set to 1. -->
@@ -604,15 +604,15 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- ##### 3.1. Living kin -->
 
-<!-- Now, let's visualize how the expected number of daughters, siblings, cousins, etc., changes over the life-course of Focal. Use  `DemoKin::rename_kin()` with full names to identify each relative type. Some guiding questions: Why some kin increase and other decrease in first ages? Why not all types decrease in oldest ages? -->
+<!-- Now, let's visualize how the expected number of daughters, siblings, cousins, etc., changes over the life-course of Focal. Use  `DemoKin::rename_kin()` with full names to identify each relative type. Some *guiding questions*: Why some kin increase and other decrease in first ages? Why not all types decrease in oldest ages? -->
 
 <!-- ```{r, fig.height=6, fig.width=8} -->
 <!-- swe_2015$kin_summary %>% -->
 <!--   rename_kin() %>% -->
 <!--   ggplot() + -->
 <!--   geom_line(aes(age_focal, count_living))  + -->
-<!--   theme_bw() + -->
 <!--   labs(x = "Focal's age") + -->
+<!--   theme_bw() + -->
 <!--   facet_wrap(~kin) -->
 <!-- ``` -->
 
@@ -651,7 +651,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--   facet_wrap(~kin) -->
 <!-- ``` -->
 
-<!-- Is coherent the mode of each kin distribution with Focal's age? Take amoment and do this bivariate comparison by intuition reviewing each type. -->
+<!-- Is coherent the mode of each kin distribution with Focal's age? Take a moment and do this bivariate comparison by intuition reviewing each type. -->
 
 <!-- If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value. -->
 
@@ -713,11 +713,11 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- ### Exercises {#exercises_mon8} -->
 
-<!-- > All exercises can be completed using datasets included in DemoKin. -->
+<!-- > All exercises can be completed using datasets included in DemoKin. Yes, last day with Sweden, we promise. -->
 
 <!-- #### E1. Kin availability and loss -->
 
-<!-- Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population, answer: -->
+<!-- Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population and answer: -->
 
 <!-- **E1.1**: What is the expected number of surviving offspring for an average woman aged 35? -->
 
@@ -740,7 +740,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--   filter(age_focal == 35, kin == "m") -->
 <!-- ``` -->
 
-<!-- **E3.3**: Plot the 'Keyfitz' diagram for that woman and compare with the one from previous section (based on rates from year 2015). -->
+<!-- **E3.3**: Plot the 'Keyfitz' diagram for that woman and compare visually with the one from previous section (based on rates from year 2015). -->
 
 <!-- ```{r, fig.height=10, fig.width=12} -->
 <!-- # Write your code here -->
@@ -750,10 +750,12 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--   plot_diagram(rounding = 2) -->
 <!-- ``` -->
 
-<!-- **E1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. -->
+<!-- **E1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. Which of the two Focals (one experiencing the 1910 rates and the other the 2015 rates) has lost more daughters at age 65? How many more daughters has she lost?  -->
 
 <!-- ```{r} -->
 <!-- # Write your code here -->
+<!-- # for all kin in this case -->
+<!-- ##### SHOULD BE NOT CUMULATED -->
 <!-- swe_1910$kin_summary %>% -->
 <!--   summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
 <!--   rename_kin(., consolidate = "count") %>% -->
@@ -785,7 +787,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--   theme_bw() -->
 <!-- ``` -->
 
-<!-- Compute the mean and SD of the age of Focal's sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`). Plot separately (1) for younger and older sisters, (2) and for all sisters. -->
+<!-- Compute the mean and standard deviation of the age of sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`) and: -->
 
 <!-- **E2.1**: get then mean age of living mother, daughter and sisters for a female aged 35. -->
 
@@ -797,7 +799,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!--             .by = c(kin)) -->
 <!-- ``` -->
 
-<!-- **E2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize that and try it. -->
+<!-- **E2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize the comparison and try it. -->
 
 <!-- ```{r} -->
 <!-- # Write your code here -->
@@ -817,8 +819,20 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- **E2.3** -->
 
-<!-- The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [-@alburezgutierrez_sandwich_2021]. -->
-<!-- For this exercise, we consider an individual to be 'sandwiched' if they have at least one child aged $15$ or younger and a mother older than $75$ (actually in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015, assuming time-invariant rates and a female-only population. -->
+<!-- The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [@alburezgutierrez_sandwich_2021]. -->
+<!-- For this exercise, we consider the level 'sandwich-ness' to the sum of living daughters aged $15$ or younger and mothers (actually the portion of her) older than $75$ (in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015 under previous definition, assuming time-invariant rates and a female-only population. -->
+
+<!-- ```{r} -->
+<!-- swe_2015$kin_full %>%  -->
+<!--   group_by(age_focal) %>%  -->
+<!--   summarise(sandwiched_by_daughter = sum(living[kin=='d' & age_kin<=15]), -->
+<!--             sandwiched_by_mother = sum(living[kin=='m' & age_kin>=75]), -->
+<!--             sandwiched_level = sandwiched_by_daughter + sandwiched_by_mother) %>% -->
+<!--   ggplot(aes(age_focal, sandwiched_level))+ -->
+<!--   geom_line() + -->
+<!--   scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5)) -->
+<!-- ``` -->
+
 
 <!-- #### E3. By hand calculation -->
 
