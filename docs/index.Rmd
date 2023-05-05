@@ -307,7 +307,7 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 ## Fri 5
 
-### how create a subdiagonal matrix
+### How create a subdiagonal matrix
 
 With $w$ ages, and $p$ the vector of survival probabilities...
 
@@ -316,6 +316,25 @@ U <- matrix(0, nrow = w, ncol = w)
 U[row(U)-1 == col(U)] <- p[-w]
 U[w, w] <- p[w]
 ```
+
+### Multiply many times the same matrix
+
+You can use a function from package `expm`. For a random matrix called X: 
+
+```{r, message=F}
+library(expm)
+A <- matrix(1:4,2,2)
+A_power_2 <- `%^%`(A,2)
+```
+
+Check is true:
+
+```{r}
+all(A_power_2 == (A %*% A))
+```
+
+
+### Markovs chain for individual stochasticity
 
 Let´s see the case of Sweden in the first year:
 
@@ -353,7 +372,7 @@ legend("topright", c("from age 0", "from age 50"), col=1:2, lty=1)
 ```
 
 ### life lost
-```{r, eval=F}
+```{r}
 n1_dagger <- t(B[,1]) %*% n1
 n2_dagger <- t(B[,1]) %*% n2
 var_n_dagger <- n2_dagger - n1_dagger * n1_dagger
