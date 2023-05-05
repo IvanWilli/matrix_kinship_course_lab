@@ -869,7 +869,7 @@ probabilities…</p>
 <div id="multiply-many-times-the-same-matrix" class="section level3">
 <h3>Multiply many times the same matrix</h3>
 <p>You can use a function from package <code>expm</code>. For a random
-matrix called X:</p>
+matrix called A:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(expm)</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>)</span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>A_power_2 <span class="ot">&lt;-</span> <span class="st">`</span><span class="at">%^%</span><span class="st">`</span>(A,<span class="dv">2</span>)</span></code></pre></div>
