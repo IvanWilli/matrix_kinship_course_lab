@@ -319,7 +319,7 @@ U[w, w] <- p[w]
 
 ### Multiply many times the same matrix
 
-You can use a function from package `expm`. For a random matrix called X: 
+You can use a function from package `expm`. For a random matrix called A: 
 
 ```{r, message=F}
 library(expm)
