@@ -307,17 +307,20 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 ## Fri 5
 
+### how create a subdiagonal matrix
+
 With $w$ ages, and $p$ the vector of survival probabilities...
 
-### create a subdiagonal matrix
 ```{r, eval=F}
 U <- matrix(0, nrow = w, ncol = w)
 U[row(U)-1 == col(U)] <- p[-w]
 U[w, w] <- p[w]
 ```
 
+Let´s see the case of Sweden in the first year:
+
 ### expected occupancy time
-```{r, eval=F}
+```{r}
 load("../data/SWEhist_matrices.Rdata")
 y = 1
 U <- U[[y]]
@@ -329,8 +332,8 @@ Var <- N2 - N1 * N1
 ```
 
 ### longevity
-```{r, eval=F}
-ones <- rep(1,ages)
+```{r}
+ones <- rep(1,w)
 ones <- as.matrix(ones) # just in case
 n1 <- t(t(ones) %*% N1)
 n2 <- t(t(n1) %*% (2*N1-I))
@@ -338,9 +341,15 @@ var <- n2 - n1 * n1
 ```
 
 ### age at death distribution
-```{r, eval=F}
-M_ <- diag(1-colSums(U))
-B <- M_ %*% N1
+
+Define $M$ as the matrix with probabilities of death in the diagonal.
+
+```{r}
+M <- diag(1-colSums(U))
+B <- M %*% N1
+plot(0:(w-1), B[,1], t="l")
+lines(B[,51], col=2)
+legend("topright", c("from age 0", "from age 50"), col=1:2, lty=1)
 ```
 
 ### life lost
@@ -349,9 +358,6 @@ n1_dagger <- t(B[,1]) %*% n1
 n2_dagger <- t(B[,1]) %*% n2
 var_n_dagger <- n2_dagger - n1_dagger * n1_dagger
 ```
-
-
-
 
 <!-- <!-- ---------------------------------------------------------------------- --> 
 
