@@ -457,7 +457,7 @@ display: none;
 <h1 class="title toc-ignore">Matrix Approaches to Modelling Kinship:
 Theory and Applications</h1>
 <h3 class="subtitle">IDEM 128 - Computer labs</h3>
-<h4 class="date">Updated: 2023-05-04</h4>
+<h4 class="date">Updated: 2023-05-05</h4>
 
 </div>
 
@@ -662,10 +662,10 @@ element operator, which use the symbol <code>*</code>.</p>
 <p>Let’s create a square <em>non-singular</em> matrix (with no zero
 determinant, with inverse):</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>other_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rpois</span>(<span class="dv">25</span>, <span class="dv">3</span>), <span class="dv">5</span>, <span class="dv">5</span>)</span></code></pre></div>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>other_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(<span class="dv">25</span>), <span class="dv">5</span>, <span class="dv">5</span>)</span></code></pre></div>
 <p>Get the determinant:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">det</span>(other_matrix)</span></code></pre></div>
-<pre><code>## [1] 305</code></pre>
+<pre><code>## [1] 0.0790383</code></pre>
 <ul>
 <li>Inverse:</li>
 </ul>
@@ -673,12 +673,12 @@ determinant, with inverse):</p>
 gives the identity matrix. Useful for calculation of the
 <em>fundamental</em> matrix for example.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(other_matrix)</span></code></pre></div>
-<pre><code>##             [,1]        [,2]         [,3]        [,4]        [,5]
-## [1,] -0.14754098  0.13114754 -0.311475410  0.14754098  0.40983607
-## [2,] -0.34426230  0.23934426  0.006557377  0.14426230  0.02295082
-## [3,]  0.24590164 -0.28524590  0.252459016 -0.44590164  0.38360656
-## [4,]  0.26229508  0.05573770  0.042622951 -0.06229508 -0.35081967
-## [5,]  0.01639344 -0.05901639  0.190163934  0.18360656 -0.33442623</code></pre>
+<pre><code>##            [,1]       [,2]       [,3]       [,4]       [,5]
+## [1,] -0.7532561  0.4483513 -0.8803085  0.2389641  2.5925394
+## [2,] -1.7584887  1.1373711  0.3223507  0.5824490  0.4623462
+## [3,]  0.4501699 -1.0999430  0.8439473 -1.7318679  2.5762176
+## [4,]  1.5851130  0.4581780 -0.2507393 -0.3155394 -2.0105742
+## [5,]  0.5923742 -0.4038200  0.7294525  1.1270147 -2.4426687</code></pre>
 <ul>
 <li>Eigendecomposition.</li>
 </ul>
@@ -688,21 +688,21 @@ distribution.</p>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>eigen_values <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>values</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>eigen_vectors <span class="ot">&lt;-</span> eigen_decomposition<span class="sc">$</span>vectors</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>eigen_values</span></code></pre></div>
-<pre><code>## [1] 11.910996+0.000000i  2.318929+1.472428i  2.318929-1.472428i
-## [4] -1.274427+1.330214i -1.274427-1.330214i</code></pre>
+<pre><code>## [1]  2.0530799+0.0000000i  0.4773004+0.3184035i  0.4773004-0.3184035i
+## [4] -0.2875065+0.1851585i -0.2875065-0.1851585i</code></pre>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>eigen_vectors</span></code></pre></div>
-<pre><code>##              [,1]                  [,2]                  [,3]
-## [1,] 0.4339381+0i  0.3874815+0.0797035i  0.3874815-0.0797035i
-## [2,] 0.5607435+0i -0.0993659-0.4991753i -0.0993659+0.4991753i
-## [3,] 0.5130707+0i -0.7037654+0.0000000i -0.7037654+0.0000000i
-## [4,] 0.3561372+0i  0.2547811+0.0840579i  0.2547811-0.0840579i
-## [5,] 0.3273976+0i -0.1267783+0.0334399i -0.1267783-0.0334399i
+<pre><code>##               [,1]                    [,2]                    [,3]
+## [1,] -0.4822995+0i -0.25138592-0.10180400i -0.25138592+0.10180400i
+## [2,] -0.5185911+0i  0.04457630+0.50906992i  0.04457630-0.50906992i
+## [3,] -0.5421256+0i  0.74451004+0.00000000i  0.74451004+0.00000000i
+## [4,] -0.3441768+0i -0.31996739-0.04760300i -0.31996739+0.04760300i
+## [5,] -0.2934154+0i  0.02297589-0.07637777i  0.02297589+0.07637777i
 ##                       [,4]                  [,5]
-## [1,]  0.5467952+0.0000000i  0.5467952+0.0000000i
-## [2,]  0.2820805-0.2321957i  0.2820805+0.2321957i
-## [3,] -0.0686875+0.3083393i -0.0686875-0.3083393i
-## [4,] -0.4817458+0.2580972i -0.4817458-0.2580972i
-## [5,] -0.2732244-0.3072375i -0.2732244+0.3072375i</code></pre>
+## [1,]  0.4840069+0.2144677i  0.4840069-0.2144677i
+## [2,]  0.3504491-0.0257238i  0.3504491+0.0257238i
+## [3,] -0.0063401+0.2390741i -0.0063401-0.2390741i
+## [4,] -0.6151650+0.0000000i -0.6151650+0.0000000i
+## [5,] -0.1934342-0.3510316i -0.1934342+0.3510316i</code></pre>
 <p>The dominant value is in the first position
 <code>eigen_values[1]</code>, and its associated vector in the first
 column of the <code>eigen_vectors</code> matrix,
@@ -854,7 +854,48 @@ visualize results. A very basic one:</p>
 <p>Here, we showed you some packages and functions we like, but in the
 exercises you can use the tools that you want!</p>
 </blockquote>
-<!-- ---------------------------------------------------------------------- -->
+</div>
+</div>
+<div id="fri-5" class="section level2">
+<h2>Fri 5</h2>
+<p>With <span class="math inline">\(w\)</span> ages, and <span class="math inline">\(p\)</span> the vector of survival
+probabilities…</p>
+<div id="create-a-subdiagonal-matrix" class="section level3">
+<h3>create a subdiagonal matrix</h3>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> w, <span class="at">ncol =</span> w)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>U[<span class="fu">row</span>(U)<span class="sc">-</span><span class="dv">1</span> <span class="sc">==</span> <span class="fu">col</span>(U)] <span class="ot">&lt;-</span> p[<span class="sc">-</span>w]</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>U[w, w] <span class="ot">&lt;-</span> p[w]</span></code></pre></div>
+</div>
+<div id="expected-occupancy-time" class="section level3">
+<h3>expected occupancy time</h3>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;../data/SWEhist_matrices.Rdata&quot;</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> U[[y]]</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">ncol</span>(U)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>,w)</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>N1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(I<span class="sc">-</span>U)</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>N2 <span class="ot">&lt;-</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">diag</span>(<span class="fu">diag</span>(N1))<span class="sc">-</span>I) <span class="sc">%*%</span> N1</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>Var <span class="ot">&lt;-</span> N2 <span class="sc">-</span> N1 <span class="sc">*</span> N1</span></code></pre></div>
+</div>
+<div id="longevity" class="section level3">
+<h3>longevity</h3>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>ones <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,ages)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>ones <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(ones) <span class="co"># just in case</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">t</span>(ones) <span class="sc">%*%</span> N1)</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">t</span>(n1) <span class="sc">%*%</span> (<span class="dv">2</span><span class="sc">*</span>N1<span class="sc">-</span>I))</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> n2 <span class="sc">-</span> n1 <span class="sc">*</span> n1</span></code></pre></div>
+</div>
+<div id="age-at-death-distribution" class="section level3">
+<h3>age at death distribution</h3>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>M_ <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">-</span><span class="fu">colSums</span>(U))</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> M_ <span class="sc">%*%</span> N1</span></code></pre></div>
+</div>
+<div id="life-lost" class="section level3">
+<h3>life lost</h3>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>n1_dagger <span class="ot">&lt;-</span> <span class="fu">t</span>(B[,<span class="dv">1</span>]) <span class="sc">%*%</span> n1</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>n2_dagger <span class="ot">&lt;-</span> <span class="fu">t</span>(B[,<span class="dv">1</span>]) <span class="sc">%*%</span> n2</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>var_n_dagger <span class="ot">&lt;-</span> n2_dagger <span class="sc">-</span> n1_dagger <span class="sc">*</span> n1_dagger</span></code></pre></div>
+<!-- <!-- ---------------------------------------------------------------------- -->
 <!-- ## Mon 8 -->
 <!-- We will see how to translate the theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for a seamless implementation, and finally do some exercises. Sections: -->
 <!-- - [By hand](#by_hand_mon8) -->
@@ -963,7 +1004,7 @@ exercises you can use the tools that you want!</p>
 <!-- ``` -->
 <!-- Let's visualize living kin by Focal's age for the cases computed: -->
 <!-- ```{r} -->
-<!-- plot(age, d, t = "b", ylab = "k", ylim = c(0, 2)) -->
+<!-- plot(age, d, t = "b", ylab = "k", ylim = c(0, 1.5)) -->
 <!-- lines(age, a, t = "b", col = 2) -->
 <!-- lines(age, m_n, t = "b", col = 3) -->
 <!-- lines(age, g, t = "b", col = 4) -->
@@ -1017,7 +1058,7 @@ exercises you can use the tools that you want!</p>
 <!-- # First, get vectors for a given year -->
 <!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
 <!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
-<!-- # Run  -->
+<!-- # Run -->
 <!-- swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
 <!-- ``` -->
 <!-- Main **arguments** are: -->
@@ -1027,7 +1068,7 @@ exercises you can use the tools that you want!</p>
 <!-- -   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ... -->
 <!-- Other relevant argument is **birth_female**, which is set as $1/2.04$ by default. This multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only, this parameter needs to be set to 1. -->
 <!-- Relatives for the `output_kin` argument are identified by a unique code. -->
-<!-- > Note: relationship codes used in `DemoKin` differ from those in Caswell [-@caswell_formal_2019]. The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion: -->
+<!-- > Note: relationship codes used in `DemoKin` differs from those in Caswell [-@caswell_formal_2019]. The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion: -->
 <!-- ```{r} -->
 <!-- demokin_codes() -->
 <!-- ``` -->
@@ -1156,10 +1197,10 @@ exercises you can use the tools that you want!</p>
 <!-- ``` -->
 <!-- We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell's paper. Let's try some exercises. -->
 <!-- ### Exercises {#exercises_mon8} -->
-<!-- > All exercises can be completed using datasets included in DemoKin. Yes, last day with Sweden, we promise. -->
-<!-- #### E1. Kin availability and loss -->
+<!-- > All exercises can be completed using datasets included in `DemoKin`. Yes, last day with Sweden, we promise. -->
+<!-- #### 1. Kin availability and loss -->
 <!-- Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population and answer: -->
-<!-- **E1.1**: What is the expected number of surviving offspring for an average woman aged 35? -->
+<!-- **1.1**: What is the expected number of surviving offspring for an average woman aged 35? -->
 <!-- ```{r} -->
 <!-- # Write your code here -->
 <!-- swe_surv_1910 <- DemoKin::swe_px[,"1910"] -->
@@ -1169,14 +1210,14 @@ exercises you can use the tools that you want!</p>
 <!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
 <!--   filter(age_focal == 35, kin == "d") -->
 <!-- ``` -->
-<!-- **E3.2**: What is the expected number of surviving mother for the same woman? -->
+<!-- **1.2**: What is the expected number of surviving mother for the same woman? -->
 <!-- ```{r} -->
 <!-- # Write your code here -->
 <!-- swe_1910$kin_summary %>% -->
 <!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
 <!--   filter(age_focal == 35, kin == "m") -->
 <!-- ``` -->
-<!-- **E3.3**: Plot the 'Keyfitz' diagram for that woman and compare visually with the one from previous section (based on rates from year 2015). -->
+<!-- **1.3**: Plot the 'Keyfitz' diagram for that woman and compare visually with the one from previous section (which were based on rates from year 2015). -->
 <!-- ```{r, fig.height=10, fig.width=12} -->
 <!-- # Write your code here -->
 <!-- swe_1910$kin_summary %>% -->
@@ -1184,24 +1225,19 @@ exercises you can use the tools that you want!</p>
 <!--   select(kin, count = count_living) %>% -->
 <!--   plot_diagram(rounding = 2) -->
 <!-- ``` -->
-<!-- **E1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. Which of the two Focals (one experiencing the 1910 rates and the other the 2015 rates) has lost more daughters at age 65? How many more daughters has she lost?  -->
+<!-- **1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. Which of the two Focals (one experiencing the 1910 rates and the other the 2015 rates) has lost more daughters at age 65? How many more daughters has she lost? -->
 <!-- ```{r} -->
 <!-- # Write your code here -->
 <!-- # for all kin in this case -->
-<!-- ##### SHOULD BE NOT CUMULATED -->
 <!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
-<!--   rename_kin(., consolidate = "count") %>% -->
-<!--   filter(age_focal == 65) %>% -->
-<!--   rename(loss_1910 = count) %>% -->
+<!--   filter(age_focal == 65, kin == "d") %>% -->
+<!--   select(age_focal, loss_1910 = count_cum_dead) %>% -->
 <!--   inner_join( -->
 <!--     swe_2015$kin_summary %>% -->
-<!--       summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
-<!--       rename_kin(., consolidate = "count") %>% -->
-<!--       filter(age_focal == 65) %>% -->
-<!--       rename(loss_2015 = count)) -->
+<!--       filter(age_focal == 65, kin == "d") %>% -->
+<!--       select(age_focal, loss_2015 = count_cum_dead)) -->
 <!-- ``` -->
-<!-- #### E2. Kin age distribution -->
+<!-- #### 2. Kin age distribution -->
 <!-- Let's back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal's life-course: -->
 <!-- ```{r, warning=F, message=F} -->
 <!-- swe_2015$kin_summary %>% -->
@@ -1217,15 +1253,16 @@ exercises you can use the tools that you want!</p>
 <!--   theme_bw() -->
 <!-- ``` -->
 <!-- Compute the mean and standard deviation of the age of sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`) and: -->
-<!-- **E2.1**: get then mean age of living mother, daughter and sisters for a female aged 35. -->
+<!-- **2.1**: get then mean age of living mother, daughter and sisters for a female aged 35. -->
 <!-- ```{r} -->
 <!-- # Write your code here -->
 <!-- mean_ages_2015 <- swe_2015$kin_full %>% -->
 <!--   filter(age_focal == 35) %>% -->
 <!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
 <!--             .by = c(kin)) -->
+<!-- mean_ages_2015 -->
 <!-- ``` -->
-<!-- **E2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize the comparison and try it. -->
+<!-- **2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize the comparison and try it. -->
 <!-- ```{r} -->
 <!-- # Write your code here -->
 <!-- mean_ages_1910 <- swe_1910$kin_full %>% -->
@@ -1241,21 +1278,23 @@ exercises you can use the tools that you want!</p>
 <!--   geom_bar(aes(kin, mean_age, fill=factor(year)), -->
 <!--            stat = "identity", position = "dodge") -->
 <!-- ``` -->
-<!-- **E2.3** -->
+<!-- **2.3** -->
 <!-- The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [@alburezgutierrez_sandwich_2021]. -->
-<!-- For this exercise, we consider the level 'sandwich-ness' to the sum of living daughters aged $15$ or younger and mothers (actually the portion of her) older than $75$ (in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015 under previous definition, assuming time-invariant rates and a female-only population. -->
+<!-- For this exercise, we consider the level 'sandwich-ness' to the sum of living daughters aged $15$ or younger and mothers (actually the portion of her) older than $75$ (in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015 under previous definition, assuming time-invariant rates and a female-only population. If you plot the total 'sandwich-ness' by age you get 500 points, but if also color each kin contribution you get 1,000 points. -->
 <!-- ```{r} -->
-<!-- swe_2015$kin_full %>%  -->
-<!--   group_by(age_focal) %>%  -->
-<!--   summarise(sandwiched_by_daughter = sum(living[kin=='d' & age_kin<=15]), -->
-<!--             sandwiched_by_mother = sum(living[kin=='m' & age_kin>=75]), -->
-<!--             sandwiched_level = sandwiched_by_daughter + sandwiched_by_mother) %>% -->
-<!--   ggplot(aes(age_focal, sandwiched_level))+ -->
-<!--   geom_line() + -->
+<!-- swe_2015$kin_full %>% -->
+<!--   group_by(age_focal) %>% -->
+<!--   summarise(daughter = sum(living[kin=='d' & age_kin<=15]), -->
+<!--             mother = sum(living[kin=='m' & age_kin>=75]), -->
+<!--             sandwiched_level = daughter + mother) %>% -->
+<!--   pivot_longer(cols = daughter:sandwiched_level) %>%  -->
+<!--   ggplot()+ -->
+<!--   geom_line(aes(age_focal, value, col=name))+   -->
 <!--   scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5)) -->
 <!-- ``` -->
-<!-- #### E3. By hand calculation -->
-<!-- **E3.1**: use vectors $p$ and $f$ from the toy example in *By Hand* section, but this time with `DemoKin`. Do you have the same results? How many grandmothers have Focal during her life? -->
+<!-- #### 3. By hand calculation -->
+<!-- **3.1**  -->
+<!-- Use vectors $p$ and $f$ from the toy example in *By Hand* section, but this time with `DemoKin`. Do you have the same results? How many grandmothers have Focal during her life? -->
 <!-- ```{r} -->
 <!-- by_hand_example <- kin(p, f, birth_female = 1) -->
 <!-- # some checks -->
@@ -1282,7 +1321,9 @@ exercises you can use the tools that you want!</p>
 <!-- f <- c(0, .5, .5, .3, 0) -->
 <!-- Ft <- sapply(0:T., function(t) f *(.99)^t) -->
 <!-- plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female offspring only -->
-<!-- # plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5 -->
+<!-- plot(age, Pt[,1], xlab = "t", ylab = "px", t="b") -->
+<!-- lines(age, Pt[,T.+1], col=2, t="b") -->
+<!-- legend("topright", c("0","T"), col = 1:2, lty=1) -->
 <!-- ``` -->
 <!-- Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon. -->
 <!-- ```{r} -->
@@ -1300,22 +1341,20 @@ exercises you can use the tools that you want!</p>
 <!-- # see survival matrix at t=1 (second element) -->
 <!-- Ut_list[[2]] -->
 <!-- ``` -->
-<!-- In this case we have a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones: -->
+<!-- In this case we have access to a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones: -->
 <!-- ```{r} -->
 <!-- # initial population count -->
 <!-- pop <- c(300, 250, 100, 15, 0) -->
-<!-- # distribution by age -->
-<!-- z <- pop / sum(pop) -->
 <!-- # project population Z and get pi at each year -->
 <!-- Z <- Pi <- matrix(0, ages, years) -->
-<!-- Z[,1] <- z -->
+<!-- Z[,1] <- pop -->
 <!-- Pi[,1] <- Z[,1] * Ft[,1] / sum(Z[,1] * Ft[,1]) -->
 <!-- for(t in 1:T.){ -->
 <!--   At <- Ut_list[[t]] + Ft_list[[t]] -->
 <!--   Z[,t+1] <- At %*% Z[,t] # eq 13 Caswell (2021) -->
 <!--   Pi[,t+1] <- Z[,t+1] * Ft[,t+1] / sum(Z[,t+1] * Ft[,t+1]) # eq 14 Caswell (2021) -->
 <!-- } -->
-<!-- plot(0:T., colSums(Z), ylab = "%pop", xlab = "t") -->
+<!-- plot(0:T., colSums(Z), ylab = "pop counts", xlab = "t") -->
 <!-- ``` -->
 <!-- Basically this is what we are going to do for kinship *populations*: make dynamic matrices by time with those lists. -->
 <!-- For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*time boundary*), and what is the initial kin availability for Focal born on next $T$ years (eq. 15 and 16 from @caswell_formal_2021). -->
@@ -1423,16 +1462,15 @@ exercises you can use the tools that you want!</p>
 <!--      scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10)) -->
 <!-- ``` -->
 <!-- We account for this, by using the time-variant models introduced by @caswell_formal_2021. Let's take a look at the resulting kin counts for a Focal born in 1960, limiting the output to the relative types given in the argument `output_kin`. -->
+<!-- To interpret the results ...."plot apc" -->
 <!-- ```{r, fig.height=6, fig.width=8} -->
 <!-- swe_time_varying_1960_cohort <- -->
-<!--   kin( -->
-<!--     p = swe_px, -->
+<!--   kin(p = swe_px, -->
 <!--     f = swe_asfr, -->
 <!--     n = swe_pop, -->
 <!--     time_invariant =FALSE, -->
 <!--     output_cohort = 1960, -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm")) -->
 <!-- # plot -->
 <!-- swe_time_varying_1960_cohort$kin_summary %>% -->
 <!--   DemoKin::rename_kin() %>% -->
@@ -1440,22 +1478,20 @@ exercises you can use the tools that you want!</p>
 <!--   geom_line()+ -->
 <!--   scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+ -->
 <!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin,scales = "free")+ -->
+<!--   facet_wrap(~kin)+ -->
 <!--   theme_bw() -->
 <!-- ``` -->
-<!-- These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here it is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018. -->
+<!-- These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. It is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018. -->
 <!-- > Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)). -->
-<!-- But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot). -->
+<!-- But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot). **Answer**: Do you notice any unexpected trend for some kin? What may be causing it? -->
 <!-- ```{r, fig.height=6, fig.width=8} -->
 <!-- swe_time_varying_1960_1910_cohort <- -->
-<!--   kin( -->
-<!--     p = swe_px, -->
+<!--   kin(p = swe_px, -->
 <!--     f = swe_asfr, -->
 <!--     n = swe_pop, -->
 <!--     time_invariant =FALSE, -->
 <!--     output_cohort = c(1910, 1960), -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm")) -->
 <!-- # plot -->
 <!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
 <!--   DemoKin::rename_kin() %>% -->
@@ -1463,22 +1499,22 @@ exercises you can use the tools that you want!</p>
 <!--   geom_line()+ -->
 <!--   scale_y_continuous(name = "",labels = seq(0,3,.2), breaks = seq(0,3,.2))+ -->
 <!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin, scales = "free")+ -->
+<!--   facet_wrap(~kin)+ -->
 <!--   theme_bw() -->
 <!-- ``` -->
-<!-- Maybe you are interested in take a snapshot of kin distribution in some year, for example 1990, setting argument`output_period = 1990`. What can you describe and not with this period approach, and what with the cohort approach? -->
+<!-- Maybe you are interested in take a snapshot of kin distribution in some year, for example 1960. Set argument`output_period = 1960`. **Answer**: looks similar to previous plots? What can you describe and not with this period approach, and what with the cohort approach?  -->
 <!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_time_varying_1990_period <- -->
+<!-- swe_time_varying_1960_period <- -->
 <!--   kin( -->
 <!--     p = swe_px, -->
 <!--     f = swe_asfr, -->
 <!--     n = swe_pop, -->
 <!--     time_invariant =FALSE, -->
-<!--     output_period = 1990, -->
+<!--     output_period = 1960, -->
 <!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
 <!--     ) -->
 <!-- # plot -->
-<!-- swe_time_varying_1990_period$kin_summary %>% -->
+<!-- swe_time_varying_1960_period$kin_summary %>% -->
 <!--   DemoKin::rename_kin() %>% -->
 <!--   ggplot(aes(age_focal,count_living)) + -->
 <!--   geom_line() + -->
@@ -1489,7 +1525,7 @@ exercises you can use the tools that you want!</p>
 <!-- ``` -->
 <!-- #### 2. Kin deaths -->
 <!-- Kin loss can have severe consequences for bereaved relatives. It can also affect the provision of care support and intergenerational transfers over the life course. -->
-<!-- The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison: what types looks with the biggest differences? See absolute and relative terms (scale in this grid plots can be confusing some times)? -->
+<!-- The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison 1910 vs 1960: which kin types looks that have the biggest differences? See it in absolute and relative terms (*free* scale in this grid plots can be confusing some times when comparing counts with non similar magnitudes). -->
 <!-- ```{r, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, eval=F} -->
 <!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
 <!--   DemoKin::rename_kin() %>% -->
@@ -1509,7 +1545,7 @@ exercises you can use the tools that you want!</p>
 <!--   mutate_if(is.numeric, round, 1) -->
 <!-- ``` -->
 <!-- ### Exercises {#exercises_tues9} -->
-<!-- **E.1** Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located at same folder than with this *Rmd*,  [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)). -->
+<!-- Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)). -->
 <!-- ```{r} -->
 <!-- # load function -->
 <!-- source("get_UNWPP_inputs.R") -->
@@ -1517,21 +1553,20 @@ exercises you can use the tools that you want!</p>
 <!-- country <- c("Argentina") -->
 <!-- # Year range -->
 <!-- my_startyr   <- 1950 -->
-<!-- my_endyr     <- 2021 -->
+<!-- my_endyr     <- 2022 -->
 <!-- # data downloaded -->
 <!-- data <- get_UNWPP_inputs( -->
 <!--   countries = country, -->
 <!--   my_startyr = my_startyr, -->
-<!--   my_endyr = my_endyr -->
-<!--   ) -->
-<!-- # reshape fertility -->
+<!--   my_endyr = my_endyr) -->
+<!-- # reshape fertility conveniently for DemoKin -->
 <!-- country_fert <- data %>% -->
 <!--   select(age, year, fx) %>% -->
 <!--   pivot_wider(names_from = year, values_from = fx) %>% -->
 <!--   select(-age) %>% -->
 <!--   as.matrix() -->
 <!-- ``` -->
-<!-- **E.1.1** Reshape data for survival in the same way and visualize it. -->
+<!-- **1.1** Reshape data for survival in the same way and visualize it. -->
 <!-- ```{r} -->
 <!-- # reshape survival -->
 <!-- country_surv <- data %>% -->
@@ -1549,16 +1584,14 @@ exercises you can use the tools that you want!</p>
 <!--     scale_y_log10() + -->
 <!--     theme(legend.position = "none") -->
 <!-- ``` -->
-<!-- **E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings. -->
+<!-- **1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal age 50, compare both years in terms of total living and and mean age, and extract two or three findings. -->
 <!-- ```{r} -->
 <!-- E.1.2 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
+<!--   kin(p = country_surv, -->
 <!--     f = country_fert, -->
 <!--     time_invariant =FALSE, -->
-<!--     output_period = c(1990, 2015), -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
+<!--     output_period = c(1950, 2015), -->
+<!--     output_kin = c("d","gd","ggd","m","gm","ggm")) -->
 <!-- E.1.2$kin_summary %>% -->
 <!--   DemoKin::rename_kin() %>% -->
 <!--   ggplot(aes(age_focal,count_living,color=factor(year))) + -->
@@ -1566,34 +1599,32 @@ exercises you can use the tools that you want!</p>
 <!--   labs(y = "Expected number of living relatives") + -->
 <!--   facet_wrap(~kin,scales = "free")+ -->
 <!--   theme_bw() -->
+<!-- E.1.2$kin_summary %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot(aes(age_focal,mean_age,color=factor(year))) + -->
+<!--   geom_line() + -->
+<!--   labs(y = "Expected number of living relatives") + -->
+<!--   facet_wrap(~kin,scales = "free")+ -->
+<!--   theme_bw() -->
 <!-- ``` -->
-<!-- **E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters. -->
-<!-- > Take a look to the graphic from @Song2019, we are in the definition 2 of years lived but with a simpler approach for sisters in our case. -->
+<!-- **1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the total amount of sister-years shared since birth for a Focal aged 15, interpret the result and find its limitations. -->
+<!-- > Take a look to the graphic from @Song2019 for shared grandchild-years from a grandparent perspective, we are in the definition number 2. -->
 <!-- ![Fig. 1 in Song (2019)](song_shared.png) -->
 <!-- ```{r} -->
 <!-- E.1.3 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
+<!--   kin(p = country_surv, -->
 <!--     f = country_fert, -->
 <!--     time_invariant =FALSE, -->
 <!--     output_cohort = c(1990), -->
-<!--     output_kin = c("os", "ys") -->
-<!--     ) -->
-<!-- # E.1.3$kin_summary %>% -->
-<!-- #   DemoKin::rename_kin() %>% -->
-<!-- #   ggplot(aes(age_focal,count_living)) + -->
-<!-- #   geom_line() + -->
-<!-- #   labs(y = "Expected number of living relatives") + -->
-<!-- #   facet_wrap(~kin)+ -->
-<!-- #   theme_bw() -->
+<!--     output_kin = c("os", "ys")) -->
 <!-- E.1.3$kin_summary %>% -->
 <!--   group_by(kin, cohort) %>% -->
 <!--   mutate(shared_years = cumsum(count_living)) %>% -->
-<!--   filter(age_focal == 30) %>% -->
+<!--   filter(age_focal == 15) %>% -->
 <!--   group_by(cohort, kin) %>% -->
 <!--   summarise(sister_years =sum(shared_years)) -->
 <!-- ``` -->
-<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect. -->
+<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement for some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (one choice of baseline, could be averaging some previous years too), you can have a sense of Covid19 impact in kin bereavement. Calculate the difference between living older kin for a female aged 60 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect. -->
 <!-- ```{r} -->
 <!-- country_surv_counterfactual <- country_surv -->
 <!-- country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"] -->
@@ -1613,12 +1644,12 @@ exercises you can use the tools that you want!</p>
 <!--     output_period = c(2021) -->
 <!--     ) -->
 <!-- c(E.1.4$kin_full %>% -->
-<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])), -->
+<!--   summarise(all_kin = sum(living[age_focal == 60 & age_kin>60])), -->
 <!-- E.1.4_counterfactual$kin_full %>% -->
-<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])) -->
+<!--   summarise(all_kin = sum(living[age_focal == 60 & age_kin>60])) -->
 <!-- ) -->
 <!-- ``` -->
-<!-- E.3 Run the toy example with DemoKin and check if you have the same results for type *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$. -->
+<!-- E.3 Run the toy example with DemoKin and check if you have the same results for *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$. Remember to set `birth_female = 1` and set also the argument `pi = Pi` to reflect better the calculations. -->
 <!-- ```{r} -->
 <!-- rownames(Pt) <- rownames(Ft) <- rownames(Pi) <- 0:4 -->
 <!-- colnames(Pt) <- colnames(Ft) <- colnames(Ft) <- 0:9 -->
@@ -2111,6 +2142,83 @@ exercises you can use the tools that you want!</p>
 <!--   facet_wrap(~kin, nrow = 2) -->
 <!-- ``` -->
 <!-- ### Exercises {#exercises_thurs11} -->
+<!-- ## Solutions -->
+<!-- ### Mon 8 -->
+<!-- **1.1** -->
+<!-- ```{r} -->
+<!-- swe_surv_1910 <- DemoKin::swe_px[,"1910"] -->
+<!-- swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"] -->
+<!-- swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE) -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
+<!--   filter(age_focal == 35, kin == "d") -->
+<!-- ``` -->
+<!-- **1.2** -->
+<!-- ```{r} -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
+<!--   filter(age_focal == 35, kin == "m") -->
+<!-- ``` -->
+<!-- **1.3** -->
+<!-- ```{r, fig.height=10, fig.width=12} -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   select(kin, count = count_living) %>% -->
+<!--   plot_diagram(rounding = 2) -->
+<!-- ``` -->
+<!-- **1.4** -->
+<!-- ```{r} -->
+<!-- swe_1910$kin_summary %>% -->
+<!--   filter(age_focal == 65, kin == "d") %>% -->
+<!--   select(age_focal, loss_1910 = count_cum_dead) %>% -->
+<!--   inner_join( -->
+<!--     swe_2015$kin_summary %>% -->
+<!--       filter(age_focal == 65, kin == "d") %>% -->
+<!--       select(age_focal, loss_2015 = count_cum_dead)) -->
+<!-- ``` -->
+<!-- **2.1** -->
+<!-- ```{r} -->
+<!-- mean_ages_2015 <- swe_2015$kin_full %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   summarise(mean_age = sum(age_kin*living)/sum(living), .by = c(kin)) -->
+<!-- mean_ages_2015 -->
+<!-- ``` -->
+<!-- **2.2** -->
+<!-- ```{r} -->
+<!-- mean_ages_1910 <- swe_1910$kin_full %>% -->
+<!--   filter(age_focal == 35) %>% -->
+<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
+<!--             .by = c(kin)) -->
+<!-- # one posible plot -->
+<!-- mean_ages_1910 %>% -->
+<!--   mutate(year = 1910) %>% -->
+<!--   bind_rows( -->
+<!--     mean_ages_2015 %>% mutate(year = 2015)) %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(kin, mean_age, fill=factor(year)), -->
+<!--            stat = "identity", position = "dodge") -->
+<!-- ``` -->
+<!-- **2.3** -->
+<!-- ```{r} -->
+<!-- swe_2015$kin_full %>% -->
+<!--   group_by(age_focal) %>% -->
+<!--   summarise(sandwiched_by_daughter = sum(living[kin=='d' & age_kin<=15]), -->
+<!--             sandwiched_by_mother = sum(living[kin=='m' & age_kin>=75]), -->
+<!--             sandwiched_level = sandwiched_by_daughter + sandwiched_by_mother) %>% -->
+<!--   ggplot(aes(age_focal, sandwiched_level))+ -->
+<!--   geom_line() + -->
+<!--   scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5)) -->
+<!-- ``` -->
+<!-- **3.1**  -->
+<!-- ```{r} -->
+<!-- by_hand_example <- kin(p, f, birth_female = 1) -->
+<!-- # some checks -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) - g -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) - d -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) - a -->
+<!-- # grandmothers -->
+<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) -->
+<!-- ``` -->
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">
