@@ -180,7 +180,7 @@ t(a_matrix)
 Let's create a square *non-singular* matrix (with no zero determinant, with inverse):
 ```{r}
 set.seed(50)
-other_matrix <- matrix(rpois(25, 3), 5, 5)
+other_matrix <- matrix(runif(25), 5, 5)
 ```
 
 Get the determinant:
@@ -307,1001 +307,988 @@ ggplot(aes(mpg, wt, colour = hp)) +
 
 <!-- ---------------------------------------------------------------------- -->
 
-<!-- ## Mon 8 -->
+## Mon 8
 
-<!-- We will see how to translate the theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for a seamless implementation, and finally do some exercises. Sections: -->
+We will see how to translate the theory of **Age-classified time-invariant one-sex kinship models** to code, how to use `DemoKin` package for a seamless implementation, and finally do some exercises. Sections:
 
-<!-- - [By hand](#by_hand_mon8) -->
+- [By hand](#by_hand_mon8)
 
-<!-- - [Using DemoKin](#using_demokin_mon8) -->
+- [Using DemoKin](#using_demokin_mon8)
 
-<!-- - [Exercises](#exercises_mon8) -->
+- [Exercises](#exercises_mon8)
 
-<!-- ### By hand {#by_hand_mon8} -->
+### By hand {#by_hand_mon8}
 
-<!-- Imagine you are studying a female population with 5 age-classes and fixed survival probabilities and fertility rates (only female offspring), given by: -->
+Imagine you are studying a female population with 5 age-classes and fixed survival probabilities and fertility rates (only female offspring), given by:
 
-<!-- ```{r} -->
-<!-- age <- 0:4 -->
-<!-- p <- c(.9, .7, .4, .1, 0) -->
-<!-- f <- c(0, .5, .5, .3, 0) -->
-<!-- ``` -->
+```{r}
+age <- 0:4
+p <- c(.9, .7, .4, .1, 0)
+f <- c(0, .5, .5, .3, 0)
+```
 
-<!-- Remember: each *age* is a *stage*, so age 0-1 is the stage 1, age 1-2 is the stage 2, and so on. At age 5 nobody is alive ($\omega=5$ in life table applications). -->
+Remember: each *age* is a *stage*, so age 0-1 is the stage 1, age 1-2 is the stage 2, and so on. At age 5 nobody is alive ($\omega=5$ in life table applications).
 
-<!-- > Note: we are going to use Hal's letters for naming relatives: -->
+> Note: we are going to use Hal's letters for naming relatives:
 
-<!-- ```{r, echo = F} -->
-<!-- DemoKin::demokin_codes() %>% select(-1) -->
-<!-- ``` -->
+```{r, echo = F}
+DemoKin::demokin_codes() %>% select(-1)
+```
 
-<!-- Let's build matrices $U$ and $F$. In R, the letter $F$ is reserved for `FALSE`, so we need to modify the label, in our case we choose to add a point (sorry). -->
+Let's build matrices $U$ and $F$. In R, the letter $F$ is reserved for `FALSE`, so we need to modify the label, in our case we choose to add a point (sorry).
 
-<!-- ```{r} -->
-<!-- ages <- length(age) -->
-<!-- U <- F. <- matrix(0, nrow = ages, ncol = ages) -->
-<!-- U[row(U)-1 == col(U)] <- p[-ages] -->
-<!-- U[ages, ages] <- p[ages] # in this case is 0, omega = 5 -->
-<!-- F.[1,] <- f -->
-<!-- ``` -->
+```{r}
+ages <- length(age)
+U <- F. <- matrix(0, nrow = ages, ncol = ages)
+U[row(U)-1 == col(U)] <- p[-ages]
+U[ages, ages] <- p[ages] # in this case is 0, omega = 5
+F.[1,] <- f
+```
 
-<!-- Now let's find eigenvalues and eigenvectors to calculate $w$ (the stable distribution by age) and $\pi$ (the one for the mothers). -->
+Now let's find eigenvalues and eigenvectors to calculate $w$ (the stable distribution by age) and $\pi$ (the one for the mothers).
 
-<!-- ```{r} -->
-<!-- A = U + F. -->
-<!-- A_eigen <- eigen(A) -->
-<!-- A_eigen_value <- as.double(A_eigen$values[1]) # Oh! what information does it gives you? -->
-<!-- A_eigen_vector <- as.double(A_eigen$vectors[,1]) -->
-<!-- w <- A_eigen_vector/sum(A_eigen_vector) -->
-<!-- pi <- w * f / sum(w * f) -->
-<!-- ``` -->
+```{r}
+A = U + F.
+A_eigen <- eigen(A)
+A_eigen_value <- as.double(A_eigen$values[1]) # Oh! what information does it gives you?
+A_eigen_vector <- as.double(A_eigen$vectors[,1])
+w <- A_eigen_vector/sum(A_eigen_vector)
+pi <- w * f / sum(w * f)
+```
 
-<!-- Next we are going to see how to project some relatives. For each of those we are going to create a matrix of dimension $5$ x $5$ to save the vectors of surviving kin by age (rows) in each Focal's age (columns). -->
-<!-- So for example, living mothers by age when Focal is at age 0 will be placed in first column, living mothers by age when Focal is 1 on the second column, and so on. -->
+Next we are going to see how to project some relatives. For each of those we are going to create a matrix of dimension $5$ x $5$ to save the vectors of surviving kin by age (rows) in each Focal's age (columns).
+So for example, living mothers by age when Focal is at age 0 will be placed in first column, living mothers by age when Focal is 1 on the second column, and so on.
 
-<!-- - **Mother** -->
+- **Mother**
 
-<!-- In the case of mothers, $\pi$ is the age distribution when Focal just born. Remember, every mother is alive a that moment, so the total (sum of $\pi$) should be 1. This vector will be placed in the first column of $D$. -->
+In the case of mothers, $\pi$ is the age distribution when Focal just born. Remember, every mother is alive a that moment, so the total (sum of $\pi$) should be 1. This vector will be placed in the first column of $D$.
 
-<!-- ```{r} -->
-<!-- D <- matrix(0, ages, ages) -->
-<!-- D[,1] <- pi  # eq 14 in Caswell (2019) -->
-<!-- ``` -->
+```{r}
+D <- matrix(0, ages, ages)
+D[,1] <- pi  # eq 14 in Caswell (2019)
+```
 
-<!-- Let's project that population (here the *key*, each kin is a population) and get the living mothers at each age of Focal, preserving the age's kin too (that's why we save results in column vectors on the matrix). -->
+Let's project that population (here the *key*, each kin is a population) and get the living mothers at each age of Focal, preserving the age's kin too (that's why we save results in column vectors on the matrix).
 
-<!-- ```{r} -->
-<!-- for(x in 2:ages){ -->
-<!--   D[,x] <- U %*% D[,x-1]  # eq 13 in Caswell (2019) but in a matrix form -->
-<!-- } -->
-<!-- ``` -->
+```{r}
+for(x in 2:ages){
+  D[,x] <- U %*% D[,x-1]  # eq 13 in Caswell (2019) but in a matrix form
+}
+```
 
-<!-- Each column-vector in $D$ is the vector $d(x)$ in equation 13 of @caswell_formal_2019: the distribution of living mothers by each Focal's age. -->
+Each column-vector in $D$ is the vector $d(x)$ in equation 13 of @caswell_formal_2019: the distribution of living mothers by each Focal's age.
 
-<!-- ```{r} -->
-<!-- round(D,2) -->
-<!-- ``` -->
+```{r}
+round(D,2)
+```
 
-<!-- If we sum up by columns (marginal), we get the expected living mothers for Focal when she grows up. -->
-<!-- ```{r} -->
-<!-- ones <- rep(1,ages) -->
-<!-- d <- t(ones) %*% D # could be done with colSums(D) -->
-<!-- plot(age, d, t = "b") -->
-<!-- ``` -->
+If we sum up by columns (marginal), we get the expected living mothers for Focal when she grows up.
+```{r}
+ones <- rep(1,ages)
+d <- t(ones) %*% D # could be done with colSums(D)
+plot(age, d, t = "b")
+```
 
-<!-- This is the general idea for all kin. Some are a bit different because includes subsidy, offspring from *other population* (other kin type), and is necessary a second term in the projection loop. -->
+This is the general idea for all kin. Some are a bit different because includes subsidy, offspring from *other population* (other kin type), and is necessary a second term in the projection loop.
 
-<!-- - **Daughters** -->
+- **Daughters**
 
-<!-- The case of relatives that born after Focal requires explicitly an additional matrix of subsidy. -->
-<!-- Focusing on the **daughters** of Focal, initial living count by age is zero. -->
+The case of relatives that born after Focal requires explicitly an additional matrix of subsidy.
+Focusing on the **daughters** of Focal, initial living count by age is zero.
 
-<!-- ```{r} -->
-<!-- A <- matrix(0, 5, 5) # eq 7 in Caswell (2019) -->
-<!-- ``` -->
+```{r}
+A <- matrix(0, 5, 5) # eq 7 in Caswell (2019)
+```
 
-<!-- Let's project that population, adding offspring from Focal at each age (the diagonal matrix $E$ is for that purpose, is tracking Focal's age): -->
+Let's project that population, adding offspring from Focal at each age (the diagonal matrix $E$ is for that purpose, is tracking Focal's age):
 
-<!-- ```{r} -->
-<!-- E <- diag(1, ages) -->
-<!-- for(x in 2:ages){ -->
-<!--   A[,x] <- U %*% A[,x-1] + F. %*% E[,x-1] # eq 6 in Caswell (2019) in matrix form -->
-<!-- } -->
-<!-- a <- t(ones) %*% A # could be done with colSums(A) -->
-<!-- plot(age, a, t = "b") -->
-<!-- ``` -->
+```{r}
+E <- diag(1, ages)
+for(x in 2:ages){
+  A[,x] <- U %*% A[,x-1] + F. %*% E[,x-1] # eq 6 in Caswell (2019) in matrix form
+}
+a <- t(ones) %*% A # could be done with colSums(A)
+plot(age, a, t = "b")
+```
 
-<!-- Take a moment to see how multiplication between $F$ and $E[,x]$ works. -->
+Take a moment to see how multiplication between $F$ and $E[,x]$ works.
 
-<!-- - **Sisters** -->
+- **Sisters**
 
-<!-- The treatment is different depending if the sister born before or after Focal. -->
+The treatment is different depending if the sister born before or after Focal.
 
-<!--   - *Older* sisters: the initial distribution by age comes from the probability that Focal's mother had daughters at the time that Focal born, and then just survive (no subsidy, no new old sisters). -->
-<!--   - *Younger* sisters: the initial count is zero, and then the mother can bring little sisters to Focal, sisters that needs to survive with age too. -->
+  - *Older* sisters: the initial distribution by age comes from the probability that Focal's mother had daughters at the time that Focal born, and then just survive (no subsidy, no new old sisters).
+  - *Younger* sisters: the initial count is zero, and then the mother can bring little sisters to Focal, sisters that needs to survive with age too.
 
-<!-- ```{r} -->
-<!-- M <- N <- matrix(0, 5, 5) -->
-<!-- M[,1] <- A %*% D[,1] # eq 22 -->
-<!-- N[,1] <- 0           # eq 24 -->
-<!-- for(x in 2:ages){ -->
-<!--   M[,x] <- U %*% M[,x-1]                 # eq 21 -->
-<!--   N[,x] <- U %*% N[,x-1] + F. %*% D[,x-1]  # eq 23 -->
-<!-- } -->
-<!-- # lets group them directly as sisters -->
-<!-- m_n <- t(ones) %*% (M + N) -->
-<!-- ``` -->
+```{r}
+M <- N <- matrix(0, 5, 5)
+M[,1] <- A %*% D[,1] # eq 22
+N[,1] <- 0           # eq 24
+for(x in 2:ages){
+  M[,x] <- U %*% M[,x-1]                 # eq 21
+  N[,x] <- U %*% N[,x-1] + F. %*% D[,x-1]  # eq 23
+}
+# lets group them directly as sisters
+m_n <- t(ones) %*% (M + N)
+```
 
-<!-- - **Grandmother** -->
+- **Grandmother**
 
-<!-- What about the **grandmother**? "The age distribution of grandmothers at the birth of Focal is the age distribution of the mothers of Focal’s mother, at the age of Focal’s mother when Focal is born" (@caswell_formal_2019). -->
+What about the **grandmother**? "The age distribution of grandmothers at the birth of Focal is the age distribution of the mothers of Focal’s mother, at the age of Focal’s mother when Focal is born" (@caswell_formal_2019).
 
-<!-- > Note: we are treating a female population in a [matrilineal](https://en.wikipedia.org/wiki/Matrilineality) framework, so Focal has only a grandmother from mother's side (female line). -->
+> Note: we are treating a female population in a [matrilineal](https://en.wikipedia.org/wiki/Matrilineality) framework, so Focal has only a grandmother from mother's side (female line).
 
-<!-- In other words: What "portion" of the mother remains alive for Focal's mother when Focal born? We know that at Focal's birth there was 1 mother with age distribution $\pi$. The distribution by age of her living mother can be obtained as $D %*% \pi$. -->
+In other words: What "portion" of the mother remains alive for Focal's mother when Focal born? We know that at Focal's birth there was 1 mother with age distribution $\pi$. The distribution by age of her living mother can be obtained as $D %*% \pi$.
 
-<!-- ```{r} -->
-<!-- G <- matrix(0, 5, 5) -->
-<!-- G[,1] <- D %*% pi -->
-<!-- ``` -->
+```{r}
+G <- matrix(0, 5, 5)
+G[,1] <- D %*% pi
+```
 
-<!-- Take a minute to see what just happened. -->
+Take a minute to see what just happened.
 
-<!-- Now let's project $G$ population: -->
+Now let's project $G$ population:
 
-<!-- ```{r} -->
-<!-- for(x in 2:ages){ -->
-<!--   G[,x] <- U %*% G[,x-1] -->
-<!-- } -->
-<!-- g <- t(ones) %*% G # or colSums(G) -->
-<!-- ``` -->
+```{r}
+for(x in 2:ages){
+  G[,x] <- U %*% G[,x-1]
+}
+g <- t(ones) %*% G # or colSums(G)
+```
 
-<!-- Let's visualize living kin by Focal's age for the cases computed: -->
+Let's visualize living kin by Focal's age for the cases computed:
 
-<!-- ```{r} -->
-<!-- plot(age, d, t = "b", ylab = "k", ylim = c(0, 2)) -->
-<!-- lines(age, a, t = "b", col = 2) -->
-<!-- lines(age, m_n, t = "b", col = 3) -->
-<!-- lines(age, g, t = "b", col = 4) -->
-<!-- legend("bottomright", c("m","d","s","gm"), col = 1:4, lty = 1) -->
-<!-- ``` -->
+```{r}
+plot(age, d, t = "b", ylab = "k", ylim = c(0, 1.5))
+lines(age, a, t = "b", col = 2)
+lines(age, m_n, t = "b", col = 3)
+lines(age, g, t = "b", col = 4)
+legend("bottomright", c("m","d","s","gm"), col = 1:4, lty = 1)
+```
 
-<!-- That's the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don't change), and pretty much the essence for every variant that we will see in next days. -->
+That's the kinship projection essence for one-sex in the time-invariant model ($U$ and $F$ don't change), and pretty much the essence for every variant that we will see in next days.
 
-<!-- In the `Demokin` package we have this automatized. Let's take a look on how to use it. -->
+In the `Demokin` package we have this automatized. Let's take a look on how to use it.
 
-<!-- ### Using DemoKin {#using_demokin_mon8} -->
+### Using DemoKin {#using_demokin_mon8}
 
-<!-- First please load these libraries: -->
+First please load these libraries:
 
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(DemoKin) -->
-<!-- library(dplyr) -->
-<!-- library(tidyr) -->
-<!-- library(ggplot2) -->
-<!-- ``` -->
+```{r, warning=FALSE, message=FALSE}
+library(DemoKin)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
 
-<!-- #### 1. Built-in data -->
+#### 1. Built-in data
 
-<!-- The `DemoKin` package includes data from Sweden as an example. This comes from the [Human Mortality Database](https://www.mortality.org/) and [Human Fertility Database](https://www.humanfertility.org/). -->
+The `DemoKin` package includes data from Sweden as an example. This comes from the [Human Mortality Database](https://www.mortality.org/) and [Human Fertility Database](https://www.humanfertility.org/).
 
-<!-- This is how data of survival probabilities by age looks like: -->
+This is how data of survival probabilities by age looks like:
 
-<!-- ```{r} -->
-<!-- data("swe_px", package="DemoKin") -->
-<!-- swe_px[1:5, 1:5] -->
-<!-- ``` -->
+```{r}
+data("swe_px", package="DemoKin")
+swe_px[1:5, 1:5]
+```
 
-<!-- It has years in columns and age in rows. We thought that from an user perspective it could be more easy to organize the input rather than include $U$. Plotting $q_x$ ($´s complement) over age in a year, for example 2015, looks like this: -->
+It has years in columns and age in rows. We thought that from an user perspective it could be more easy to organize the input rather than include $U$. Plotting $q_x$ ($´s complement) over age in a year, for example 2015, looks like this:
 
-<!-- ```{r, warning=F, message=F} -->
-<!-- swe_px %>% -->
-<!--     as.data.frame() %>% -->
-<!--     select(px = `2015`) %>% -->
-<!--     mutate(ages = 1:nrow(swe_px)-1) %>% -->
-<!--     ggplot() + -->
-<!--     geom_line(aes(x = ages, y = 1-px)) + -->
-<!--     scale_y_log10() -->
-<!-- ``` -->
+```{r, warning=F, message=F}
+swe_px %>%
+    as.data.frame() %>%
+    select(px = `2015`) %>%
+    mutate(ages = 1:nrow(swe_px)-1) %>%
+    ggplot() +
+    geom_line(aes(x = ages, y = 1-px)) +
+    scale_y_log10()
+```
 
-<!-- And age-specific fertility rates: -->
+And age-specific fertility rates:
 
-<!-- ```{r} -->
-<!-- data("swe_asfr", package="DemoKin") -->
-<!-- swe_asfr[26:30, 1:5] -->
-<!-- ``` -->
+```{r}
+data("swe_asfr", package="DemoKin")
+swe_asfr[26:30, 1:5]
+```
 
-<!-- Plotted over time and age the same year: -->
+Plotted over time and age the same year:
 
-<!-- ```{r} -->
-<!-- swe_asfr %>% as.data.frame() %>% -->
-<!--       as.data.frame() %>% -->
-<!--       select(fx = `2015`) %>% -->
-<!--       mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--       ggplot() + -->
-<!--       geom_line(aes(x = age, y = fx)) -->
-<!-- ``` -->
+```{r}
+swe_asfr %>% as.data.frame() %>%
+      as.data.frame() %>%
+      select(fx = `2015`) %>%
+      mutate(age = 1:nrow(swe_asfr)-1) %>%
+      ggplot() +
+      geom_line(aes(x = age, y = fx))
+```
 
-<!-- #### 2. The function `kin()` -->
+#### 2. The function `kin()`
 
-<!-- `DemoKin` can be used to compute the number and age distribution of Focal's relatives under a range of assumptions, for living and deceased kin. -->
-<!-- The function `DemoKin::kin()` currently does most of the heavy lifting in terms of implementing the models. This is what it looks like in action, in this case assuming time-invariant demographic rates of year 2015: -->
+`DemoKin` can be used to compute the number and age distribution of Focal's relatives under a range of assumptions, for living and deceased kin.
+The function `DemoKin::kin()` currently does most of the heavy lifting in terms of implementing the models. This is what it looks like in action, in this case assuming time-invariant demographic rates of year 2015:
 
-<!-- ```{r} -->
-<!-- # First, get vectors for a given year -->
-<!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
-<!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
-<!-- # Run  -->
-<!-- swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
-<!-- ``` -->
+```{r}
+# First, get vectors for a given year
+swe_surv_2015 <- DemoKin::swe_px[,"2015"]
+swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"]
+# Run
+swe_2015 <- kin(p = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE)
+```
 
-<!-- Main **arguments** are: -->
+Main **arguments** are:
 
-<!-- -   **p** numeric. A vector or matrix of survival probabilities with rows as ages (and columns as years in case of matrix). -->
-<!-- -   **f** numeric. Same as **p** but for age-specific fertility rates. -->
-<!-- -   **time_invariant** logical. Assume time-invariant rates. Default `TRUE`. -->
-<!-- -   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ... -->
+-   **p** numeric. A vector or matrix of survival probabilities with rows as ages (and columns as years in case of matrix).
+-   **f** numeric. Same as **p** but for age-specific fertility rates.
+-   **time_invariant** logical. Assume time-invariant rates. Default `TRUE`.
+-   **output_kin** character. kin types to return: "m" for mother, "d" for daughter, ...
 
-<!-- Other relevant argument is **birth_female**, which is set as $1/2.04$ by default. This multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only, this parameter needs to be set to 1. -->
+Other relevant argument is **birth_female**, which is set as $1/2.04$ by default. This multiplies `f` argument at some point, so in case you are using fertility rates already for female offspring only, this parameter needs to be set to 1.
 
-<!-- Relatives for the `output_kin` argument are identified by a unique code. -->
+Relatives for the `output_kin` argument are identified by a unique code.
 
-<!-- > Note: relationship codes used in `DemoKin` differ from those in Caswell [-@caswell_formal_2019]. The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion: -->
+> Note: relationship codes used in `DemoKin` differs from those in Caswell [-@caswell_formal_2019]. The equivalence between the two set of codes is given in the following table, so keep an eye on that in case some confusion:
 
-<!-- ```{r} -->
-<!-- demokin_codes() -->
-<!-- ``` -->
+```{r}
+demokin_codes()
+```
 
-<!-- The output from `DemoKin::kin()` returns a list containing two data frames: `kin_full` and `kin_summary`. -->
+The output from `DemoKin::kin()` returns a list containing two data frames: `kin_full` and `kin_summary`.
 
-<!-- ```{r} -->
-<!-- str(swe_2015) -->
-<!-- ``` -->
+```{r}
+str(swe_2015)
+```
 
-<!-- -   `kin_full` : This data frame contains expected kin counts by year (or cohort), age of Focal, and age of kin. The number of rows is because we have *14 kin types*, *101 Focal ages* and *101 kin ages*. -->
+-   `kin_full` : This data frame contains expected kin counts by year (or cohort), age of Focal, and age of kin. The number of rows is because we have *14 kin types*, *101 Focal ages* and *101 kin ages*.
 
-<!-- ```{r} -->
-<!-- head(swe_2015$kin_full) -->
-<!-- ``` -->
+```{r}
+head(swe_2015$kin_full)
+```
 
-<!-- -   `kin_summary` : This is a 'summary' data frame derived from `kin_full`. To produce it, we sum over all ages of kin to produce a data frame of expected kin counts by year or cohort and age of Focal (but *not* by age of kin). This is how the `kin_summary` object is derived: -->
+-   `kin_summary` : This is a 'summary' data frame derived from `kin_full`. To produce it, we sum over all ages of kin to produce a data frame of expected kin counts by year or cohort and age of Focal (but *not* by age of kin). This is how the `kin_summary` object is derived:
 
-<!-- ```{r, message=F} -->
-<!-- kin_by_age_Focal <- -->
-<!--   swe_2015$kin_full %>% -->
-<!--   group_by(cohort, kin, age_focal) %>% -->
-<!--   summarise(count = sum(living)) %>% -->
-<!--   ungroup() -->
-<!-- # Check that they are identical (for living kin only here) -->
-<!-- kin_by_age_Focal %>% -->
-<!--   select(cohort, kin, age_focal, count) %>% -->
-<!--   identical( -->
-<!--     swe_2015$kin_summary %>% -->
-<!--       select(cohort, kin, age_focal, count = count_living) %>% -->
-<!--       arrange(cohort, kin, age_focal) -->
-<!--   ) -->
-<!-- ``` -->
+```{r, message=F}
+kin_by_age_Focal <-
+  swe_2015$kin_full %>%
+  group_by(cohort, kin, age_focal) %>%
+  summarise(count = sum(living)) %>%
+  ungroup()
+# Check that they are identical (for living kin only here)
+kin_by_age_Focal %>%
+  select(cohort, kin, age_focal, count) %>%
+  identical(
+    swe_2015$kin_summary %>%
+      select(cohort, kin, age_focal, count = count_living) %>%
+      arrange(cohort, kin, age_focal)
+  )
+```
 
-<!-- A lot of interesting data to explore. Take a moment to interpret what information is returned in those tables. All comes from the matrices that we calculated in the *by hand* section. -->
+A lot of interesting data to explore. Take a moment to interpret what information is returned in those tables. All comes from the matrices that we calculated in the *by hand* section.
 
-<!-- Let's give more context with some possible research questions as an example. -->
+Let's give more context with some possible research questions as an example.
 
-<!-- #### 3. Example: kin counts in time-invariant populations for Sweden 2015 -->
+#### 3. Example: kin counts in time-invariant populations for Sweden 2015
 
-<!-- Following Caswell [-@caswell_formal_2019], we assume a female closed population in which everyone experiences the Swedish 2015 mortality and fertility rates at each age throughout their life. We then ask: -->
+Following Caswell [-@caswell_formal_2019], we assume a female closed population in which everyone experiences the Swedish 2015 mortality and fertility rates at each age throughout their life. We then ask:
 
-<!-- > How can we characterize the kinship network of an average member of the population (call her 'Focal')? -->
+> How can we characterize the kinship network of an average member of the population (call her 'Focal')?
 
-<!-- Let's use the pre-loaded Swedish data and re-run model. -->
-
-<!-- ```{r} -->
-<!-- # First, get vectors for a given year -->
-<!-- swe_surv_2015 <- DemoKin::swe_px[,"2015"] -->
-<!-- swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"] -->
-<!-- # Run kinship model -->
-<!-- swe_2015 <- kin(U = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE) -->
-<!-- ``` -->
-
-<!-- ##### 3.1. Living kin -->
-
-<!-- Now, let's visualize how the expected number of daughters, siblings, cousins, etc., changes over the life-course of Focal. Use  `DemoKin::rename_kin()` with full names to identify each relative type. Some *guiding questions*: Why some kin increase and other decrease in first ages? Why not all types decrease in oldest ages? -->
-
-<!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   rename_kin() %>% -->
-<!--   ggplot() + -->
-<!--   geom_line(aes(age_focal, count_living))  + -->
-<!--   labs(x = "Focal's age") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~kin) -->
-<!-- ``` -->
+Let's use the pre-loaded Swedish data and re-run model.
+
+```{r}
+# First, get vectors for a given year
+swe_surv_2015 <- DemoKin::swe_px[,"2015"]
+swe_asfr_2015 <- DemoKin::swe_asfr[,"2015"]
+# Run kinship model
+swe_2015 <- kin(U = swe_surv_2015, f = swe_asfr_2015, time_invariant = TRUE)
+```
+
+##### 3.1. Living kin
+
+Now, let's visualize how the expected number of daughters, siblings, cousins, etc., changes over the life-course of Focal. Use  `DemoKin::rename_kin()` with full names to identify each relative type. Some *guiding questions*: Why some kin increase and other decrease in first ages? Why not all types decrease in oldest ages?
+
+```{r, fig.height=6, fig.width=8}
+swe_2015$kin_summary %>%
+  rename_kin() %>%
+  ggplot() +
+  geom_line(aes(age_focal, count_living))  +
+  labs(x = "Focal's age") +
+  theme_bw() +
+  facet_wrap(~kin)
+```
 
-<!-- > You can think of the results as analogous to life expectancy (i.e., expected years of life for a synthetic cohort experiencing a given set of mortality rates), a period indicator. The only difference is that with $e_x$ you don't care what happened before that year, but with kinship yes (you need to give an age distribution to Focal's mother, for example). -->
+> You can think of the results as analogous to life expectancy (i.e., expected years of life for a synthetic cohort experiencing a given set of mortality rates), a period indicator. The only difference is that with $e_x$ you don't care what happened before that year, but with kinship yes (you need to give an age distribution to Focal's mother, for example).
 
-<!-- Let's get together all previous lines in an area plot to study kin composition by age. How does overall family size (and family composition) vary over life for an average woman at each age? -->
+Let's get together all previous lines in an area plot to study kin composition by age. How does overall family size (and family composition) vary over life for an average woman at each age?
 
-<!-- ```{r} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   select(age_focal, kin, count_living) %>% -->
-<!--   rename_kin(., consolidate_column = "count_living") %>% -->
-<!--   ggplot(aes(x = age_focal, y = count)) + -->
-<!--   geom_area(aes(fill = kin), colour = "black") + -->
-<!--   labs(x = "Focal's age", y = "Number of living female relatives") + -->
-<!--   theme_bw() + -->
-<!--   scale_x_continuous(labels = seq(0, 100, 10), breaks = seq(0, 100, 10)) + -->
-<!--   theme(legend.position = "bottom") -->
-<!-- ``` -->
+```{r}
+swe_2015$kin_summary %>%
+  select(age_focal, kin, count_living) %>%
+  rename_kin(., consolidate_column = "count_living") %>%
+  ggplot(aes(x = age_focal, y = count)) +
+  geom_area(aes(fill = kin), colour = "black") +
+  labs(x = "Focal's age", y = "Number of living female relatives") +
+  theme_bw() +
+  scale_x_continuous(labels = seq(0, 100, 10), breaks = seq(0, 100, 10)) +
+  theme(legend.position = "bottom")
+```
 
-<!-- Some additional questions can be formulated: is there a pick in the total? How about composition, which colors prevails in each life stage? -->
+Some additional questions can be formulated: is there a pick in the total? How about composition, which colors prevails in each life stage?
 
-<!-- ##### 3.2. Age distribution of living kin when Focal has some age -->
+##### 3.2. Age distribution of living kin when Focal has some age
 
-<!-- How old are Focal's relatives at some point's of Focal's life course? What does she see around when stops a moment of climbing over her diagonal-Lexis line? Using the `kin_full` data frame (with extended results), we can visualize the age distribution of Focal's relatives throughout Focal's life. -->
-<!-- For example when Focal is 35, the age pattern of her relatives is: -->
-
-<!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_2015$kin_full %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   ggplot() + -->
-<!--   geom_line(aes(age_kin, living)) + -->
-<!--   geom_vline(xintercept = 35, color=2) + -->
-<!--   labs(y = "Expected number of living relatives") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~kin) -->
-<!-- ``` -->
-
-<!-- Is coherent the mode of each kin distribution with Focal's age? Take a moment and do this bivariate comparison by intuition reviewing each type. -->
-
-<!-- If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value. -->
-
-<!-- ```{r, fig.height=10, fig.width=12} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   select(kin, count = count_living) %>% -->
-<!--   plot_diagram(rounding = 2) -->
-<!-- ``` -->
-
-
-<!-- ##### 3.3. Deceased kin -->
-
-<!-- We have focused on living kin, but what about relatives who have died during her life? -->
-<!-- The output of `kin` also includes information of kin deaths experienced by Focal. We did not see the code implementation in R, but it requires minimum additional modification to get the experienced death (basically implement equation 49 and 50 in @caswell_formal_2019, take a look to `DemoKin` in any case or ask us if you are curious). -->
-<!-- We start by considering the number of kin deaths that can expect to experience at each age. -->
-<!-- In other words, the non-cumulative number of deaths in the family that Focal experiences at a given age. At which age Focal would experience more kin deaths? From what types? What do you think is the reason for having *waves of bereavement*? -->
-
-<!-- ```{r} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   filter(age_focal>0) %>% -->
-<!--   group_by(age_focal, kin) %>% -->
-<!--   summarise(count = sum(count_dead)) %>% -->
-<!--   ungroup() %>% -->
-<!--   rename_kin(., consolidate_column = "count") %>% -->
-<!--   ggplot(aes(x = age_focal, y = count)) + -->
-<!--   geom_area(aes(fill = kin), colour = "black") + -->
-<!--   labs(x = "Focal's age", y = "Number of kin deaths experienced at each age") + -->
-<!--   coord_cartesian(ylim = c(0, 0.086)) + -->
-<!--   theme_bw() + -->
-<!--   theme(legend.position = "bottom") -->
-<!-- ``` -->
-
-<!-- Now, we combine all kin types to show the cumulative burden of kin death for an average member of the population surviving to each age: -->
-
-<!-- ```{r} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   group_by(age_focal, kin) %>% -->
-<!--   summarise(count = sum(count_cum_dead)) %>% -->
-<!--   ungroup() %>% -->
-<!--   rename_kin(., consolidate = "count") %>% -->
-<!--   ggplot(aes(x = age_focal, y = count)) + -->
-<!--   geom_area(aes(fill = kin), colour = "black") + -->
-<!--   labs(x = "Focal's age", y = "Number of kin deaths experienced (cumulative)") + -->
-<!--   theme_bw() + -->
-<!--   theme(legend.position = "bottom") -->
-<!-- ``` -->
-
-<!-- A member of the population aged 15, 50, and 65yo will have experienced, on average, this burden of death experience (considering all kin type with same weight): -->
-
-<!-- ```{r} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   group_by(age_focal) %>% -->
-<!--   summarise(count = sum(count_cum_dead)) %>% -->
-<!--   filter(age_focal %in% c(15, 50, 65)) -->
-<!-- ``` -->
-
-<!-- We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell's paper. Let's try some exercises. -->
-
-<!-- ### Exercises {#exercises_mon8} -->
-
-<!-- > All exercises can be completed using datasets included in DemoKin. Yes, last day with Sweden, we promise. -->
-
-<!-- #### E1. Kin availability and loss -->
-
-<!-- Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population and answer: -->
-
-<!-- **E1.1**: What is the expected number of surviving offspring for an average woman aged 35? -->
-
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- swe_surv_1910 <- DemoKin::swe_px[,"1910"] -->
-<!-- swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"] -->
-<!-- swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE) -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
-<!--   filter(age_focal == 35, kin == "d") -->
-<!-- ``` -->
-
-<!-- **E3.2**: What is the expected number of surviving mother for the same woman? -->
-
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
-<!--   filter(age_focal == 35, kin == "m") -->
-<!-- ``` -->
-
-<!-- **E3.3**: Plot the 'Keyfitz' diagram for that woman and compare visually with the one from previous section (based on rates from year 2015). -->
-
-<!-- ```{r, fig.height=10, fig.width=12} -->
-<!-- # Write your code here -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   select(kin, count = count_living) %>% -->
-<!--   plot_diagram(rounding = 2) -->
-<!-- ``` -->
-
-<!-- **E1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. Which of the two Focals (one experiencing the 1910 rates and the other the 2015 rates) has lost more daughters at age 65? How many more daughters has she lost?  -->
-
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- # for all kin in this case -->
-<!-- ##### SHOULD BE NOT CUMULATED -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
-<!--   rename_kin(., consolidate = "count") %>% -->
-<!--   filter(age_focal == 65) %>% -->
-<!--   rename(loss_1910 = count) %>% -->
-<!--   inner_join( -->
-<!--     swe_2015$kin_summary %>% -->
-<!--       summarise(count = round(sum(count_cum_dead),3), .by = c(age_focal, kin)) %>% -->
-<!--       rename_kin(., consolidate = "count") %>% -->
-<!--       filter(age_focal == 65) %>% -->
-<!--       rename(loss_2015 = count)) -->
-<!-- ``` -->
-
-<!-- #### E2. Kin age distribution -->
-
-<!-- Let's back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal's life-course: -->
-
-<!-- ```{r, warning=F, message=F} -->
-<!-- swe_2015$kin_summary %>% -->
-<!--   filter(kin %in% c("os", "ys")) %>% -->
-<!--   rename_kin() %>% -->
-<!--   select(kin, age_focal, mean_age, sd_age) %>% -->
-<!--   mutate(`sd_age/mean_age` = sd_age/mean_age) %>% -->
-<!--   pivot_longer(mean_age:`sd_age/mean_age`) %>% -->
-<!--   ggplot(aes(x = age_focal, y = value, colour = kin)) + -->
-<!--   geom_line() + -->
-<!--   facet_wrap(~name, scales = "free") + -->
-<!--   labs(y = "Mean age of sister(s)") + -->
-<!--   theme_bw() -->
-<!-- ``` -->
-
-<!-- Compute the mean and standard deviation of the age of sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`) and: -->
-
-<!-- **E2.1**: get then mean age of living mother, daughter and sisters for a female aged 35. -->
-
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- mean_ages_2015 <- swe_2015$kin_full %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
-<!--             .by = c(kin)) -->
-<!-- ``` -->
-
-<!-- **E2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize the comparison and try it. -->
-
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- mean_ages_1910 <- swe_1910$kin_full %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
-<!--             .by = c(kin)) -->
-<!-- # one posible plot -->
-<!-- mean_ages_1910 %>% -->
-<!--   mutate(year = 1910) %>% -->
-<!--   bind_rows( -->
-<!--     mean_ages_2015 %>% mutate(year = 2015)) %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(kin, mean_age, fill=factor(year)), -->
-<!--            stat = "identity", position = "dodge") -->
-<!-- ``` -->
-
-<!-- **E2.3** -->
-
-<!-- The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [@alburezgutierrez_sandwich_2021]. -->
-<!-- For this exercise, we consider the level 'sandwich-ness' to the sum of living daughters aged $15$ or younger and mothers (actually the portion of her) older than $75$ (in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015 under previous definition, assuming time-invariant rates and a female-only population. -->
-
-<!-- ```{r} -->
-<!-- swe_2015$kin_full %>%  -->
-<!--   group_by(age_focal) %>%  -->
-<!--   summarise(sandwiched_by_daughter = sum(living[kin=='d' & age_kin<=15]), -->
-<!--             sandwiched_by_mother = sum(living[kin=='m' & age_kin>=75]), -->
-<!--             sandwiched_level = sandwiched_by_daughter + sandwiched_by_mother) %>% -->
-<!--   ggplot(aes(age_focal, sandwiched_level))+ -->
-<!--   geom_line() + -->
-<!--   scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5)) -->
-<!-- ``` -->
-
-
-<!-- #### E3. By hand calculation -->
-
-<!-- **E3.1**: use vectors $p$ and $f$ from the toy example in *By Hand* section, but this time with `DemoKin`. Do you have the same results? How many grandmothers have Focal during her life? -->
-
-<!-- ```{r} -->
-<!-- by_hand_example <- kin(p, f, birth_female = 1) -->
-<!-- # some checks -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) == g -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) == d -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) == a -->
-<!-- # grandmothers -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) -->
-<!-- ``` -->
-
-
-<!-- ## Tues 9 -->
-
-<!-- Here, we will implement the theory of Age-classified time-**variant** one-sex kinship models in R, show how to use the `DemoKin` package for that goal, and do some exercises. -->
-
-<!-- - [By hand](#by_hand_tues9) -->
-
-<!-- - [Using DemoKin](#using_demokin_tues9) -->
-
-<!-- - [Exercises](#exercises_tues9) -->
-
-<!-- ### By hand {#by_hand_tues9} -->
-
-<!-- Let's keep studying our female closed population with 5 age-classes, but now we know that in the next 9 years ($T=9$) the probability of death will decline 1% yearly for all age-classes. Fertility rates will also decline by 1% each year. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows). -->
-
-<!-- ```{r} -->
-<!-- age <- 0:4 -->
-<!-- ages <- length(age) -->
-<!-- T. <- 9 # again T is reserved for logical TRUE value, so we add a point -->
-<!-- years <- length(0:T.) -->
-<!-- p <- c(.9, .7, .4, .1, 0) -->
-<!-- Pt <- 1 - sapply(0:T., function(t) (1-p)*(.99)^t) -->
-<!-- f <- c(0, .5, .5, .3, 0) -->
-<!-- Ft <- sapply(0:T., function(t) f *(.99)^t) -->
-<!-- plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female offspring only -->
-<!-- # plot(0:T., colSums(Pt)+.5, xlab = "t", ylab = "e(0)") # an approximation of e(0) when a(x)=.5 -->
-<!-- ``` -->
-
-<!-- Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon. -->
-
-<!-- ```{r} -->
-<!-- Ut_list <- list() # eq 6 Caswell (2021) -->
-<!-- Ft_list <- list() # eq 7 Caswell (2021) -->
-<!-- U_temp <- F_temp <- matrix(0, ages, ages) -->
-<!-- for(t in 1:years){ -->
-<!--   # create matrices -->
-<!--   U_temp[row(U_temp)-1 == col(U_temp)] <- Pt[-ages,t] -->
-<!--   F_temp[1,] <- Ft[,t] -->
-<!--   # save as element -->
-<!--   Ut_list[[t]] <- U_temp -->
-<!--   Ft_list[[t]] <- F_temp -->
-<!-- } -->
-<!-- # see survival matrix at t=1 (second element) -->
-<!-- Ut_list[[2]] -->
-<!-- ``` -->
-
-<!-- In this case we have a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones: -->
-
-<!-- ```{r} -->
-<!-- # initial population count -->
-<!-- pop <- c(300, 250, 100, 15, 0) -->
-<!-- # distribution by age -->
-<!-- z <- pop / sum(pop) -->
-<!-- # project population Z and get pi at each year -->
-<!-- Z <- Pi <- matrix(0, ages, years) -->
-<!-- Z[,1] <- z -->
-<!-- Pi[,1] <- Z[,1] * Ft[,1] / sum(Z[,1] * Ft[,1]) -->
-<!-- for(t in 1:T.){ -->
-<!--   At <- Ut_list[[t]] + Ft_list[[t]] -->
-<!--   Z[,t+1] <- At %*% Z[,t] # eq 13 Caswell (2021) -->
-<!--   Pi[,t+1] <- Z[,t+1] * Ft[,t+1] / sum(Z[,t+1] * Ft[,t+1]) # eq 14 Caswell (2021) -->
-<!-- } -->
-<!-- plot(0:T., colSums(Z), ylab = "%pop", xlab = "t") -->
-<!-- ``` -->
-
-<!-- Basically this is what we are going to do for kinship *populations*: make dynamic matrices by time with those lists. -->
-
-<!-- For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*time boundary*), and what is the initial kin availability for Focal born on next $T$ years (eq. 15 and 16 from @caswell_formal_2021). -->
-
-<!-- ![Caswell, 2021. Fig 2.](time_var_boundaries.png) -->
-
-<!-- - **Mother** -->
-
-<!-- One solution to the time boundary restriction comes with assuming a stable population behavior before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution? -->
-
-<!-- The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that's the reason why we saved $\pi$ for all the years. -->
-
-<!-- Let's start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal's age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption: -->
-
-<!-- ```{r} -->
-<!-- Dt_list <- list() -->
-<!-- D0 <- matrix(0, ages, ages) -->
-<!-- D0[,1] <- Pi[,1] # from stable assumption -->
-<!-- for(x in 2:ages){ -->
-<!--   D0[,x] <- Ut_list[[1]] %*% D0[,x-1] # look that we are using akways the base year -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- > As with age classes, try to not confuse $t$ value with the order of elements in the list: for $t=0$ is the first element, for $t=1$ is the second..., for $t=9$ is the tenth. -->
-
-<!-- So this is the initial snapshot of mothers by age of Focal in base year. Every average woman by age in that year experimented what Focal did in the time-invariant scenario. -->
-
-<!-- ```{r} -->
-<!-- plot(age, D0[,1], t = "b",ylab = "Mother by focal age in base year") -->
-<!-- for(x in 2:ages){ -->
-<!--   lines(age, D0[,x], t = "b", col = x) -->
-<!-- } -->
-<!-- legend("topright", c("0","1","2","3","4"), col = 1:5, lty = 1) -->
-<!-- ``` -->
-
-<!-- Let's project over time. Create a list for saving each $Dt$ matrix of living mothers at each year: -->
-
-<!-- ```{r} -->
-<!-- Dt_list[[1]] <- D0 -->
-<!-- ``` -->
-
-<!-- After 1 year, the mother of each Focal will survive, and new Focals (just born) will have mothers with $\Pi(t+1)$ distribution: -->
-
-<!-- ```{r} -->
-<!-- # D1 for t=1 -->
-<!-- D1 <- matrix(0, ages, ages) -->
-<!-- D1[,1] <- Pi[,1] -->
-<!-- for(x in 2:ages){ -->
-<!--   D1[,x] <- Ut_list[[1]] %*% D0[,x-1] # we look the distribution in the previous year -->
-<!-- } -->
-<!-- Dt_list[[2]] <- D1 -->
-<!-- ``` -->
-
-<!-- After 1 more year... -->
-
-<!-- ```{r} -->
-<!-- # D2 for t=2 -->
-<!-- D2 <- matrix(0, ages, ages) -->
-<!-- D2[,1] <- Pi[,2] -->
-<!-- for(x in 2:ages){ -->
-<!--   D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year -->
-<!-- } -->
-<!-- Dt_list[[3]] <- D2 -->
-<!-- ``` -->
-
-<!-- At the end we will have living mothers by age for each Focal's age, at each year: -->
-
-<!-- ```{r, eval = F} -->
-<!-- for(t in 3:years){ -->
-<!-- Dt <- matrix(0, 5, 5) -->
-<!-- Dt[,1] <- Pi[,t]  # eq 32 in Caswell (2021) -->
-<!--   for(x in 2:ages){ -->
-<!--     Dt[,x] <- Ut_list[[t]] %*% Dt_list[[t-1]][,x-1] # eq 31 in Caswell (2021) -->
-<!--   } -->
-<!-- Dt_list[[t]] <- Dt -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- > Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 5 Focals, one at each age-class with living kin distribution by age and type that depends of experienced rates. -->
-
-<!-- Let's bind results in a table, so we can see what we have. -->
-
-<!-- ```{r} -->
-<!-- D_table <-lapply(1:length(Dt_list), function(t){ -->
-<!--    data.frame(age_focal = age, year = t-1, count_living = colSums(Dt_list[[t]]))}) %>% -->
-<!--   dplyr::bind_rows() -->
-<!-- ``` -->
-
-<!-- We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal's age, in each year, depending kin's age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame. -->
-
-<!-- Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in $t=3$ will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$. -->
-
-<!-- ![Caswell, 2021](time_var_summary.png) -->
-
-<!-- Let's play with real data! -->
-
-<!-- ### Using DemoKin {#using_demokin_tues9} -->
-
-<!-- #### 1. Living kin -->
-
-<!-- We saw yesterday the case of Sweden in 2015 assuming constant rates. But the demography of Sweden is, as you know, changing every year. This means that Focal and her relatives will have experienced changing mortality and fertility rates over time. Data has year in columns and age in rows, and plotted $q_x$ (p's complement) over age and time, looks like this: -->
-
-<!-- ```{r} -->
-<!-- data("swe_px", package="DemoKin") -->
-<!-- swe_px %>% -->
-<!--     as.data.frame() %>% -->
-<!--     mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--     pivot_longer(-age, names_to = "year", values_to = "px") %>% -->
-<!--     mutate(qx = 1-px) %>% -->
-<!--     ggplot() + -->
-<!--     geom_line(aes(x = age, y = qx, col = year)) + -->
-<!--     scale_y_log10() + -->
-<!--     theme(legend.position = "none") -->
-<!-- ``` -->
-
-<!-- Age-specific fertility rates: -->
-
-<!-- ```{r} -->
-<!-- data("swe_asfr", package="DemoKin") -->
-<!-- swe_asfr %>% as.data.frame() %>% -->
-<!--      mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--      pivot_longer(-age, names_to = "year", values_to = "asfr") %>% -->
-<!--      mutate(year = as.integer(year)) %>% -->
-<!--      ggplot() + geom_tile(aes(x = year, y = age, fill = asfr)) + -->
-<!--      scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10)) -->
-<!-- ``` -->
-
-<!-- And female population by age: -->
-
-<!-- ```{r} -->
-<!-- data("swe_pop", package="DemoKin") -->
-<!-- swe_pop %>% as.data.frame() %>% -->
-<!--      mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--      pivot_longer(-age, names_to = "year", values_to = "pop") %>% -->
-<!--      mutate(year = as.integer(year)) %>% -->
-<!--      ggplot() + geom_tile(aes(x = year, y = age, fill = pop)) + -->
-<!--      scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10)) -->
-<!-- ``` -->
-
-<!-- We account for this, by using the time-variant models introduced by @caswell_formal_2021. Let's take a look at the resulting kin counts for a Focal born in 1960, limiting the output to the relative types given in the argument `output_kin`. -->
-
-<!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_time_varying_1960_cohort <- -->
-<!--   kin( -->
-<!--     p = swe_px, -->
-<!--     f = swe_asfr, -->
-<!--     n = swe_pop, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_cohort = 1960, -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
-
-<!-- # plot -->
-<!-- swe_time_varying_1960_cohort$kin_summary %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot(aes(age_focal,count_living)) + -->
-<!--   geom_line()+ -->
-<!--   scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+ -->
-<!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin,scales = "free")+ -->
-<!--   theme_bw() -->
-<!-- ``` -->
-
-<!-- These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. Here it is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018. -->
-
-<!-- > Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)). -->
-
-<!-- But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot). -->
-
-<!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_time_varying_1960_1910_cohort <- -->
-<!--   kin( -->
-<!--     p = swe_px, -->
-<!--     f = swe_asfr, -->
-<!--     n = swe_pop, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_cohort = c(1910, 1960), -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
-
-<!-- # plot -->
-<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot(aes(age_focal,count_living,color=factor(cohort))) + -->
-<!--   geom_line()+ -->
-<!--   scale_y_continuous(name = "",labels = seq(0,3,.2), breaks = seq(0,3,.2))+ -->
-<!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin, scales = "free")+ -->
-<!--   theme_bw() -->
-<!-- ``` -->
-
-<!-- Maybe you are interested in take a snapshot of kin distribution in some year, for example 1990, setting argument`output_period = 1990`. What can you describe and not with this period approach, and what with the cohort approach? -->
-
-<!-- ```{r, fig.height=6, fig.width=8} -->
-<!-- swe_time_varying_1990_period <- -->
-<!--   kin( -->
-<!--     p = swe_px, -->
-<!--     f = swe_asfr, -->
-<!--     n = swe_pop, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = 1990, -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
-
-<!-- # plot -->
-<!-- swe_time_varying_1990_period$kin_summary %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot(aes(age_focal,count_living)) + -->
-<!--   geom_line() + -->
-<!--   scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+ -->
-<!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin,scales = "free")+ -->
-<!--   theme_bw() -->
-<!-- ``` -->
-
-<!-- #### 2. Kin deaths -->
-
-<!-- Kin loss can have severe consequences for bereaved relatives. It can also affect the provision of care support and intergenerational transfers over the life course. -->
-<!-- The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison: what types looks with the biggest differences? See absolute and relative terms (scale in this grid plots can be confusing some times)? -->
-
-<!-- ```{r, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, eval=F} -->
-<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot() + -->
-<!--   geom_line(aes(age_focal, count_cum_dead, col = factor(cohort))) + -->
-<!--   labs(y = "Expected number of deceased relatives") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~kin,scales="free") -->
-<!-- ``` -->
-
-<!-- Given these population-level measures, we can compute Focal's mean age at the time of her relative's death. For a Focal aged 50 yo, what kind of conclusions can you get? -->
-
-<!-- ```{r} -->
-<!-- swe_time_varying_1960_1910_cohort$kin_summary %>% -->
-<!--   rename_kin() %>% -->
-<!--   filter(age_focal == 50) %>% -->
-<!--   select(kin,cohort,mean_age_lost) %>% -->
-<!--   pivot_wider(names_from = cohort, values_from = mean_age_lost) %>% -->
-<!--   mutate_if(is.numeric, round, 1) -->
-<!-- ``` -->
-
-<!-- ### Exercises {#exercises_tues9} -->
-
-<!-- **E.1** Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located at same folder than with this *Rmd*,  [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)). -->
-
-<!-- ```{r} -->
-<!-- # load function -->
-<!-- source("get_UNWPP_inputs.R") -->
-
-<!-- # pick country -->
-<!-- country <- c("Argentina") -->
-
-<!-- # Year range -->
-<!-- my_startyr   <- 1950 -->
-<!-- my_endyr     <- 2021 -->
-
-<!-- # data downloaded -->
-<!-- data <- get_UNWPP_inputs( -->
-<!--   countries = country, -->
-<!--   my_startyr = my_startyr, -->
-<!--   my_endyr = my_endyr -->
-<!--   ) -->
-
-<!-- # reshape fertility -->
-<!-- country_fert <- data %>% -->
-<!--   select(age, year, fx) %>% -->
-<!--   pivot_wider(names_from = year, values_from = fx) %>% -->
-<!--   select(-age) %>% -->
-<!--   as.matrix() -->
-<!-- ``` -->
-
-<!-- **E.1.1** Reshape data for survival in the same way and visualize it. -->
-
-<!-- ```{r} -->
-<!-- # reshape survival -->
-<!-- country_surv <- data %>% -->
-<!--   select(age, year, px) %>% -->
-<!--   pivot_wider(names_from = year, values_from = px) %>% -->
-<!--   select(-age) %>% -->
-<!--   as.matrix() -->
-<!-- country_surv %>% -->
-<!--     as.data.frame() %>% -->
-<!--     mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--     pivot_longer(-age, names_to = "year", values_to = "px") %>% -->
-<!--     mutate(qx = 1-px) %>% -->
-<!--     ggplot() + -->
-<!--     geom_line(aes(x = age, y = qx, col = year)) + -->
-<!--     scale_y_log10() + -->
-<!--     theme(legend.position = "none") -->
-
-<!-- ``` -->
-
-<!-- **E.1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings. -->
-
-<!-- ```{r} -->
-<!-- E.1.2 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(1990, 2015), -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm") -->
-<!--     ) -->
-
-<!-- E.1.2$kin_summary %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot(aes(age_focal,count_living,color=factor(year))) + -->
-<!--   geom_line() + -->
-<!--   labs(y = "Expected number of living relatives") + -->
-<!--   facet_wrap(~kin,scales = "free")+ -->
-<!--   theme_bw() -->
-<!-- ``` -->
-
-<!-- **E.1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the amount of sister-years shared for Focal at age 30, for older and younger sisters. -->
-
-<!-- > Take a look to the graphic from @Song2019, we are in the definition 2 of years lived but with a simpler approach for sisters in our case. -->
-<!-- ![Fig. 1 in Song (2019)](song_shared.png) -->
-
-<!-- ```{r} -->
-<!-- E.1.3 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_cohort = c(1990), -->
-<!--     output_kin = c("os", "ys") -->
-<!--     ) -->
-
-<!-- # E.1.3$kin_summary %>% -->
-<!-- #   DemoKin::rename_kin() %>% -->
-<!-- #   ggplot(aes(age_focal,count_living)) + -->
-<!-- #   geom_line() + -->
-<!-- #   labs(y = "Expected number of living relatives") + -->
-<!-- #   facet_wrap(~kin)+ -->
-<!-- #   theme_bw() -->
-
-<!-- E.1.3$kin_summary %>% -->
-<!--   group_by(kin, cohort) %>% -->
-<!--   mutate(shared_years = cumsum(count_living)) %>% -->
-<!--   filter(age_focal == 30) %>% -->
-<!--   group_by(cohort, kin) %>% -->
-<!--   summarise(sister_years =sum(shared_years)) -->
-<!-- ``` -->
-
-
-<!-- **E.1.4** Covid pandemic had a big impact in kin bereavement in some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (a baseline, could be averaging some previous too), maybe you can have a sense of Covid19 impact in kin bereavement, for example for the 1960 cohort. Give a try, calculating the difference between living older kin for a female aged 50 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect. -->
-
-<!-- ```{r} -->
-<!-- country_surv_counterfactual <- country_surv -->
-<!-- country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"] -->
-<!-- country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"] -->
-
-<!-- E.1.4 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(2021) -->
-<!--     ) -->
-<!-- E.1.4_counterfactual <- -->
-<!--   kin( -->
-<!--     p = country_surv_counterfactual, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(2021) -->
-<!--     ) -->
-
-<!-- c(E.1.4$kin_full %>% -->
-<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])), -->
-<!-- E.1.4_counterfactual$kin_full %>% -->
-<!--   summarise(all_kin = sum(living[age_focal == 50 & age_kin>50])) -->
-<!-- ) -->
-
-<!-- ``` -->
-
-<!-- E.3 Run the toy example with DemoKin and check if you have the same results for type *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$. -->
-
-<!-- ```{r} -->
-<!-- rownames(Pt) <- rownames(Ft) <- rownames(Pi) <- 0:4 -->
-<!-- colnames(Pt) <- colnames(Ft) <- colnames(Ft) <- 0:9 -->
-<!-- by_hand_example <- kin(p = Pt, f = Ft, pi = Pi, time_invariant = FALSE, birth_female = 1) -->
-<!-- by_hand_example -->
-
-<!-- D_table -->
-<!-- by_hand_example$kin_summary %>% -->
-<!--   filter(kin == "m") %>% -->
-<!--   summarise(living = sum(count_living), .by = c(year, age_focal)) %>% -->
-<!--   arrange(year, age_focal) -->
-<!-- ``` -->
+How old are Focal's relatives at some point's of Focal's life course? What does she see around when stops a moment of climbing over her diagonal-Lexis line? Using the `kin_full` data frame (with extended results), we can visualize the age distribution of Focal's relatives throughout Focal's life.
+For example when Focal is 35, the age pattern of her relatives is:
+
+```{r, fig.height=6, fig.width=8}
+swe_2015$kin_full %>%
+  DemoKin::rename_kin() %>%
+  filter(age_focal == 35) %>%
+  ggplot() +
+  geom_line(aes(age_kin, living)) +
+  geom_vline(xintercept = 35, color=2) +
+  labs(y = "Expected number of living relatives") +
+  theme_bw() +
+  facet_wrap(~kin)
+```
+
+Is coherent the mode of each kin distribution with Focal's age? Take a moment and do this bivariate comparison by intuition reviewing each type.
+
+If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. Take a moment to see what means each value.
+
+```{r, fig.height=10, fig.width=12}
+swe_2015$kin_summary %>%
+  filter(age_focal == 35) %>%
+  select(kin, count = count_living) %>%
+  plot_diagram(rounding = 2)
+```
+
+
+##### 3.3. Deceased kin
+
+We have focused on living kin, but what about relatives who have died during her life?
+The output of `kin` also includes information of kin deaths experienced by Focal. We did not see the code implementation in R, but it requires minimum additional modification to get the experienced death (basically implement equation 49 and 50 in @caswell_formal_2019, take a look to `DemoKin` in any case or ask us if you are curious).
+We start by considering the number of kin deaths that can expect to experience at each age.
+In other words, the non-cumulative number of deaths in the family that Focal experiences at a given age. At which age Focal would experience more kin deaths? From what types? What do you think is the reason for having *waves of bereavement*?
+
+```{r}
+swe_2015$kin_summary %>%
+  filter(age_focal>0) %>%
+  group_by(age_focal, kin) %>%
+  summarise(count = sum(count_dead)) %>%
+  ungroup() %>%
+  rename_kin(., consolidate_column = "count") %>%
+  ggplot(aes(x = age_focal, y = count)) +
+  geom_area(aes(fill = kin), colour = "black") +
+  labs(x = "Focal's age", y = "Number of kin deaths experienced at each age") +
+  coord_cartesian(ylim = c(0, 0.086)) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+Now, we combine all kin types to show the cumulative burden of kin death for an average member of the population surviving to each age:
+
+```{r}
+swe_2015$kin_summary %>%
+  group_by(age_focal, kin) %>%
+  summarise(count = sum(count_cum_dead)) %>%
+  ungroup() %>%
+  rename_kin(., consolidate = "count") %>%
+  ggplot(aes(x = age_focal, y = count)) +
+  geom_area(aes(fill = kin), colour = "black") +
+  labs(x = "Focal's age", y = "Number of kin deaths experienced (cumulative)") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+A member of the population aged 15, 50, and 65yo will have experienced, on average, this burden of death experience (considering all kin type with same weight):
+
+```{r}
+swe_2015$kin_summary %>%
+  group_by(age_focal) %>%
+  summarise(count = sum(count_cum_dead)) %>%
+  filter(age_focal %in% c(15, 50, 65))
+```
+
+We took a look on what we can do with `DemoKin`, based in matrix implementation from Hal Caswell's paper. Let's try some exercises.
+
+### Exercises {#exercises_mon8}
+
+> All exercises can be completed using datasets included in `DemoKin`. Yes, last day with Sweden, we promise.
+
+#### 1. Kin availability and loss
+
+Use `DemoKin` assuming time-invariant rates from 1910 in female Swedish population and answer:
+
+**1.1**: What is the expected number of surviving offspring for an average woman aged 35?
+
+```{r}
+# Write your code here
+swe_surv_1910 <- DemoKin::swe_px[,"1910"]
+swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"]
+swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE)
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "d")
+```
+
+**1.2**: What is the expected number of surviving mother for the same woman?
+
+```{r}
+# Write your code here
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "m")
+```
+
+**1.3**: Plot the 'Keyfitz' diagram for that woman and compare visually with the one from previous section (which were based on rates from year 2015).
+
+```{r, fig.height=10, fig.width=12}
+# Write your code here
+swe_1910$kin_summary %>%
+  filter(age_focal == 35) %>%
+  select(kin, count = count_living) %>%
+  plot_diagram(rounding = 2)
+```
+
+**1.4**: What is the cumulative number of offspring deaths experienced by an average woman who survives to age 65? Compare it with the 2015 scenario creating a data frame with columns: `kin`, `loss_1910`, `loss_2015`. Which of the two Focals (one experiencing the 1910 rates and the other the 2015 rates) has lost more daughters at age 65? How many more daughters has she lost?
+
+```{r}
+# Write your code here
+# for all kin in this case
+swe_1910$kin_summary %>%
+  filter(age_focal == 65, kin == "d") %>%
+  select(age_focal, loss_1910 = count_cum_dead) %>%
+  inner_join(
+    swe_2015$kin_summary %>%
+      filter(age_focal == 65, kin == "d") %>%
+      select(age_focal, loss_2015 = count_cum_dead))
+```
+
+#### 2. Kin age distribution
+
+Let's back to Sweden 2015. The output of `DemoKin::kin` includes information on the average age of Focal's relatives (in the columns `kin_summary$mean_age` and `kin_summary$$sd_age`). For example, this allows us to determine the mean age, standard deviation and coefficient of variation of Focal's sisters over Focal's life-course:
+
+```{r, warning=F, message=F}
+swe_2015$kin_summary %>%
+  filter(kin %in% c("os", "ys")) %>%
+  rename_kin() %>%
+  select(kin, age_focal, mean_age, sd_age) %>%
+  mutate(`sd_age/mean_age` = sd_age/mean_age) %>%
+  pivot_longer(mean_age:`sd_age/mean_age`) %>%
+  ggplot(aes(x = age_focal, y = value, colour = kin)) +
+  geom_line() +
+  facet_wrap(~name, scales = "free") +
+  labs(y = "Mean age of sister(s)") +
+  theme_bw()
+```
+
+Compute the mean and standard deviation of the age of sisters over the ages of Focal **by your own** (i.e., using the raw output in `kin_full`) and:
+
+**2.1**: get then mean age of living mother, daughter and sisters for a female aged 35.
+
+```{r}
+# Write your code here
+mean_ages_2015 <- swe_2015$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living),
+            .by = c(kin))
+mean_ages_2015
+```
+
+**2.2**: Do the same with rates from 1910 and compare. Think in a good way to visualize the comparison and try it.
+
+```{r}
+# Write your code here
+mean_ages_1910 <- swe_1910$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living),
+            .by = c(kin))
+# one posible plot
+mean_ages_1910 %>%
+  mutate(year = 1910) %>%
+  bind_rows(
+    mean_ages_2015 %>% mutate(year = 2015)) %>%
+  ggplot() +
+  geom_bar(aes(kin, mean_age, fill=factor(year)),
+           stat = "identity", position = "dodge")
+```
+
+**2.3**
+
+The 'Sandwich Generation' refers to persons who are squeezed between frail older parents and young dependent children and are assumed to have simultaneous care responsibilities for multiple generations, potentially limiting their ability to provide care [@alburezgutierrez_sandwich_2021].
+For this exercise, we consider the level 'sandwich-ness' to the sum of living daughters aged $15$ or younger and mothers (actually the portion of her) older than $75$ (in the paper this age $a$ is the one that makes $e_a=5$). Use `DemoKin` to find at which age Focal is more *sandwiched* in 2015 under previous definition, assuming time-invariant rates and a female-only population. If you plot the total 'sandwich-ness' by age you get 500 points, but if also color each kin contribution you get 1,000 points.
+
+```{r}
+swe_2015$kin_full %>%
+  group_by(age_focal) %>%
+  summarise(daughter = sum(living[kin=='d' & age_kin<=15]),
+            mother = sum(living[kin=='m' & age_kin>=75]),
+            sandwiched_level = daughter + mother) %>%
+  pivot_longer(cols = daughter:sandwiched_level) %>% 
+  ggplot()+
+  geom_line(aes(age_focal, value, col=name))+  
+  scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5))
+```
+
+
+#### 3. By hand calculation
+
+**3.1** 
+
+Use vectors $p$ and $f$ from the toy example in *By Hand* section, but this time with `DemoKin`. Do you have the same results? How many grandmothers have Focal during her life?
+
+```{r}
+by_hand_example <- kin(p, f, birth_female = 1)
+# some checks
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) == g
+by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) == d
+by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) == a
+# grandmothers
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living)
+```
+
+
+## Tues 9
+
+Here, we will implement the theory of Age-classified time-**variant** one-sex kinship models in R, show how to use the `DemoKin` package for that goal, and do some exercises.
+
+- [By hand](#by_hand_tues9)
+
+- [Using DemoKin](#using_demokin_tues9)
+
+- [Exercises](#exercises_tues9)
+
+### By hand {#by_hand_tues9}
+
+Let's keep studying our female closed population with 5 age-classes, but now we know that in the next 9 years ($T=9$) the probability of death will decline 1% yearly for all age-classes. Fertility rates will also decline by 1% each year. We use $Pt$ and $Ft$ for create matrices with time varying rates (time in columns and age in rows).
+
+```{r}
+age <- 0:4
+ages <- length(age)
+T. <- 9 # again T is reserved for logical TRUE value, so we add a point
+years <- length(0:T.)
+p <- c(.9, .7, .4, .1, 0)
+Pt <- 1 - sapply(0:T., function(t) (1-p)*(.99)^t)
+f <- c(0, .5, .5, .3, 0)
+Ft <- sapply(0:T., function(t) f *(.99)^t)
+plot(0:T., colSums(Ft), xlab = "t", ylab = "GRR") # we are dealing with female offspring only
+plot(age, Pt[,1], xlab = "t", ylab = "px", t="b")
+lines(age, Pt[,T.+1], col=2, t="b")
+legend("topright", c("0","T"), col = 1:2, lty=1)
+```
+
+Those matrices are not convenient for projection purposes: for this we would need transition matrices. Let's create two lists with time dependent matrices for survival and fertility, called $Ut\_list$ and $Ft\_list$. We will come back to these soon.
+
+```{r}
+Ut_list <- list() # eq 6 Caswell (2021)
+Ft_list <- list() # eq 7 Caswell (2021)
+U_temp <- F_temp <- matrix(0, ages, ages)
+for(t in 1:years){
+  # create matrices
+  U_temp[row(U_temp)-1 == col(U_temp)] <- Pt[-ages,t]
+  F_temp[1,] <- Ft[,t]
+  # save as element
+  Ut_list[[t]] <- U_temp
+  Ft_list[[t]] <- F_temp
+}
+# see survival matrix at t=1 (second element)
+Ut_list[[2]]
+```
+
+In this case we have access to a vector of female population `pop` at the beginning of the period, so we can project this and calculate empirical mother's distribution by age for that year and next the ones:
+
+```{r}
+# initial population count
+pop <- c(300, 250, 100, 15, 0)
+# project population Z and get pi at each year
+Z <- Pi <- matrix(0, ages, years)
+Z[,1] <- pop
+Pi[,1] <- Z[,1] * Ft[,1] / sum(Z[,1] * Ft[,1])
+for(t in 1:T.){
+  At <- Ut_list[[t]] + Ft_list[[t]]
+  Z[,t+1] <- At %*% Z[,t] # eq 13 Caswell (2021)
+  Pi[,t+1] <- Z[,t+1] * Ft[,t+1] / sum(Z[,t+1] * Ft[,t+1]) # eq 14 Caswell (2021)
+}
+plot(0:T., colSums(Z), ylab = "pop counts", xlab = "t")
+```
+
+Basically this is what we are going to do for kinship *populations*: make dynamic matrices by time with those lists.
+
+For each kin we need to define the initial snapshot by age at time 0 $k(x,0)$ (*time boundary*), and what is the initial kin availability for Focal born on next $T$ years (eq. 15 and 16 from @caswell_formal_2021).
+
+![Caswell, 2021. Fig 2.](time_var_boundaries.png)
+
+- **Mother**
+
+One solution to the time boundary restriction comes with assuming a stable population behavior before $t=0$: every Focal has living kin with the pattern by age that we saw in time-invariant method. What would be another solution?
+
+The solution to the age boundary will come from taking the empirical $\pi(t)$ at each time (also stable assumption can be done in case no observed data is available, but is not the same). And that's the reason why we saved $\pi$ for all the years.
+
+Let's start with the base year $t=0$, define a list that will save mothers by age (rows) and Focal's age (cols) in each year, as we did in the previous day, and assign the distribution that comes from stable assumption:
+
+```{r}
+Dt_list <- list()
+D0 <- matrix(0, ages, ages)
+D0[,1] <- Pi[,1] # from stable assumption
+for(x in 2:ages){
+  D0[,x] <- Ut_list[[1]] %*% D0[,x-1] # look that we are using akways the base year
+}
+```
+
+> As with age classes, try to not confuse $t$ value with the order of elements in the list: for $t=0$ is the first element, for $t=1$ is the second..., for $t=9$ is the tenth.
+
+So this is the initial snapshot of mothers by age of Focal in base year. Every average woman by age in that year experimented what Focal did in the time-invariant scenario.
+
+```{r}
+plot(age, D0[,1], t = "b",ylab = "Mother by focal age in base year")
+for(x in 2:ages){
+  lines(age, D0[,x], t = "b", col = x)
+}
+legend("topright", c("0","1","2","3","4"), col = 1:5, lty = 1)
+```
+
+Let's project over time. Create a list for saving each $Dt$ matrix of living mothers at each year:
+
+```{r}
+Dt_list[[1]] <- D0
+```
+
+After 1 year, the mother of each Focal will survive, and new Focals (just born) will have mothers with $\Pi(t+1)$ distribution:
+
+```{r}
+# D1 for t=1
+D1 <- matrix(0, ages, ages)
+D1[,1] <- Pi[,1]
+for(x in 2:ages){
+  D1[,x] <- Ut_list[[1]] %*% D0[,x-1] # we look the distribution in the previous year
+}
+Dt_list[[2]] <- D1
+```
+
+After 1 more year...
+
+```{r}
+# D2 for t=2
+D2 <- matrix(0, ages, ages)
+D2[,1] <- Pi[,2]
+for(x in 2:ages){
+  D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year
+}
+Dt_list[[3]] <- D2
+```
+
+At the end we will have living mothers by age for each Focal's age, at each year:
+
+```{r, eval = F}
+for(t in 3:years){
+Dt <- matrix(0, 5, 5)
+Dt[,1] <- Pi[,t]  # eq 32 in Caswell (2021)
+  for(x in 2:ages){
+    Dt[,x] <- Ut_list[[t]] %*% Dt_list[[t-1]][,x-1] # eq 31 in Caswell (2021)
+  }
+Dt_list[[t]] <- Dt
+}
+```
+
+> Consider that we are creating a series of Focal's cohorts: at each year $t$ we have 5 Focals, one at each age-class with living kin distribution by age and type that depends of experienced rates.
+
+Let's bind results in a table, so we can see what we have.
+
+```{r}
+D_table <-lapply(1:length(Dt_list), function(t){
+   data.frame(age_focal = age, year = t-1, count_living = colSums(Dt_list[[t]]))}) %>%
+  dplyr::bind_rows()
+```
+
+We have a table with 250 rows (5 age-classes of Focal by 10 years by 5 age-classes of mother), with living mothers by focal's age, in each year, depending kin's age, which allows analysis in APC dimensions (section 2.2 in @caswell_formal_2021). This is pretty similar to what `Demokin` give us as output in `kin_full` data frame.
+
+Similar reasoning follows other kin types. Time boundary comes from time-invariant assumption, and age boundary comes from using $\pi(t)$ at each year and relates that with kin distribution in the same time. For example, grandmothers for a newborn in $t=3$ will be `Dt_list[[3]] %*% \Pi[,3]`, which in terms of table 1 from @caswell_formal_2021 is $\sum_{i}{\pi_i(t)d(i,t)}$, a vectorized form with ages $i$.
+
+![Caswell, 2021](time_var_summary.png)
+
+Let's play with real data!
+
+### Using DemoKin {#using_demokin_tues9}
+
+#### 1. Living kin
+
+We saw yesterday the case of Sweden in 2015 assuming constant rates. But the demography of Sweden is, as you know, changing every year. This means that Focal and her relatives will have experienced changing mortality and fertility rates over time. Data has year in columns and age in rows, and plotted $q_x$ (p's complement) over age and time, looks like this:
+
+```{r}
+data("swe_px", package="DemoKin")
+swe_px %>%
+    as.data.frame() %>%
+    mutate(age = 1:nrow(swe_asfr)-1) %>%
+    pivot_longer(-age, names_to = "year", values_to = "px") %>%
+    mutate(qx = 1-px) %>%
+    ggplot() +
+    geom_line(aes(x = age, y = qx, col = year)) +
+    scale_y_log10() +
+    theme(legend.position = "none")
+```
+
+Age-specific fertility rates:
+
+```{r}
+data("swe_asfr", package="DemoKin")
+swe_asfr %>% as.data.frame() %>%
+     mutate(age = 1:nrow(swe_asfr)-1) %>%
+     pivot_longer(-age, names_to = "year", values_to = "asfr") %>%
+     mutate(year = as.integer(year)) %>%
+     ggplot() + geom_tile(aes(x = year, y = age, fill = asfr)) +
+     scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10))
+```
+
+And female population by age:
+
+```{r}
+data("swe_pop", package="DemoKin")
+swe_pop %>% as.data.frame() %>%
+     mutate(age = 1:nrow(swe_asfr)-1) %>%
+     pivot_longer(-age, names_to = "year", values_to = "pop") %>%
+     mutate(year = as.integer(year)) %>%
+     ggplot() + geom_tile(aes(x = year, y = age, fill = pop)) +
+     scale_x_continuous(breaks = seq(1900,2020,10), labels = seq(1900,2020,10))
+```
+
+We account for this, by using the time-variant models introduced by @caswell_formal_2021. Let's take a look at the resulting kin counts for a Focal born in 1960, limiting the output to the relative types given in the argument `output_kin`.
+
+To interpret the results ....
+"plot apc"
+
+```{r, fig.height=6, fig.width=8}
+swe_time_varying_1960_cohort <-
+  kin(p = swe_px,
+    f = swe_asfr,
+    n = swe_pop,
+    time_invariant =FALSE,
+    output_cohort = 1960,
+    output_kin = c("d","gd","ggd","m","gm","ggm"))
+
+# plot
+swe_time_varying_1960_cohort$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot(aes(age_focal,count_living)) +
+  geom_line()+
+  scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+
+  labs(y = "Expected number of living relatives") +
+  facet_wrap(~kin)+
+  theme_bw()
+```
+
+These are the living kin that expects to have an average woman born in 1960, given experienced fertility, mortality and population distribution since 1900 to 2018. It is important to distinguish between time boundary restriction and cohort year: with `output_cohort = 1960` we are sub-setting a Focal cohort (a diagonal) from all possible results (101 age-classes and 119 years). Estimates stop at age 58 because of input restriction up to 2018.
+
+> Actually `DemoKin` can not return all APC combinations because of time/memory performance issues related to the size of data (119 X 101 x 101 x 14 ~ 17 millions of rows). We are evaluating only return `kin_summary` in this cases (this limitation could be a programming skills limitation too ;)).
+
+But also we can compare cohorts, for example against 1910`s one. Take a time to interpret results (table and plot). **Answer**: Do you notice any unexpected trend for some kin? What may be causing it?
+
+```{r, fig.height=6, fig.width=8}
+swe_time_varying_1960_1910_cohort <-
+  kin(p = swe_px,
+    f = swe_asfr,
+    n = swe_pop,
+    time_invariant =FALSE,
+    output_cohort = c(1910, 1960),
+    output_kin = c("d","gd","ggd","m","gm","ggm"))
+
+# plot
+swe_time_varying_1960_1910_cohort$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot(aes(age_focal,count_living,color=factor(cohort))) +
+  geom_line()+
+  scale_y_continuous(name = "",labels = seq(0,3,.2), breaks = seq(0,3,.2))+
+  labs(y = "Expected number of living relatives") +
+  facet_wrap(~kin)+
+  theme_bw()
+```
+
+Maybe you are interested in take a snapshot of kin distribution in some year, for example 1960. Set argument`output_period = 1960`. **Answer**: looks similar to previous plots? What can you describe and not with this period approach, and what with the cohort approach? 
+
+```{r, fig.height=6, fig.width=8}
+swe_time_varying_1960_period <-
+  kin(
+    p = swe_px,
+    f = swe_asfr,
+    n = swe_pop,
+    time_invariant =FALSE,
+    output_period = 1960,
+    output_kin = c("d","gd","ggd","m","gm","ggm")
+    )
+
+# plot
+swe_time_varying_1960_period$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot(aes(age_focal,count_living)) +
+  geom_line() +
+  scale_y_continuous(name = "",labels = seq(0,3,.2),breaks = seq(0,3,.2))+
+  labs(y = "Expected number of living relatives") +
+  facet_wrap(~kin,scales = "free")+
+  theme_bw()
+```
+
+#### 2. Kin deaths
+
+Kin loss can have severe consequences for bereaved relatives. It can also affect the provision of care support and intergenerational transfers over the life course.
+The function `kin` also includes information on the number of relatives lost by Focal during her life, stored in the column `count_cum_death`. Let's follow with the cohort comparison 1910 vs 1960: which kin types looks that have the biggest differences? See it in absolute and relative terms (*free* scale in this grid plots can be confusing some times when comparing counts with non similar magnitudes).
+
+```{r, fig.height=6, fig.width=8, message=FALSE, warning=FALSE, eval=F}
+swe_time_varying_1960_1910_cohort$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot() +
+  geom_line(aes(age_focal, count_cum_dead, col = factor(cohort))) +
+  labs(y = "Expected number of deceased relatives") +
+  theme_bw() +
+  facet_wrap(~kin,scales="free")
+```
+
+Given these population-level measures, we can compute Focal's mean age at the time of her relative's death. For a Focal aged 50 yo, what kind of conclusions can you get?
+
+```{r}
+swe_time_varying_1960_1910_cohort$kin_summary %>%
+  rename_kin() %>%
+  filter(age_focal == 50) %>%
+  select(kin,cohort,mean_age_lost) %>%
+  pivot_wider(names_from = cohort, values_from = mean_age_lost) %>%
+  mutate_if(is.numeric, round, 1)
+```
+
+### Exercises {#exercises_tues9}
+
+Thanks to [DataPortal API](https://population.un.org/dataportal/about/dataapi#tutorial-using-r) from UN we can download estimated rates from any country in the world, produced by the [World Population Prospects](https://population.un.org/wpp/) project. Pick any country (feel free to pick at random or choose that one that you are interesting) and download the data with the function `get_UNWPP_inputs` (located [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs)).
+
+```{r}
+# load function
+source("get_UNWPP_inputs.R")
+
+# pick country
+country <- c("Argentina")
+
+# Year range
+my_startyr   <- 1950
+my_endyr     <- 2021
+
+# data downloaded
+data <- get_UNWPP_inputs(
+  countries = country,
+  my_startyr = my_startyr,
+  my_endyr = my_endyr)
+
+# reshape fertility conveniently for DemoKin
+country_fert <- data %>%
+  select(age, year, fx) %>%
+  pivot_wider(names_from = year, values_from = fx) %>%
+  select(-age) %>%
+  as.matrix()
+```
+
+**1.1** Reshape data for survival in the same way and visualize it.
+
+```{r}
+# reshape survival
+country_surv <- data %>%
+  select(age, year, px) %>%
+  pivot_wider(names_from = year, values_from = px) %>%
+  select(-age) %>%
+  as.matrix()
+country_surv %>%
+    as.data.frame() %>%
+    mutate(age = 1:nrow(swe_asfr)-1) %>%
+    pivot_longer(-age, names_to = "year", values_to = "px") %>%
+    mutate(qx = 1-px) %>%
+    ggplot() +
+    geom_line(aes(x = age, y = qx, col = year)) +
+    scale_y_log10() +
+    theme(legend.position = "none")
+```
+
+**1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings.
+
+```{r}
+E.1.2 <-
+  kin(p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(1950, 2015),
+    output_kin = c("d","gd","ggd","m","gm","ggm"))
+E.1.2$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot(aes(age_focal,count_living,color=factor(year))) +
+  geom_line() +
+  labs(y = "Expected number of living relatives") +
+  facet_wrap(~kin,scales = "free")+
+  theme_bw()
+E.1.2$kin_summary %>%
+  DemoKin::rename_kin() %>%
+  ggplot(aes(age_focal,mean_age,color=factor(year))) +
+  geom_line() +
+  labs(y = "Expected number of living relatives") +
+  facet_wrap(~kin,scales = "free")+
+  theme_bw()
+```
+
+**1.2** Run a time-variant model for your country selecting cohort 1990. If we assume that each kin lives all the interval and dies (if does) at the end of the year, this means that each lived year by each kin was a "shared" one, so you can sum kin availability and get an approximation of accumulated person-years. Estimate the total amount of sister-years shared since birth for a Focal aged 15, interpret the result and find its limitations.
+
+> Take a look to the graphic from @Song2019 for shared grandchild-years from a grandparent perspective, we are in the definition number 2.
+![Fig. 1 in Song (2019)](song_shared.png)
+
+```{r}
+E.1.3 <-
+  kin(p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_cohort = c(1990),
+    output_kin = c("os", "ys"))
+
+E.1.3$kin_summary %>%
+  group_by(kin, cohort) %>%
+  mutate(shared_years = cumsum(count_living)) %>%
+  filter(age_focal == 15) %>%
+  group_by(cohort, kin) %>%
+  summarise(sister_years =sum(shared_years))
+```
+**E.1.4** Covid pandemic had a big impact in kin bereavement for some countries (@verdery_tracking_2020; @Snyder2022). If you make an scenario replacing 2020 and 2021 survival probabilities by the ones from 2019 (one choice of baseline, could be averaging some previous years too), you can have a sense of Covid19 impact in kin bereavement. Calculate the difference between living older kin for a female aged 60 in the two scenarios. But! We recommend to take a look on excess mortality implied in survival pattern to know in advance the magnitude of the shock you can expect.
+
+```{r}
+country_surv_counterfactual <- country_surv
+country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"]
+country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"]
+
+E.1.4 <-
+  kin(
+    p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+E.1.4_counterfactual <-
+  kin(
+    p = country_surv_counterfactual,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+
+c(E.1.4$kin_full %>%
+  summarise(all_kin = sum(living[age_focal == 60 & age_kin>60])),
+E.1.4_counterfactual$kin_full %>%
+  summarise(all_kin = sum(living[age_focal == 60 & age_kin>60]))
+)
+```
+
+E.3 Run the toy example with DemoKin and check if you have the same results for *mother* (the one that we coded in that section). To make it work you need first to add row names (age) and column names (years) to $Pt$ and $Ft$. Remember to set `birth_female = 1` and set also the argument `pi = Pi` to reflect better the calculations.
+
+```{r}
+rownames(Pt) <- rownames(Ft) <- rownames(Pi) <- 0:4
+colnames(Pt) <- colnames(Ft) <- colnames(Ft) <- 0:9
+by_hand_example <- kin(p = Pt, f = Ft, pi = Pi, time_invariant = FALSE, birth_female = 1)
+by_hand_example
+
+D_table
+by_hand_example$kin_summary %>%
+  filter(kin == "m") %>%
+  summarise(living = sum(count_living), .by = c(year, age_focal)) %>%
+  arrange(year, age_focal)
+```
 
 
 <!-- ## Wed 10 -->
@@ -1913,5 +1900,101 @@ ggplot(aes(mpg, wt, colour = hp)) +
 <!-- ``` -->
 
 <!-- ### Exercises {#exercises_thurs11} -->
+
+
+## Solutions
+
+### Mon 8
+
+**1.1**
+
+```{r}
+swe_surv_1910 <- DemoKin::swe_px[,"1910"]
+swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"]
+swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE)
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "d")
+```
+
+**1.2**
+
+```{r}
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "m")
+```
+
+**1.3**
+
+```{r, fig.height=10, fig.width=12}
+swe_1910$kin_summary %>%
+  filter(age_focal == 35) %>%
+  select(kin, count = count_living) %>%
+  plot_diagram(rounding = 2)
+```
+
+**1.4**
+
+```{r}
+swe_1910$kin_summary %>%
+  filter(age_focal == 65, kin == "d") %>%
+  select(age_focal, loss_1910 = count_cum_dead) %>%
+  inner_join(
+    swe_2015$kin_summary %>%
+      filter(age_focal == 65, kin == "d") %>%
+      select(age_focal, loss_2015 = count_cum_dead))
+```
+
+**2.1**
+
+```{r}
+mean_ages_2015 <- swe_2015$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living), .by = c(kin))
+mean_ages_2015
+```
+
+**2.2**
+
+```{r}
+mean_ages_1910 <- swe_1910$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living),
+            .by = c(kin))
+# one posible plot
+mean_ages_1910 %>%
+  mutate(year = 1910) %>%
+  bind_rows(
+    mean_ages_2015 %>% mutate(year = 2015)) %>%
+  ggplot() +
+  geom_bar(aes(kin, mean_age, fill=factor(year)),
+           stat = "identity", position = "dodge")
+```
+
+**2.3**
+
+```{r}
+swe_2015$kin_full %>%
+  group_by(age_focal) %>%
+  summarise(sandwiched_by_daughter = sum(living[kin=='d' & age_kin<=15]),
+            sandwiched_by_mother = sum(living[kin=='m' & age_kin>=75]),
+            sandwiched_level = sandwiched_by_daughter + sandwiched_by_mother) %>%
+  ggplot(aes(age_focal, sandwiched_level))+
+  geom_line() +
+  scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5))
+```
+
+**3.1** 
+
+```{r}
+by_hand_example <- kin(p, f, birth_female = 1)
+# some checks
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) - g
+by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) - d
+by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) - a
+# grandmothers
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living)
+```
 
 ## References
