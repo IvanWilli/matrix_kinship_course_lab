@@ -1053,8 +1053,7 @@ swe_pop %>% as.data.frame() %>%
 
 We account for this, by using the time-variant models introduced by @caswell_formal_2021. Let's take a look at the resulting kin counts for a Focal born in 1960, limiting the output to the relative types given in the argument `output_kin`.
 
-To interpret the results ....
-"plot apc"
+To interpret the results ...."plot apc"
 
 ```{r, fig.height=6, fig.width=8}
 swe_time_varying_1960_cohort <-
@@ -1165,7 +1164,7 @@ country <- c("Argentina")
 
 # Year range
 my_startyr   <- 1950
-my_endyr     <- 2021
+my_endyr     <- 2022
 
 # data downloaded
 data <- get_UNWPP_inputs(
@@ -1201,7 +1200,7 @@ country_surv %>%
     theme(legend.position = "none")
 ```
 
-**1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal's ages 50, compare both years in terms of total living kin and and mean age and extract two or three findings.
+**1.2** Run a time-variant model for your country, selecting years 1950 and 2015 from a period perspective. Focusing in Focal age 50, compare both years in terms of total living and and mean age, and extract two or three findings.
 
 ```{r}
 E.1.2 <-
