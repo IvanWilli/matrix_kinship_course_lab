@@ -733,6 +733,7 @@ swe_2015$kin_full %>%
 ```
 
 <!-- DAG: I don't get this question: how would you say it in Spanish? -->
+<!-- IW:  si que la moda este a la derecha o a la izquierda de la edad de focal tiene sentido-->
 **Answer**: Is coherent the mode of each kin distribution with Focal's age? Take a moment and do this bivariate comparison by intuition reviewing each type.
 
 If we sum-up the density for each kin we have total living kin. Let's visualize this when Focal is 35 yo in a time-invariant population using a network or 'Keyfitz' kinship diagram [@Keyfitz2005] with the `plot_diagram` function. 
@@ -800,6 +801,7 @@ We took a look on what we can do with `DemoKin`. Now we will ask you to get your
 ### Exercises {#exercises_mon8}
 
 <!-- DAG: I think these are all good exercises but they are a lot and I am not sure that we will have time to cover everything. So, my suggestion would be to order them in such a way that the most important ones go first and the least important ones go last, known that these may not be covered given time constraints. -->
+<!-- IW: yes, true. I think already are in kind of that order -->
 > All exercises can be completed using datasets included in `DemoKin`. This is the last day we work with Sweden, we promise.
 
 #### 1. Kin availability and loss
@@ -1362,6 +1364,7 @@ E.1.2$kin_summary %>%
 **Answer:** How many person-years were shared between Focal and her sisters between Focal's birth and Focal's 15th birthday?
 
 <!-- DAG: There is something weird going on here: the output of kin shows no relatives for most ages of Focal?? -->
+<!-- IW: Should show only sisters. I think works -->
 ```{r}
 E.1.3 <-
   kin(p = country_surv,
@@ -1390,6 +1393,7 @@ The Covid pandemic had a big impact in kin bereavement for some countries (@verd
 1. Using these two models, estimate difference between living older kin for a female aged 60 in the 'realistic' and 'counterfactual' scenarios. 
 
 <!-- DAG: The results of this exercise are also 0??-->
+<!-- IW: Strange, is not 0 for me-->
 ```{r}
 country_surv_counterfactual <- country_surv
 country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"]
