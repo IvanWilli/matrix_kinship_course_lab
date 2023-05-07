@@ -1,4 +1,4 @@
-get_UNWPP_inputs <- function(countries, my_startyr, my_endyr, variant = "Median"){
+get_UNWPP_inputs <- function(countries, my_startyr, my_endyr, sex = "Female", variant = "Median"){
   
   print("Getting API ready...")
   print("Make sure you have a working internet connection!")
@@ -44,32 +44,36 @@ get_UNWPP_inputs <- function(countries, my_startyr, my_endyr, variant = "Median"
   px <- 
     read.csv(target, sep='|', skip=1) %>% 
     dplyr::filter(Variant %in% variant) %>% 
-    dplyr::filter(Sex == "Female") %>% 
+    dplyr::filter(Sex == sex) %>% 
     dplyr::mutate(px = 1- Value) %>% 
     dplyr::select(Location, year = TimeLabel, age = AgeStart, px)
   
   # ASFR
   
-  print(paste0("Getting fertility data for ", paste(countries, collapse = ", ")))
+  if(sex == "Female"){
+    print(paste0("Getting fertility data for ", paste(countries, collapse = ", ")))
+    
+    my_indicator <- asfr_code
+    
+    target <- paste0(base_url,
+                     '/data/indicators/',my_indicator,
+                     '/locations/',my_location,
+                     '/start/',my_startyr,
+                     '/end/',my_endyr,
+                     '/?format=csv')
+    
+    asfr <- 
+      read.csv(target, sep='|', skip=1) %>% 
+      dplyr::filter(Variant %in% variant) %>% 
+      dplyr::select(Location, year = TimeLabel, age = AgeStart, fx = Value) %>% 
+      dplyr::mutate(fx = fx/1000)
+    
+    data <- 
+      dplyr::left_join(px, asfr, by = c("Location", "year", "age")) %>% 
+      dplyr::mutate(fx = replace(fx,is.na(fx),0)) 
+  }else{
+    data <- px
+  }
   
-  my_indicator <- asfr_code
-  
-  target <- paste0(base_url,
-                   '/data/indicators/',my_indicator,
-                   '/locations/',my_location,
-                   '/start/',my_startyr,
-                   '/end/',my_endyr,
-                   '/?format=csv')
-  
-  asfr <- 
-    read.csv(target, sep='|', skip=1) %>% 
-    dplyr::filter(Variant %in% variant) %>% 
-    dplyr::select(Location, year = TimeLabel, age = AgeStart, fx = Value) %>% 
-    dplyr::mutate(fx = fx/1000)
-  
-  data <- 
-    dplyr::left_join(px, asfr, by = c("Location", "year", "age")) %>% 
-    dplyr::mutate(fx = replace(fx,is.na(fx),0)) 
-  
-  data
+  return(data)
 }
