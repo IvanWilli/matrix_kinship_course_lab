@@ -1169,7 +1169,7 @@ country_fert[20:25,1:5]
 
 #### 1. Expected kin for your country of choice
 
-**1.1** Using the `data` object created above, for your own country, reshape the fertility and survival data in the same way in which we reshaped the fertility data above. Plot the $q_x$ values over age for all periods available in the same way we did for Sweden (use different colours for each period).
+**1.1** Using the `data` object created above, for your own country, reshape the fertility and survival data in the same way in which we reshaped the fertility data above. Plot the evolution of mortality over time and age, or create a table that summaries that. You can use the plot of $q_x$ values over age for all periods that we did for Sweden as inspiration (using different colours for each period).
 
 ```{r, eval= F, include=F}
 # reshape survival
@@ -1240,7 +1240,9 @@ The Covid pandemic has been linked to a wave of kin loss for some countries [@ve
 
 1. You will need a 'baseline scenario': what would mortality have looked like in 2020 and 2021 in the absence of COVID? Create a counterfactual 'non-covid' scenario by assuming that the mortality levels observed in 2019 (i.e. before the pandemic) were in effect during 2020-2021. (You can also create more sophisticated baselines if you want.) 
 2. Second, run two time-variant kinship models: one 'realistic' model that uses the empirical mortality and fertility rates for the 1950:2021 period. The 'counterfactual' models is equivalent to the 'realistic' one except that it uses the 2019 mortality rates for the 2020:2021 period.
-3. Estimate the difference between the number of living kin for a Focal aged 60 across the 'realistic' and 'counterfactual' scenarios for the year 2021.
+3. Estimate the difference between the number of living kin for a Focal aged 60 across the 'realistic' and 'counterfactual' scenarios for the year 2021. An intuitive way to think of this:
+
+![](covid.png)
 
 **Answer**: Provide a measure of the magnitude of the 'excess bereavement' caused by COVID-19. You can chose an absolute or relative measure: it's up to you but be ready to justify your choice!  
 
@@ -1379,9 +1381,9 @@ After 1 more year...
 ```{r}
 # D2 for t=2
 D2 <- matrix(0, ages, ages)
-D2[,1] <- Pi[,2]
+D2[,1] <- Pi[,1]
 for(x in 2:ages){
-  D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year
+  D2[,x] <- Ut_list[[1]] %*% D1[,x-1] # we look the distribution in the previous year
 }
 Dt_list[[3]] <- D2
 ```
