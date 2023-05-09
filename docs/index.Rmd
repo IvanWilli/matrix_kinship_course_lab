@@ -1381,9 +1381,9 @@ After 1 more year...
 ```{r}
 # D2 for t=2
 D2 <- matrix(0, ages, ages)
-D2[,1] <- Pi[,1]
+D2[,1] <- Pi[,2]
 for(x in 2:ages){
-  D2[,x] <- Ut_list[[1]] %*% D1[,x-1] # we look the distribution in the previous year
+  D2[,x] <- Ut_list[[2]] %*% D1[,x-1] # we look the distribution in the previous year
 }
 Dt_list[[3]] <- D2
 ```

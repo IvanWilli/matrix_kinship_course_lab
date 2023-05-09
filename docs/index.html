@@ -1949,9 +1949,9 @@ year:</p>
 <p>After 1 more year…</p>
 <div class="sourceCode" id="cb142"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a><span class="co"># D2 for t=2</span></span>
 <span id="cb142-2"><a href="#cb142-2"></a>D2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, ages, ages)</span>
-<span id="cb142-3"><a href="#cb142-3"></a>D2[,<span class="dv">1</span>] <span class="ot">&lt;-</span> Pi[,<span class="dv">1</span>]</span>
+<span id="cb142-3"><a href="#cb142-3"></a>D2[,<span class="dv">1</span>] <span class="ot">&lt;-</span> Pi[,<span class="dv">2</span>]</span>
 <span id="cb142-4"><a href="#cb142-4"></a><span class="cf">for</span>(x <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>ages){</span>
-<span id="cb142-5"><a href="#cb142-5"></a>  D2[,x] <span class="ot">&lt;-</span> Ut_list[[<span class="dv">1</span>]] <span class="sc">%*%</span> D1[,x<span class="dv">-1</span>] <span class="co"># we look the distribution in the previous year</span></span>
+<span id="cb142-5"><a href="#cb142-5"></a>  D2[,x] <span class="ot">&lt;-</span> Ut_list[[<span class="dv">2</span>]] <span class="sc">%*%</span> D1[,x<span class="dv">-1</span>] <span class="co"># we look the distribution in the previous year</span></span>
 <span id="cb142-6"><a href="#cb142-6"></a>}</span>
 <span id="cb142-7"><a href="#cb142-7"></a>Dt_list[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> D2</span></code></pre></div>
 <p>At the end we will have living mothers by age for each Focal’s age,
@@ -2021,7 +2021,7 @@ function.</p>
 <span id="cb149-8"><a href="#cb149-8"></a>         <span class="at">rel_dif =</span> dif<span class="sc">/</span>living_by_hand<span class="sc">*</span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(age_focal, year)`</code></pre>
 <div class="sourceCode" id="cb151"><pre class="sourceCode numberSource r numberLines"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="fu">sum</span>(comparison_by_hand_demokin<span class="sc">$</span>dif)</span></code></pre></div>
-<pre><code>## [1] 0.0101</code></pre>
+<pre><code>## [1] 0</code></pre>
 <!-- ## Wed 10 -->
 <!-- During this section, we will use `DemoKin` for **Age-classified time-invariant two-sex** kinship models and do some exercises. -->
 <!-- - [Using DemoKin](#using_demokin_wed10) -->
