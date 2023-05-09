@@ -994,7 +994,7 @@ With this input we can model kinship structure in Age-Period-Cohort (APC) dimens
 
 #### Cohort approach
 
-Let's take a look at the resulting kin counts from a time-variant (argument `time_invariant = FALSE`) model for a Focal born in 1960, limiting the output to a selection of relatives (see argument `output_kin`) and a given cohort (argument `output_cohort`).
+Let's take a look at the resulting kin counts from a time-variant (argument `time_invariant = FALSE`) model for a Focal born in 1960, limiting the output to a selection of relatives (see argument `output_kin`) and a given cohort (argument `output_cohort`). Do you see any new parameter?
 
 ```{r, fig.height=6, fig.width=8}
 swe_time_varying_1960_cohort <-
