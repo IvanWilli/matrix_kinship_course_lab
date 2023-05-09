@@ -37,6 +37,7 @@ Some useful things to know:
 
 - The updated syllabus can be found here: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/syllabus.
 - The required readings and from: https://www.dropbox.com/t/iM06GB0D5fXboWYu. See guidance from Hal in the syllabus. More readings in this folder (that Hal will be updating during the course): https://www.dropbox.com/transfer/AAAAADHvknkaWSj2fSAOIxVF_YStAYFgv2j3CCUNY7DBX-h3yBJwi9c.
+- More bibliography here too: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/bibliography
 - Course's slides can be downloaded from: https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/slides.
 - Find this website's source code on GitHub: https://github.com/IvanWilli/matrix_kinship_course_lab/blob/main/docs/index.Rmd.
 - Data for exercises can be found in previous dropbox folder and at https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/data.
