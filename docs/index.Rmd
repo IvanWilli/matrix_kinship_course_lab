@@ -2604,13 +2604,13 @@ df_comparison %>%
   theme_bw() +
   facet_wrap(~kolk_kin, scales = "free")
 
-# We see there are some issues with data in parents and cousins, so we'll left those out of the comparison. We get an average difference of total living kin, assuming all Focal ages have the same weight (not population weighted). It looks that GKP model is closer, followed by full and then the androgynous one. 
+# We see there are some issues with data in parents, so we'll left those out of the comparison. We get an average difference of total living kin experienced of Focal along her life (in all ages), assuming that Focal ages have the same weight (dividing by the number of ages). It looks that GKP model is closer, followed by full and then the androgynous one. 
 
 df_comparison %>%
-  filter(!kolk_kin %in% c("cousins", "parents")) %>% 
+  filter(!kolk_kin %in% c("parents")) %>% 
   summarise(living_total = sum(living)/101, .by = c(model)) %>% 
   pivot_wider(names_from = model, values_from = living_total) %>% 
-  kable(digits = 1)
+  kable(digits = 1, format="simple")
 
 # We can plot the four estimates together:
 
