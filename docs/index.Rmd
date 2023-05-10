@@ -1769,7 +1769,7 @@ Note that the figure includes female and male kin and that the sex of Focal is n
 
 For this exercise, you should use `DemoKin` to replicate this figure. Concretely, run three iterations of the kinship model:
 
-   1. One-sex model; time-invariant rates; no two-sex approximation
+   1. One-sex model; time-invariant rates; GKP factors
    2. Two-sex model; time-variant rates; approximate male kin using the androgynous assumption (i.e., male fertility is equivalent to female fertility); use mortality rates for males and females
    3. Two-sex model; time-variant rates; use real male and female fertility rates
 
@@ -1780,7 +1780,7 @@ data.frame(
 `ID` = 1:3
   , `Time` = c("invariant", "variant", "variant")
   , `Sex` = c("one-sex", "two-sex", "two-sex")
-  , `Approx.` = c("None", "Androgynous fertility", "None")
+  , `Approx.` = c("GKP", "Androgynous fertility", "None")
 ) %>% knitr::kable()
 ```
 
@@ -1812,114 +1812,6 @@ gkp_factors <- data.frame(
 After running the 3 models, answer:
 
 **E2.1** How well do your models approximate the kin counts reported by [@kolk_swedish_2021]? Justify your answer using some quantitative measure. A clarification on this: many things can be compared and in many ways, there is not a correct one, just think in one that you consider important and pick one indicator. Plotting the comparison or replicating the previous plot for each model gets 1,000 more points that you can exchange for hugs or handshakes at some point.
-
-```{r, include=FALSE, eval=FALSE}
-load("../data/swe_males.Rdata")
-
-# create matrices with same range than male fertility data
-asfr_males <- swe_asfr_males
-surv_males <- swe_surv_males[,colnames(swe_asfr_males)]
-asfr_females <- swe_asfr[,colnames(swe_asfr_males)]
-surv_females <- swe_px[,colnames(swe_asfr_males)]
-
-# checking dimensions to be sure
-dim(surv_females);dim(surv_males);dim(asfr_females);dim(asfr_males);
-
-# Run models
-Model_1 <- kin(surv_females[,"2015"], asfr_females[,"2015"], birth_female = .5)$kin_summary %>% 
-  inner_join(gkp_factors %>% select(-2)) %>% 
-  mutate(count_living = count_living * factor)
-  
-Model_2 <- kin2sex(pf = surv_females,
-                    pm = surv_males,
-                    ff = asfr_females,
-                    fm = asfr_females,
-                    sex_focal = "f",
-                    time_invariant = FALSE,
-                    birth_female = .5,
-                    output_period = 2015)$kin_summary
-
-Model_3 <- kin2sex(pf = surv_females,
-                    pm = surv_males,
-                    ff = asfr_females,
-                    fm = asfr_males,
-                    sex_focal = "f",
-                    time_invariant = FALSE,
-                    birth_female = .5,
-                    output_period = 2015)$kin_summary
-
-# recode following kolk (can be done with given table)
-kin_types_kolk <- data.frame(kolk_kin = c("cousins","cousins","children","grandchildren",NA,NA,"grandparents","parents","nephews/nieces","nephews/nieces","uncles/aunts","siblings","uncles/aunts","siblings"),
-           kin = unique(Model_1$kin))
-
-# arrange my data to compare
-df_comparison <- bind_rows(
-  Model_1 %>% mutate(model = "gkp"),
-  Model_2 %>% mutate(model = "androgynous"),
-  Model_3 %>% mutate(model = "full")) %>%
-  inner_join(kin_types_kolk) %>%
-  filter(!is.na(kolk_kin)) %>% 
-  mutate(cohort = 2015-age_focal) %>%
-  summarise(living = sum(count_living), .by = c(kolk_kin, cohort, age_focal, model)) %>%
-  bind_rows(kolk %>% rename(living = mean, kolk_kin = kin) %>% mutate(age_focal = 2015 - cohort , model = "Kolk"))
-
-# visually comparison
-df_comparison %>%
-  ggplot(aes(x = age_focal, y = living, color = model)) +
-  geom_line() +
-  theme_bw() +
-  facet_wrap(~kolk_kin, scales = "free")
-```
-
-```{r, include=FALSE, eval=FALSE}
-# We see there are some issues with data in parents and cousins, so we'll left those out of the comparison. We get an average difference of total living kin, assuming all Focal ages have the same weight (not population weighted). It looks that GKP model is closer, followed by full and then the androgynous one. 
-df_comparison %>%
-  filter(!kolk_kin %in% c("cousins", "parents")) %>% 
-  summarise(living_total = sum(living)/101, .by = c(model)) %>% 
-  pivot_wider(names_from = model, values_from = living_total) %>% 
-  kable(digits = 1)
-```
-
-```{r, include=FALSE, eval=FALSE}
-# We can plot the four estimates together:
-plot_model1 <- Model_1 %>%
-  inner_join(kin_types_kolk) %>%
-  filter(!is.na(kolk_kin)) %>% 
-  mutate(kolk_kin = factor(kolk_kin, levels = levs)) %>%
-  mutate(cohort = 2017-age_focal) %>%
-  summarise(living = sum(count_living), .by = c(kolk_kin, cohort)) %>% 
-  ggplot(aes(x = cohort, y = living, group = kolk_kin, fill = kolk_kin)) +
-  geom_area(colour = "black") +
-  scale_x_continuous(labels = function(x) paste0(x, "\n (", 2017 - x, ")")) +
-  labs(y = "Mean number of kin (both sexes)", x = "Model 1") +
-  theme_bw() +
-  theme(legend.position = "bottom")
-plot_model2 <- Model_2 %>%
-  inner_join(kin_types_kolk) %>%
-  filter(!is.na(kolk_kin)) %>% 
-  mutate(kolk_kin = factor(kolk_kin, levels = levs)) %>%
-  mutate(cohort = 2017-age_focal) %>%
-  summarise(living = sum(count_living), .by = c(kolk_kin, cohort)) %>% 
-  ggplot(aes(x = cohort, y = living, group = kolk_kin, fill = kolk_kin)) +
-  geom_area(colour = "black") +
-  scale_x_continuous(labels = function(x) paste0(x, "\n (", 2017 - x, ")")) +
-  labs(y = "", x = "Model 2") +
-  theme_bw() +
-  theme(legend.position = "bottom")
-plot_model3 <- Model_3 %>%
-  inner_join(kin_types_kolk) %>%
-  filter(!is.na(kolk_kin)) %>% 
-  mutate(kolk_kin = factor(kolk_kin, levels = levs)) %>%
-  mutate(cohort = 2017-age_focal) %>%
-  summarise(living = sum(count_living), .by = c(kolk_kin, cohort)) %>% 
-  ggplot(aes(x = cohort, y = living, group = kolk_kin, fill = kolk_kin)) +
-  geom_area(colour = "black") +
-  scale_x_continuous(labels = function(x) paste0(x, "\n (", 2017 - x, ")")) +
-  labs(y = "", x = "Model 3") +
-  theme_bw() +
-  theme(legend.position = "bottom")
-ggpubr::ggarrange(kolk_plot + xlab("Kolk"), plot_model1, plot_model2, plot_model3, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
-```
 
 **E2.2** Based on this exercise, think in the advantages and drawbacks of using formal models to quantify kinship.
 
@@ -2065,7 +1957,6 @@ plot(age, a_daughter, t = "b", col=2)
 lines(age, a_son, t = "b", col = 4)
 legend("topleft", c("daughter","son"), col = c(2, 4), lty = 1)
 ```
-
 
 Continuing with other kin has the same logic than the one-sex model but with block-structured vectors and matrices but with two exceptions. For the case of descendants we need to assign births to one of the parents, because if not we would be counting twice young siblings, for example (fertility rates are independent between sex). By convention is assigned to the mother, replacing male fertility from $\tilde{F}$ for $\tilde{F}^*$ (eq 57). The other exception is that for ancestors, $\pi$ is the sum of female and male distribution, due to the no identification of grandparents by sex from which parent line. See table from @caswell_formal_2022 for a summary.
 
@@ -2594,6 +2485,7 @@ arg_surv_males <- data_males %>%
   as.matrix()
 ```
 </details>
+
 **E1.1**
 <details><summary>Show</summary>
 ```{r}
@@ -2623,6 +2515,7 @@ bind_rows(
   )
 ```
 </details>
+
 **E1.2** 
 <details><summary>Show</summary>
 ```{r}
@@ -2710,21 +2603,17 @@ df_comparison %>%
   geom_line() +
   theme_bw() +
   facet_wrap(~kolk_kin, scales = "free")
-```
 
-We see there are some issues with data in parents and cousins, so we'll left those out of the comparison. We get an average difference of total living kin, assuming all Focal ages have the same weight (not population weighted). It looks that GKP model is closer, followed by full and then the androgynous one. 
+# We see there are some issues with data in parents and cousins, so we'll left those out of the comparison. We get an average difference of total living kin, assuming all Focal ages have the same weight (not population weighted). It looks that GKP model is closer, followed by full and then the androgynous one. 
 
-```{r}
 df_comparison %>%
   filter(!kolk_kin %in% c("cousins", "parents")) %>% 
   summarise(living_total = sum(living)/101, .by = c(model)) %>% 
   pivot_wider(names_from = model, values_from = living_total) %>% 
   kable(digits = 1)
-```
 
-We can plot the four estimates together:
+# We can plot the four estimates together:
 
-```{r}
 plot_model1 <- Model_1 %>%
   inner_join(kin_types_kolk) %>%
   filter(!is.na(kolk_kin)) %>% 
@@ -2764,4 +2653,5 @@ plot_model3 <- Model_3 %>%
 ggpubr::ggarrange(kolk_plot + xlab("Kolk"), plot_model1, plot_model2, plot_model3, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
 ```
 </details>
+
 ## References
