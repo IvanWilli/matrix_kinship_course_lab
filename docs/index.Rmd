@@ -2090,13 +2090,112 @@ toy_ex$kin_summary %>% filter(kin == "d") %>%
 
 <!-- ## Thurs 11 -->
 
-<!-- During this section we will implement the theory of **stage-age-classified time-invariant one-sex kinship models** in R, use the `DemoKin` package and do some exercises. -->
-
-<!-- - [By hand](#by_hand_thurs11) -->
+<!-- During this section we will see how to apply **stage-age-classified time-invariant one-sex kinship models** in R using `DemoKin` package and do some exercises. -->
 
 <!-- - [Using DemoKin](#using_demokin_thurs11) -->
 
 <!-- - [Exercises](#exercises_thurs11) -->
+
+<!-- - [By hand](#by_hand_thurs11) -->
+
+<!-- ### Using DemoKin {#using_demokin_thurs11} -->
+
+<!-- `DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age. -->
+
+<!-- Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states. -->
+<!-- `DemoKin` includes the data to replicate this analysis for the year 1990. Note that the function allows that user can entry lists (should be consistent in dimensions), or in a matrix format for inputs `f`, `D` and `H`. The data that comes with the package is in this format:  -->
+
+<!-- - The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$. -->
+<!-- - The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example). -->
+<!-- - The data.frame `svk_pxs` has the same structure and represents survival probabilities. -->
+<!-- - The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival. -->
+
+<!-- Let´s see objects: -->
+<!-- ```{r} -->
+<!-- # transition probabilities -->
+<!-- class(svk_Uxs) -->
+<!-- length(svk_Uxs) -->
+<!-- # at age 31 -->
+<!-- svk_Uxs[[30]] -->
+<!-- colSums(svk_Uxs[[30]]) #column-stochastic -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- # fertility -->
+<!-- class(svk_fxs) -->
+<!-- dim(svk_fxs) -->
+<!-- plot(0:109, svk_fxs[,1], col=1, t="l", ylim = c(0,.15), xlim=c(0,55)) -->
+<!-- for (i in 2:6) lines(svk_fxs[,i], col=i) -->
+<!-- legend("topright", c("0","1","2","3","4","5+"), col=1:6, lty=1) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- # survival -->
+<!-- class(svk_pxs) -->
+<!-- dim(svk_pxs) -->
+<!-- head(svk_pxs) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- # offspring age assignment -->
+<!-- class(svk_Hxs) -->
+<!-- dim(svk_Hxs) -->
+<!-- head(svk_Hxs) -->
+<!-- ``` -->
+
+
+<!-- With function `kin_multi_stage` can obtain the joint age-parity kin structure in a time-invariant framework: -->
+
+<!-- ```{r} -->
+<!-- # use birth_female=1 because fertility is for female only -->
+<!-- demokin_svk1980_caswell2020 <- -->
+<!--   kin_multi_stage( -->
+<!--     U = svk_Uxs, -->
+<!--     f = svk_fxs, -->
+<!--     D = svk_pxs, -->
+<!--     H = svk_Hxs, -->
+<!--     birth_female=1) -->
+<!-- ``` -->
+
+<!-- As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is an intermediate year in Figure 4 in Caswell [2021]). -->
+
+<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
+<!-- demokin_svk1990_caswell2020 %>% -->
+<!--   filter(kin %in% c("oa","ya"), age_focal %in% c(20,60)) %>% -->
+<!--   mutate(parity = as.integer(stage_kin)-1, -->
+<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
+<!--          parity = forcats::fct_rev(parity)) %>% -->
+<!--   group_by(age_focal, age_kin, parity) %>% -->
+<!--   summarise(count= sum(living)) %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") + -->
+<!--   geom_vline(aes(xintercept = age_focal), col=2) + -->
+<!--   labs(y = "Number of aunts") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~age_focal, nrow = 2) -->
+<!-- ``` -->
+
+<!-- We can also see the portion of living daughters and mothers at different parity stages over Focal's life-course (this is equivalent to Figure 9 and 10 in Caswell [2021] but for an intermediate year). -->
+
+<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
+<!-- demokin_svk1990_caswell2020 %>% -->
+<!--   filter(kin %in% c("d","m")) %>% -->
+<!--   mutate(parity = as.integer(stage_kin)-1, -->
+<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
+<!--          parity = forcats::fct_rev(parity)) %>% -->
+<!--   group_by(age_focal, kin, parity) %>% -->
+<!--   summarise(count= sum(living)) %>% -->
+<!--   DemoKin::rename_kin() %>% -->
+<!--   ggplot() + -->
+<!--   geom_bar(aes(x=age_focal, y = count, fill=parity), stat = "identity") + -->
+<!--   labs(y = "Kin count") + -->
+<!--   theme_bw() + -->
+<!--   facet_wrap(~kin, nrow = 2) -->
+<!-- ``` -->
+
+<!-- **Answer**: What other kind of indicators are interesting in this context? -->
+
+<!-- ### Exercises {#exercises_thurs11} -->
 
 <!-- ### By hand {#by_hand_thurs11} -->
 
@@ -2215,6 +2314,7 @@ toy_ex$kin_summary %>% filter(kin == "d") %>%
 
 <!-- # distribution of daughters by education, for each Focal'sage -->
 <!-- D_age = kronecker(I_ages, t(ones_s)) %*% D -->
+<!-- A_age = kronecker(I_ages, t(ones_s)) %*% A -->
 <!-- A_age; D_age -->
 <!-- ``` -->
 
@@ -2225,262 +2325,238 @@ toy_ex$kin_summary %>% filter(kin == "d") %>%
 <!-- A_stage; D_stage -->
 <!-- ``` -->
 
-<!-- ### Using DemoKin {#using_demokin_thurs11} -->
+<!-- ### Exercise -->
 
-<!-- `DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age. -->
-
-<!-- Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states. -->
-<!-- `DemoKin` includes the data to replicate this analysis for the year 1980: -->
-
-<!-- - The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$. -->
-<!-- - The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example). -->
-<!-- - The data.frame `svk_pxs` has the same structure and represents survival probabilities. -->
-<!-- - The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival. -->
-
-<!-- Following Caswell (2020), we can obtain the joint age-parity kin structure: -->
+<!-- Replicate previous results using the function `kin_multi_stage.R`, taht can be sourced from [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs). Set as iarguments `U`, `f`, `H` and `D` the objects already created before, given that the function can handle lists and we already created those: -->
 
 <!-- ```{r} -->
-<!-- # use birth_female=1 because fertility is for female only -->
-<!-- demokin_svk1980_caswell2020 <- -->
-<!--   kin_multi_stage( -->
-<!--     U = svk_Uxs, -->
-<!--     f = svk_fxs, -->
-<!--     D = svk_pxs, -->
-<!--     H = svk_Hxs, -->
-<!--     birth_female=1 -->
-<!--     ) -->
+<!-- # inputs to function kin_multi_stage -->
+<!-- U <- list(U_0, U_1, U_2, U_3, U_4) -->
+<!-- H <- list(H_low, H_high) -->
+<!-- D <- list(D_low, D_high) -->
+<!-- f <- F. <- lapply(1:ages, function(x){ -->
+<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
+<!--   }) -->
 <!-- ``` -->
 
-<!-- Note that the function ask for risks already in a certain matrix format. As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is equivalent to Figure 4 in Caswell [2021]). -->
+<!-- Also is needed to set `birth_female = 1` because fertility are already for female offspring, and the analysis is not on parity distribution, so `parity = FALSE`. -->
 
-<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
-<!-- demokin_svk1980_caswell2020 %>% -->
-<!--   filter(kin %in% c("oa","ya"), age_focal %in% c(20,60)) %>% -->
-<!--   mutate(parity = as.integer(stage_kin)-1, -->
-<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
-<!--          parity = forcats::fct_rev(parity)) %>% -->
-<!--   group_by(age_focal, age_kin, parity) %>% -->
-<!--   summarise(count= sum(living)) %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") + -->
-<!--   geom_vline(aes(xintercept = age_focal), col=2) + -->
-<!--   labs(y = "Number of aunts") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~age_focal, nrow = 2) -->
+<!-- ```{r, include=F} -->
+<!-- source("kin_multi_stage.R") -->
+<!-- debugonce(kin_multi_stage) -->
+<!-- U <- list(U_0, U_1, U_2, U_3, U_4) -->
+<!-- H <- list(H_low, H_high) -->
+<!-- D <- list(D_low, D_high) -->
+<!-- F. <- lapply(1:ages, function(x){ -->
+<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
+<!--   }) -->
+
+<!-- # run model -->
+<!-- demokin_multistage <- kin_multi_stage(U, F., D, H, birth_female = 1, parity = FALSE, output_kin = c("m","d")) -->
+
+<!-- # get summary -->
+<!-- demokin_multistage_summary <- demokin_multistage %>%  -->
+<!--   group_by(kin, age_focal, stage_kin) %>%  -->
+<!--   summarise(living = sum(living, na.rm=T)) -->
+
+<!-- # compare -->
+<!-- demokin_multistage_summary %>% filter(kin == "d") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(A_stage[1,],A_stage[2,]) -->
+<!-- demokin_multistage_summary %>% filter(kin == "m") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(D_stage[1,],D_stage[2,]) -->
 <!-- ``` -->
-
-<!-- We can also see the portion of living daughters and mothers at different parity stages over Focal's lie-course (this is equivalent to Figure 9 and 10 in Caswell [2021]). -->
-
-<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
-<!-- demokin_svk1980_caswell2020 %>% -->
-<!--   filter(kin %in% c("d","m")) %>% -->
-<!--   mutate(parity = as.integer(stage_kin)-1, -->
-<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
-<!--          parity = forcats::fct_rev(parity)) %>% -->
-<!--   group_by(age_focal, kin, parity) %>% -->
-<!--   summarise(count= sum(living)) %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(x=age_focal, y = count, fill=parity), stat = "identity") + -->
-<!--   labs(y = "Kin count") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~kin, nrow = 2) -->
-<!-- ``` -->
-
-<!-- ### Exercises {#exercises_thurs11} -->
 
 ## Solutions
 
 ### Mon 8
 
-<!-- **1.1** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- swe_surv_1910 <- DemoKin::swe_px[,"1910"] -->
-<!-- swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"] -->
-<!-- swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE) -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
-<!--   filter(age_focal == 35, kin == "d") -->
-<!-- ``` -->
-<!-- </details> -->
+**1.1**
+<details><summary>Show</summary>
+```{r}
+# Write your code here
+swe_surv_1910 <- DemoKin::swe_px[,"1910"]
+swe_asfr_1910 <- DemoKin::swe_asfr[,"1910"]
+swe_1910 <- kin(p = swe_surv_1910, f = swe_asfr_1910, time_invariant = TRUE)
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "d")
+```
+</details>
 
-<!-- **1.2** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- # Write your code here -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>% -->
-<!--   filter(age_focal == 35, kin == "m") -->
-<!-- ``` -->
-<!-- </details> -->
+**1.2**
+<details><summary>Show</summary>
+```{r}
+# Write your code here
+swe_1910$kin_summary %>%
+  summarise(count_living = round(sum(count_living),3), .by = c(kin, age_focal)) %>%
+  filter(age_focal == 35, kin == "m")
+```
+</details>
 
-<!-- **1.3** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r, fig.height=10, fig.width=12} -->
-<!-- # Write your code here -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   select(kin, count = count_living) %>% -->
-<!--   plot_diagram(rounding = 2) -->
-<!-- ``` -->
-<!-- </details> -->
+**1.3**
+<details><summary>Show</summary>
+```{r, fig.height=10, fig.width=12}
+# Write your code here
+swe_1910$kin_summary %>%
+  filter(age_focal == 35) %>%
+  select(kin, count = count_living) %>%
+  plot_diagram(rounding = 2)
+```
+</details>
 
-<!-- **1.4** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- swe_1910$kin_summary %>% -->
-<!--   filter(age_focal == 65, kin == "d") %>% -->
-<!--   select(age_focal, loss_1910 = count_cum_dead) %>% -->
-<!--   inner_join( -->
-<!--     swe_2015$kin_summary %>% -->
-<!--       filter(age_focal == 65, kin == "d") %>% -->
-<!--       select(age_focal, loss_2015 = count_cum_dead)) -->
-<!-- ``` -->
-<!-- </details> -->
+**1.4**
+<details><summary>Show</summary>
+```{r}
+swe_1910$kin_summary %>%
+  filter(age_focal == 65, kin == "d") %>%
+  select(age_focal, loss_1910 = count_cum_dead) %>%
+  inner_join(
+    swe_2015$kin_summary %>%
+      filter(age_focal == 65, kin == "d") %>%
+      select(age_focal, loss_2015 = count_cum_dead))
+```
+</details>
 
-<!-- **2.1** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- mean_ages_2015 <- swe_2015$kin_full %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
-<!--             .by = c(kin)) -->
-<!-- mean_ages_2015 -->
-<!-- ``` -->
-<!-- </details> -->
+**2.1**
+<details><summary>Show</summary>
+```{r}
+mean_ages_2015 <- swe_2015$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living),
+            .by = c(kin))
+mean_ages_2015
+```
+</details>
 
-<!-- **2.2** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- mean_ages_1910 <- swe_1910$kin_full %>% -->
-<!--   filter(age_focal == 35) %>% -->
-<!--   summarise(mean_age = sum(age_kin*living)/sum(living), -->
-<!--             .by = c(kin)) -->
-<!-- # one posible plot -->
-<!-- mean_ages_1910 %>% -->
-<!--   mutate(year = 1910) %>% -->
-<!--   bind_rows( -->
-<!--     mean_ages_2015 %>% mutate(year = 2015)) %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(kin, mean_age, fill=factor(year)), -->
-<!--            stat = "identity", position = "dodge") -->
-<!-- ``` -->
-<!-- </details> -->
+**2.2**
+<details><summary>Show</summary>
+```{r}
+mean_ages_1910 <- swe_1910$kin_full %>%
+  filter(age_focal == 35) %>%
+  summarise(mean_age = sum(age_kin*living)/sum(living),
+            .by = c(kin))
+# one posible plot
+mean_ages_1910 %>%
+  mutate(year = 1910) %>%
+  bind_rows(
+    mean_ages_2015 %>% mutate(year = 2015)) %>%
+  ggplot() +
+  geom_bar(aes(kin, mean_age, fill=factor(year)),
+           stat = "identity", position = "dodge")
+```
+</details>
 
-<!-- **2.3** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- swe_2015$kin_full %>% -->
-<!--   group_by(age_focal) %>% -->
-<!--   summarise(daughter = sum(living[kin=='d' & age_kin<=15]), -->
-<!--             mother = sum(living[kin=='m' & age_kin>=75]), -->
-<!--             sandwiched_level = daughter + mother) %>% -->
-<!--   pivot_longer(cols = daughter:sandwiched_level) %>% -->
-<!--   ggplot()+ -->
-<!--   geom_line(aes(age_focal, value, col=name))+ -->
-<!--   scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5)) -->
-<!-- ``` -->
-<!-- </details> -->
+**2.3**
+<details><summary>Show</summary>
+```{r}
+swe_2015$kin_full %>%
+  group_by(age_focal) %>%
+  summarise(daughter = sum(living[kin=='d' & age_kin<=15]),
+            mother = sum(living[kin=='m' & age_kin>=75]),
+            sandwiched_level = daughter + mother) %>%
+  pivot_longer(cols = daughter:sandwiched_level) %>%
+  ggplot()+
+  geom_line(aes(age_focal, value, col=name))+
+  scale_x_continuous(labels = seq(0,100,5), breaks = seq(0,100,5))
+```
+</details>
 
-<!-- **3.1** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- by_hand_example <- kin(p, f, birth_female = 1) -->
-<!-- # some checks -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) - g -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) - d -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) - a -->
-<!-- # grandmothers -->
-<!-- by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) -->
-<!-- ``` -->
-<!-- </details> -->
+**3.1**
+<details><summary>Show</summary>
+```{r}
+by_hand_example <- kin(p, f, birth_female = 1)
+# some checks
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living) - g
+by_hand_example$kin_summary %>% filter(kin == "m") %>% pull(count_living) - d
+by_hand_example$kin_summary %>% filter(kin == "d") %>% pull(count_living) - a
+# grandmothers
+by_hand_example$kin_summary %>% filter(kin == "gm") %>% pull(count_living)
+```
+</details>
 
-<!-- ### Tues 9 -->
+### Tues 9
 
-<!-- **1** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- # reshape survival -->
-<!-- country_surv <- data %>% -->
-<!--   select(age, year, px) %>% -->
-<!--   pivot_wider(names_from = year, values_from = px) %>% -->
-<!--   select(-age) %>% -->
-<!--   as.matrix() -->
+**1**
+<details><summary>Show</summary>
+```{r}
+# reshape survival
+country_surv <- data %>%
+  select(age, year, px) %>%
+  pivot_wider(names_from = year, values_from = px) %>%
+  select(-age) %>%
+  as.matrix()
 
-<!-- country_surv %>% -->
-<!--     as.data.frame() %>% -->
-<!--     mutate(age = 1:nrow(swe_asfr)-1) %>% -->
-<!--     pivot_longer(-age, names_to = "year", values_to = "px") %>% -->
-<!--     mutate(qx = 1-px) %>% -->
-<!--     ggplot() + -->
-<!--     geom_line(aes(x = age, y = qx, col = year)) + -->
-<!--     scale_y_log10() + -->
-<!--     theme(legend.position = "none") -->
-<!-- ``` -->
-<!-- </details> -->
-<!-- **1.2** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- E.1.2 <- -->
-<!--   kin(p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(1950, 2015), -->
-<!--     output_kin = c("d","gd","ggd","m","gm","ggm")) -->
-<!-- # table -->
-<!-- E.1.2$kin_summary %>% -->
-<!--   filter(age_focal == 50) %>%  -->
-<!--   summarise(count_living = sum(count_living), .by = c(kin, year)) %>%  -->
-<!--   pivot_wider(names_from = year, values_from = count_living) %>%  -->
-<!--   mutate(dif_abs = `1950`-`2015`, dif_rel = dif_abs/`1950`) %>%  -->
-<!--   arrange(-abs(dif_rel)) -->
-<!-- ``` -->
-<!-- </details> -->
-<!-- **1.3** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- E.1.3 <- -->
-<!--   kin(p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_cohort = c(1950), -->
-<!--     output_kin = c("gd") -->
-<!--     ) -->
-<!-- E.1.3$kin_summary %>% -->
-<!--   mutate(shared_years = cumsum(count_living), .by = c(kin, cohort)) %>% -->
-<!--   filter(age_focal == 70) %>% -->
-<!--   summarise(gd_years =sum(shared_years), .by = c(cohort, kin)) -->
-<!-- ``` -->
-<!-- </details> -->
-<!-- **1.4** -->
-<!-- <details><summary>Show</summary> -->
-<!-- ```{r} -->
-<!-- country_surv_counterfactual <- country_surv -->
-<!-- country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"] -->
-<!-- country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"] -->
-<!-- E.1.4 <- -->
-<!--   kin( -->
-<!--     p = country_surv, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(2021) -->
-<!--     ) -->
-<!-- E.1.4_counterfactual <- -->
-<!--   kin( -->
-<!--     p = country_surv_counterfactual, -->
-<!--     f = country_fert, -->
-<!--     time_invariant =FALSE, -->
-<!--     output_period = c(2021) -->
-<!--     ) -->
-<!-- olders_Focal <- E.1.4$kin_full %>% summarise(all_kin = sum(living[age_focal == 60 & age_kin>60])) -->
-<!-- olders_Focal_counterf <- E.1.4_counterfactual$kin_full %>% summarise(all_kin = sum(living[age_focal == 60 & age_kin>60])) -->
-<!-- excess_bereav_indic <- 1-olders_Focal/olders_Focal_counterf -->
-<!-- excess_bereav_indic -->
-<!-- # in the case of this country, Focal would have a relative excess of .3%, related to olders than her. -->
-<!-- ``` -->
-<!-- </details> -->
+country_surv %>%
+    as.data.frame() %>%
+    mutate(age = 1:nrow(swe_asfr)-1) %>%
+    pivot_longer(-age, names_to = "year", values_to = "px") %>%
+    mutate(qx = 1-px) %>%
+    ggplot() +
+    geom_line(aes(x = age, y = qx, col = year)) +
+    scale_y_log10() +
+    theme(legend.position = "none")
+```
+</details>
+**1.2**
+<details><summary>Show</summary>
+```{r}
+E.1.2 <-
+  kin(p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(1950, 2015),
+    output_kin = c("d","gd","ggd","m","gm","ggm"))
+# table
+E.1.2$kin_summary %>%
+  filter(age_focal == 50) %>%
+  summarise(count_living = sum(count_living), .by = c(kin, year)) %>%
+  pivot_wider(names_from = year, values_from = count_living) %>%
+  mutate(dif_abs = `1950`-`2015`, dif_rel = dif_abs/`1950`) %>%
+  arrange(-abs(dif_rel))
+```
+</details>
+**1.3**
+<details><summary>Show</summary>
+```{r}
+E.1.3 <-
+  kin(p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_cohort = c(1950),
+    output_kin = c("gd")
+    )
+E.1.3$kin_summary %>%
+  mutate(shared_years = cumsum(count_living), .by = c(kin, cohort)) %>%
+  filter(age_focal == 70) %>%
+  summarise(gd_years =sum(shared_years), .by = c(cohort, kin))
+```
+</details>
+**1.4**
+<details><summary>Show</summary>
+```{r}
+country_surv_counterfactual <- country_surv
+country_surv_counterfactual[,"2020"] <- country_surv_counterfactual[,"2019"]
+country_surv_counterfactual[,"2021"] <- country_surv_counterfactual[,"2019"]
+E.1.4 <-
+  kin(
+    p = country_surv,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+E.1.4_counterfactual <-
+  kin(
+    p = country_surv_counterfactual,
+    f = country_fert,
+    time_invariant =FALSE,
+    output_period = c(2021)
+    )
+olders_Focal <- E.1.4$kin_full %>% summarise(all_kin = sum(living[age_focal == 60 & age_kin>60]))
+olders_Focal_counterf <- E.1.4_counterfactual$kin_full %>% summarise(all_kin = sum(living[age_focal == 60 & age_kin>60]))
+excess_bereav_indic <- 1-olders_Focal/olders_Focal_counterf
+excess_bereav_indic
+# in the case of this country, Focal would have a relative excess of .3%, related to olders than her.
+```
+</details>
+
 
 
 ## References
