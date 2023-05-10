@@ -1712,7 +1712,7 @@ bind_rows(
     mutate(year = 2015)
   )
 ```
-**E1.2** Compare 'kin sex ratios' of grandparents, parents, daughters and siblings in a time-variant framework for the cohort 1950, at each of Focal.
+**E1.2** Compare 'kin sex ratios' of grandparents, parents, daughters and siblings in a time-variant framework for the cohort 1950, at each age of Focal.
 
 ```{r, include=FALSE, eval=FALSE}
 kin_out_2015 <- kin2sex(
@@ -1973,281 +1973,281 @@ toy_ex$kin_summary %>% filter(kin == "d") %>%
 ```
 </details>
 
-<!-- ## Thurs 11 -->
+## Thurs 11
 
-<!-- During this section we will see how to apply **stage-age-classified time-invariant one-sex kinship models** in R using `DemoKin` package and do some exercises. -->
+During this section we will see how to apply **stage-age-classified time-invariant one-sex kinship models** in R using `DemoKin` package and do some exercises.
 
-<!-- - [Using DemoKin](#using_demokin_thurs11) -->
+- [Using DemoKin](#using_demokin_thurs11)
 
-<!-- - [Exercises](#exercises_thurs11) -->
+- [Exercises](#exercises_thurs11)
 
-<!-- - [By hand](#by_hand_thurs11) -->
+- [By hand](#by_hand_thurs11)
 
-<!-- ### Using DemoKin {#using_demokin_thurs11} -->
+### Using DemoKin {#using_demokin_thurs11}
 
-<!-- `DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age. -->
+`DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of changing state by age.
 
-<!-- Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states. -->
-<!-- `DemoKin` includes the data to replicate this analysis for the year 1990. Note that the function allows that user can entry lists (should be consistent in dimensions), or in a matrix format for inputs `f`, `D` and `H`. The data that comes with the package is in this format:  -->
+Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states.
+`DemoKin` includes the data to replicate this analysis for the year 1990. Note that the function allows that user can entry lists (should be consistent in dimensions), or in a matrix format for inputs `f`, `D` and `H`. The data that comes with the package is in this format:
 
-<!-- - The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$. -->
-<!-- - The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example). -->
-<!-- - The data.frame `svk_pxs` has the same structure and represents survival probabilities. -->
-<!-- - The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival. -->
+- The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$.
+- The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example).
+- The data.frame `svk_pxs` has the same structure and represents survival probabilities.
+- The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival.
 
-<!-- Let´s see objects: -->
-<!-- ```{r} -->
-<!-- # transition probabilities -->
-<!-- class(svk_Uxs) -->
-<!-- length(svk_Uxs) -->
-<!-- # at age 31 -->
-<!-- svk_Uxs[[30]] -->
-<!-- colSums(svk_Uxs[[30]]) #column-stochastic -->
-<!-- ``` -->
+Let´s see objects:
+```{r}
+# transition probabilities
+class(svk_Uxs)
+length(svk_Uxs)
+# at age 31
+svk_Uxs[[30]]
+colSums(svk_Uxs[[30]]) #column-stochastic
+```
 
-<!-- ```{r} -->
-<!-- # fertility -->
-<!-- class(svk_fxs) -->
-<!-- dim(svk_fxs) -->
-<!-- plot(0:109, svk_fxs[,1], col=1, t="l", ylim = c(0,.15), xlim=c(0,55)) -->
-<!-- for (i in 2:6) lines(svk_fxs[,i], col=i) -->
-<!-- legend("topright", c("0","1","2","3","4","5+"), col=1:6, lty=1) -->
-<!-- ``` -->
+```{r}
+# fertility
+class(svk_fxs)
+dim(svk_fxs)
+plot(0:109, svk_fxs[,1], col=1, t="l", ylim = c(0,.15), xlim=c(0,55))
+for (i in 2:6) lines(svk_fxs[,i], col=i)
+legend("topright", c("0","1","2","3","4","5+"), col=1:6, lty=1)
+```
 
-<!-- ```{r} -->
-<!-- # survival -->
-<!-- class(svk_pxs) -->
-<!-- dim(svk_pxs) -->
-<!-- head(svk_pxs) -->
-<!-- ``` -->
+```{r}
+# survival
+class(svk_pxs)
+dim(svk_pxs)
+head(svk_pxs)
+```
 
-<!-- ```{r} -->
-<!-- # offspring age assignment -->
-<!-- class(svk_Hxs) -->
-<!-- dim(svk_Hxs) -->
-<!-- head(svk_Hxs) -->
-<!-- ``` -->
+```{r}
+# offspring age assignment
+class(svk_Hxs)
+dim(svk_Hxs)
+head(svk_Hxs)
+```
 
 
-<!-- With function `kin_multi_stage` can obtain the joint age-parity kin structure in a time-invariant framework: -->
+With the function `kin_multi_stage` can obtain the joint age-parity kin structure in a time-invariant framework:
 
-<!-- ```{r} -->
-<!-- # use birth_female=1 because fertility is for female only -->
-<!-- demokin_svk1980_caswell2020 <- -->
-<!--   kin_multi_stage( -->
-<!--     U = svk_Uxs, -->
-<!--     f = svk_fxs, -->
-<!--     D = svk_pxs, -->
-<!--     H = svk_Hxs, -->
-<!--     birth_female=1) -->
-<!-- ``` -->
+```{r}
+# use birth_female=1 because fertility is for female only
+demokin_svk1980_caswell2020 <-
+  kin_multi_stage(
+    U = svk_Uxs,
+    f = svk_fxs,
+    D = svk_pxs,
+    H = svk_Hxs,
+    birth_female=1)
+```
 
-<!-- As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is an intermediate year in Figure 4 in Caswell [2021]). -->
+As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is an intermediate year in Figure 4 in Caswell [2021]).
 
-<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
-<!-- demokin_svk1990_caswell2020 %>% -->
-<!--   filter(kin %in% c("oa","ya"), age_focal %in% c(20,60)) %>% -->
-<!--   mutate(parity = as.integer(stage_kin)-1, -->
-<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
-<!--          parity = forcats::fct_rev(parity)) %>% -->
-<!--   group_by(age_focal, age_kin, parity) %>% -->
-<!--   summarise(count= sum(living)) %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") + -->
-<!--   geom_vline(aes(xintercept = age_focal), col=2) + -->
-<!--   labs(y = "Number of aunts") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~age_focal, nrow = 2) -->
-<!-- ``` -->
+```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+demokin_svk1990_caswell2020 %>%
+  filter(kin %in% c("oa","ya"), age_focal %in% c(20,60)) %>%
+  mutate(parity = as.integer(stage_kin)-1,
+         parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)),
+         parity = forcats::fct_rev(parity)) %>%
+  group_by(age_focal, age_kin, parity) %>%
+  summarise(count= sum(living)) %>%
+  ggplot() +
+  geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") +
+  geom_vline(aes(xintercept = age_focal), col=2) +
+  labs(y = "Number of aunts") +
+  theme_bw() +
+  facet_wrap(~age_focal, nrow = 2)
+```
 
-<!-- We can also see the portion of living daughters and mothers at different parity stages over Focal's life-course (this is equivalent to Figure 9 and 10 in Caswell [2021] but for an intermediate year). -->
+We can also see the portion of living daughters and mothers at different parity stages over Focal's life-course (this is equivalent to Figure 9 and 10 in Caswell [2021] but for an intermediate year).
 
-<!-- ```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10} -->
-<!-- demokin_svk1990_caswell2020 %>% -->
-<!--   filter(kin %in% c("d","m")) %>% -->
-<!--   mutate(parity = as.integer(stage_kin)-1, -->
-<!--          parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)), -->
-<!--          parity = forcats::fct_rev(parity)) %>% -->
-<!--   group_by(age_focal, kin, parity) %>% -->
-<!--   summarise(count= sum(living)) %>% -->
-<!--   DemoKin::rename_kin() %>% -->
-<!--   ggplot() + -->
-<!--   geom_bar(aes(x=age_focal, y = count, fill=parity), stat = "identity") + -->
-<!--   labs(y = "Kin count") + -->
-<!--   theme_bw() + -->
-<!--   facet_wrap(~kin, nrow = 2) -->
-<!-- ``` -->
+```{r, message=FALSE, warning=FALSE, fig.height=6, fig.width=10}
+demokin_svk1990_caswell2020 %>%
+  filter(kin %in% c("d","m")) %>%
+  mutate(parity = as.integer(stage_kin)-1,
+         parity = case_when(parity == 5 ~ "5+", T ~ as.character(parity)),
+         parity = forcats::fct_rev(parity)) %>%
+  group_by(age_focal, kin, parity) %>%
+  summarise(count= sum(living)) %>%
+  DemoKin::rename_kin() %>%
+  ggplot() +
+  geom_bar(aes(x=age_focal, y = count, fill=parity), stat = "identity") +
+  labs(y = "Kin count") +
+  theme_bw() +
+  facet_wrap(~kin, nrow = 2)
+```
 
-<!-- **Answer**: What other kind of indicators are interesting in this context? -->
+**Answer**: What other kind of indicators are interesting in this context?
 
-<!-- ### Exercises {#exercises_thurs11} -->
+### Exercises {#exercises_thurs11}
 
-<!-- ### By hand {#by_hand_thurs11} -->
+### By hand {#by_hand_thurs11}
 
-<!-- We keep studying the same female population but now we have access to their educational status, and its differential fertility and mortality. This population has 2 stages in education ($s=2$): low and high. -->
+We keep studying the same female population but now we have access to their educational status, and its differential fertility and mortality. This population has 2 stages in education ($s=2$): low and high.
 
-<!-- ```{r} -->
-<!-- age <- 0:4 -->
-<!-- ages <- length(age) -->
-<!-- s = 2 -->
-<!-- p_low <- c(.9, .7, .4, .1, 0) -->
-<!-- p_high <- p_low * 9/10 -->
-<!-- plot(age, p_low, t ="b", ylab = "px") -->
-<!-- lines(age, p_high, col=2, t="b") -->
-<!-- legend("topright", c("low","high"), col = 1:2, lty = 1) -->
-<!-- ``` -->
-<!-- ```{r} -->
-<!-- f_low <- c(0, .5, .5, .3, 0) -->
-<!-- f_high <- f_low * 4/5 -->
-<!-- plot(age, f_low,  t="b", ylab = "") -->
-<!-- lines(age, f_high, col=2,  t="b") -->
-<!-- legend("topright", c("low","high"), col = 1:2, lty = 1) -->
-<!-- ``` -->
+```{r}
+age <- 0:4
+ages <- length(age)
+s = 2
+p_low <- c(.9, .7, .4, .1, 0)
+p_high <- p_low * 9/10
+plot(age, p_low, t ="b", ylab = "px")
+lines(age, p_high, col=2, t="b")
+legend("topright", c("low","high"), col = 1:2, lty = 1)
+```
+```{r}
+f_low <- c(0, .5, .5, .3, 0)
+f_high <- f_low * 4/5
+plot(age, f_low,  t="b", ylab = "")
+lines(age, f_high, col=2,  t="b")
+legend("topright", c("low","high"), col = 1:2, lty = 1)
+```
 
-<!-- We need to specify transitions between educational stages within each age, with matrices where element $ij$ is the probability transition between $j \rightarrow i$. In our case a individual can transit from low to high but not in the other way. Let's create a list in line with equations 7 to 10 in @caswell_formal_2020 (number of elements of a list can be obtained with function `length(x)`, as vectors). -->
+We need to specify transitions between educational stages within each age, with matrices where element $ij$ is the probability transition between $j \rightarrow i$. In our case an individual can transition from 'low' to 'high' but not the other way around. Let's create a list in line with equations 7 to 10 in @caswell_formal_2020 (the number of elements of a list can be obtained using function `length(x)`).
 
-<!-- ```{r} -->
-<!-- # transition between states within each age class. Transition occurs only in ages 1 and 2 -->
-<!-- U_0 <- U_3 <- U_4 <- matrix(c(1,0,0,1), nrow = 2, ncol = 2) -->
-<!-- U_1 <- matrix(c(.9,.1,0,1), nrow = 2, ncol = 2) -->
-<!-- U_2 <- matrix(c(.5,.5,0,1), nrow = 2, ncol = 2) -->
-<!-- U <- list(U_0, U_1, U_2, U_3, U_4) -->
+```{r}
+# transition between states within each age class. Transition occurs only in ages 1 and 2
+U_0 <- U_3 <- U_4 <- matrix(c(1,0,0,1), nrow = 2, ncol = 2)
+U_1 <- matrix(c(.9,.1,0,1), nrow = 2, ncol = 2)
+U_2 <- matrix(c(.5,.5,0,1), nrow = 2, ncol = 2)
+U <- list(U_0, U_1, U_2, U_3, U_4)
 
-<!-- # age advancing with mortality in each state -->
-<!-- D_low <- D_high <- matrix(0, ages, ages) -->
-<!-- D_low[row(D_low)-1 == col(D_low)] <- p_low[-ages] -->
-<!-- D_high[row(D_high)-1 == col(D_high)] <- p_high[-ages] -->
-<!-- D <- list(D_low, D_high) -->
+# age advancing with mortality in each state
+D_low <- D_high <- matrix(0, ages, ages)
+D_low[row(D_low)-1 == col(D_low)] <- p_low[-ages]
+D_high[row(D_high)-1 == col(D_high)] <- p_high[-ages]
+D <- list(D_low, D_high)
 
-<!-- # fertility offspring in each age. Every new born is low educated, no matter Focal's status -->
-<!-- F. <- lapply(1:ages, function(x){ -->
-<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
-<!--   }) -->
+# fertility offspring in each age. Every new born is low educated, no matter Focal's status
+F. <- lapply(1:ages, function(x){
+  matrix(c(f_low[x],0,f_high[x],0),2, 2)
+  })
 
-<!-- # all offspring starts at first age-class -->
-<!-- H_low <- H_high <- matrix(0, ages, ages) -->
-<!-- H_low[1,] <- H_high[1,] <- 1 -->
-<!-- H <- list(H_low, H_high) -->
-<!-- ``` -->
+# all offspring starts at first age-class
+H_low <- H_high <- matrix(0, ages, ages)
+H_low[1,] <- H_high[1,] <- 1
+H <- list(H_low, H_high)
+```
 
-<!-- Building block-matrices we should have same dimension ages times stages for rows and cols. -->
-<!-- ```{r} -->
-<!-- # block matrix (eq 11) -->
-<!-- library(Matrix) -->
-<!-- Ub = bdiag(U) %>% as.matrix() -->
-<!-- Db = bdiag(D) %>% as.matrix() -->
-<!-- Fb = bdiag(F.) %>% as.matrix() -->
-<!-- Hb = bdiag(H) %>% as.matrix() -->
-<!-- dim(Ub); dim(Db); dim(Fb); dim(Hb) -->
-<!-- ``` -->
+Building block-matrices we should have same dimension ages times stages for rows and cols.
+```{r}
+# block matrix (eq 11)
+library(Matrix)
+Ub = bdiag(U) %>% as.matrix()
+Db = bdiag(D) %>% as.matrix()
+Fb = bdiag(F.) %>% as.matrix()
+Hb = bdiag(H) %>% as.matrix()
+dim(Ub); dim(Db); dim(Fb); dim(Hb)
+```
 
-<!-- The key in projectiong age-stage classified populations is the following: constructing vec-permutation matrices appropriate to the numbers of stages and age classes, which handle in a very smart way this transitions. -->
+The key for projecting age-stage classified populations is to construct vec-permutation matrices according to the numbers of stages and age classes. This is a smart way of handling these transitions.
 
-<!-- ```{r} -->
-<!-- # vec-permutation matrix -->
-<!-- K <- matrixcalc::commutation.matrix(s, ages) -->
+```{r}
+# vec-permutation matrix
+K <- matrixcalc::commutation.matrix(s, ages)
 
-<!-- # survival and fertility in an age-stage framework -->
-<!-- Ut <- t(K) %*% Db %*% K %*% Ub  # eq 12 -->
-<!-- Ft <-  t(K) %*% Hb %*% K %*% Fb # eq 13 -->
+# survival and fertility in an age-stage framework
+Ut <- t(K) %*% Db %*% K %*% Ub  # eq 12
+Ft <-  t(K) %*% Hb %*% K %*% Fb # eq 13
 
-<!-- # How makes Focal transits age and education conditioned on being alive. -->
-<!-- Gt <-  Ut%*% MASS::ginv(diag(colSums(Ut))) # eq 21-22 -->
-<!-- ``` -->
+# How makes Focal transits age and education conditioned on being alive.
+Gt <-  Ut%*% MASS::ginv(diag(colSums(Ut))) # eq 21-22
+```
 
-<!-- Again, initial distribution of mothers must be set. In this case the stable assumption is on the age-stage structured population. -->
+Again, we must define the initial distribution of mothers In this case the stable assumption is applied to the age-stage structured population.
 
-<!-- ```{r} -->
-<!-- # stable distribution mothers: age x stage -->
-<!-- At <- Ut + Ft -->
-<!-- A_eigen <- eigen(At) -->
-<!-- A_eigen_value <- as.double(A_eigen$values[1]) -->
-<!-- A_eigen_vector <- as.double(A_eigen$vectors[,1]) -->
-<!-- w <- A_eigen_vector/sum(A_eigen_vector) -->
-<!-- pi <- w * t(rep(1,s*ages))%*%Ft / sum(w * t(rep(1,s*ages))%*%Ft) -->
-<!-- ``` -->
+```{r}
+# stable distribution mothers: age x stage
+At <- Ut + Ft
+A_eigen <- eigen(At)
+A_eigen_value <- as.double(A_eigen$values[1])
+A_eigen_vector <- as.double(A_eigen$vectors[,1])
+w <- A_eigen_vector/sum(A_eigen_vector)
+pi <- w * t(rep(1,s*ages))%*%Ft / sum(w * t(rep(1,s*ages))%*%Ft)
+```
 
-<!-- And now we have the same procedure than in the age-classified model, so let's project mothers and daughters. -->
+And now we follow the same procedure as in the age-classified model. Let's project mothers and daughters.
 
-<!-- - **Mother** and **daughter** -->
+- **Mother** and **daughter**
 
-<!-- ```{r} -->
-<!-- phi <-A <- D <- matrix(0, ages*s, ages) -->
+```{r}
+phi <-A <- D <- matrix(0, ages*s, ages)
 
-<!-- # when Focal born she is aged 0 and andlow educated, so -->
-<!-- phi[1,1] <- 1 -->
+# when Focal born she is aged 0 and andlow educated, so
+phi[1,1] <- 1
 
-<!-- #initial distr of mothers -->
-<!-- D[,1] <- pi -->
+#initial distr of mothers
+D[,1] <- pi
 
-<!-- # project -->
-<!-- for(x in 2:ages){ -->
-<!--   phi[,x] = Gt %*% phi[,x-1] -->
-<!--   A[,x]   = Ut %*% A[,x-1] + Ft %*% phi[,x-1] -->
-<!--   D[,x]   = Ut %*% D[,x-1] -->
-<!-- } -->
-<!-- ``` -->
+# project
+for(x in 2:ages){
+  phi[,x] = Gt %*% phi[,x-1]
+  A[,x]   = Ut %*% A[,x-1] + Ft %*% phi[,x-1]
+  D[,x]   = Ut %*% D[,x-1]
+}
+```
 
-<!-- Let's explore marginals, by stage or by age: -->
+Let's explore marginals, by stage or by age:
 
-<!-- ```{r} -->
-<!-- I_ages <- diag(1, ages) -->
-<!-- ones_s <- rep(1, s) -->
-<!-- I_s <- diag(1, s) -->
-<!-- ones_ages <- rep(1, ages) -->
-<!-- ones_s_ages <- rep(1, s*ages) -->
+```{r}
+I_ages <- diag(1, ages)
+ones_s <- rep(1, s)
+I_s <- diag(1, s)
+ones_ages <- rep(1, ages)
+ones_s_ages <- rep(1, s*ages)
 
-<!-- # distribution of daughters by education, for each Focal'sage -->
-<!-- D_age = kronecker(I_ages, t(ones_s)) %*% D -->
-<!-- A_age = kronecker(I_ages, t(ones_s)) %*% A -->
-<!-- A_age; D_age -->
-<!-- ``` -->
+# distribution of daughters by education, for each Focal'sage
+D_age = kronecker(I_ages, t(ones_s)) %*% D
+A_age = kronecker(I_ages, t(ones_s)) %*% A
+A_age; D_age
+```
 
-<!-- ```{r} -->
-<!-- # distribution of daughters by age, for each Focal'sage -->
-<!-- A_stage = kronecker(t(ones_ages), I_s) %*% A -->
-<!-- D_stage = kronecker(t(ones_ages), I_s) %*% D -->
-<!-- A_stage; D_stage -->
-<!-- ``` -->
+```{r}
+# distribution of daughters by age, for each Focal'sage
+A_stage = kronecker(t(ones_ages), I_s) %*% A
+D_stage = kronecker(t(ones_ages), I_s) %*% D
+A_stage; D_stage
+```
 
-<!-- ### Exercise -->
+### Exercise
 
-<!-- Replicate previous results using the function `kin_multi_stage.R`, taht can be sourced from [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs). Set as iarguments `U`, `f`, `H` and `D` the objects already created before, given that the function can handle lists and we already created those: -->
+Replicate the previous results using the function `kin_multi_stage.R`. This can be sourced from [here](https://github.com/IvanWilli/matrix_kinship_course_lab/tree/main/docs). For the function's arguments `U`, `f`, `H` and `D`, use the objects you created above (this works because the function can handle lists like the ones we created):
 
-<!-- ```{r} -->
-<!-- # inputs to function kin_multi_stage -->
-<!-- U <- list(U_0, U_1, U_2, U_3, U_4) -->
-<!-- H <- list(H_low, H_high) -->
-<!-- D <- list(D_low, D_high) -->
-<!-- f <- F. <- lapply(1:ages, function(x){ -->
-<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
-<!--   }) -->
-<!-- ``` -->
+```{r}
+# inputs to function kin_multi_stage
+U <- list(U_0, U_1, U_2, U_3, U_4)
+H <- list(H_low, H_high)
+D <- list(D_low, D_high)
+f <- F. <- lapply(1:ages, function(x){
+  matrix(c(f_low[x],0,f_high[x],0),2, 2)
+  })
+```
 
-<!-- Also is needed to set `birth_female = 1` because fertility are already for female offspring, and the analysis is not on parity distribution, so `parity = FALSE`. -->
+You need to set `birth_female = 1` because fertility already refers to female offspring. Since the analysis is not of parity distribution, set `parity = FALSE`.
 
-<!-- ```{r, include=F} -->
-<!-- source("kin_multi_stage.R") -->
-<!-- debugonce(kin_multi_stage) -->
-<!-- U <- list(U_0, U_1, U_2, U_3, U_4) -->
-<!-- H <- list(H_low, H_high) -->
-<!-- D <- list(D_low, D_high) -->
-<!-- F. <- lapply(1:ages, function(x){ -->
-<!--   matrix(c(f_low[x],0,f_high[x],0),2, 2) -->
-<!--   }) -->
+```{r, include=F}
+source("kin_multi_stage.R")
+debugonce(kin_multi_stage)
+U <- list(U_0, U_1, U_2, U_3, U_4)
+H <- list(H_low, H_high)
+D <- list(D_low, D_high)
+F. <- lapply(1:ages, function(x){
+  matrix(c(f_low[x],0,f_high[x],0),2, 2)
+  })
 
-<!-- # run model -->
-<!-- demokin_multistage <- kin_multi_stage(U, F., D, H, birth_female = 1, parity = FALSE, output_kin = c("m","d")) -->
+# run model
+demokin_multistage <- kin_multi_stage(U, F., D, H, birth_female = 1, parity = FALSE, output_kin = c("m","d"))
 
-<!-- # get summary -->
-<!-- demokin_multistage_summary <- demokin_multistage %>%  -->
-<!--   group_by(kin, age_focal, stage_kin) %>%  -->
-<!--   summarise(living = sum(living, na.rm=T)) -->
+# get summary
+demokin_multistage_summary <- demokin_multistage %>%
+  group_by(kin, age_focal, stage_kin) %>%
+  summarise(living = sum(living, na.rm=T))
 
-<!-- # compare -->
-<!-- demokin_multistage_summary %>% filter(kin == "d") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(A_stage[1,],A_stage[2,]) -->
-<!-- demokin_multistage_summary %>% filter(kin == "m") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(D_stage[1,],D_stage[2,]) -->
-<!-- ``` -->
+# compare
+demokin_multistage_summary %>% filter(kin == "d") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(A_stage[1,],A_stage[2,])
+demokin_multistage_summary %>% filter(kin == "m") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(D_stage[1,],D_stage[2,])
+```
 
 ## Solutions
 
