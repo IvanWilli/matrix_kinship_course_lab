@@ -1438,7 +1438,7 @@ sum(comparison_by_hand_demokin$dif)
 
 ## Wed 10
 
-During this section, we will use `DemoKin` for **Age-classified time-invariant two-sex** kinship models and do some exercises.
+During this section, we will use `DemoKin` for **Age-classified two-sex** kinship models and do some exercises.
 
 - [Using DemoKin](#using_demokin_wed10)
 
@@ -1781,7 +1781,7 @@ data.frame(
   , `Time` = c("invariant", "variant", "variant")
   , `Sex` = c("one-sex", "two-sex", "two-sex")
   , `Approx.` = c("GKP", "Androgynous fertility", "None")
-) %>% knitr::kable()
+) %>% knitr::kable(format = "simple")
 ```
 
 Data for female mortality and fertility are already included in `DemoKin`. For males you can access to a file called *"swe_males.Rdata"* in the data folder, with age-specific survival probabilities and fertility rates. This is **all the data you need**. Where comes from this data? See:

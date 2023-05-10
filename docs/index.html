@@ -2029,8 +2029,8 @@ function.</p>
 <div id="wed-10" class="section level2">
 <h2>Wed 10</h2>
 <p>During this section, we will use <code>DemoKin</code> for
-<strong>Age-classified time-invariant two-sex</strong> kinship models
-and do some exercises.</p>
+<strong>Age-classified two-sex</strong> kinship models and do some
+exercises.</p>
 <ul>
 <li><p><a href="#using_demokin_wed10">Using DemoKin</a></p></li>
 <li><p><a href="#exercises_wed10">Exercises</a></p></li>
@@ -2330,66 +2330,34 @@ fertility rates</li>
 <span id="cb168-3"><a href="#cb168-3"></a>  , <span class="st">`</span><span class="at">Time</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;invariant&quot;</span>, <span class="st">&quot;variant&quot;</span>, <span class="st">&quot;variant&quot;</span>)</span>
 <span id="cb168-4"><a href="#cb168-4"></a>  , <span class="st">`</span><span class="at">Sex</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;one-sex&quot;</span>, <span class="st">&quot;two-sex&quot;</span>, <span class="st">&quot;two-sex&quot;</span>)</span>
 <span id="cb168-5"><a href="#cb168-5"></a>  , <span class="st">`</span><span class="at">Approx.</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;GKP&quot;</span>, <span class="st">&quot;Androgynous fertility&quot;</span>, <span class="st">&quot;None&quot;</span>)</span>
-<span id="cb168-6"><a href="#cb168-6"></a>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<span id="cb168-6"><a href="#cb168-6"></a>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">format =</span> <span class="st">&quot;simple&quot;</span>)</span></code></pre></div>
 <table>
 <thead>
-<tr>
-<th style="text-align:right;">
-ID
-</th>
-<th style="text-align:left;">
-Time
-</th>
-<th style="text-align:left;">
-Sex
-</th>
-<th style="text-align:left;">
-Approx.
-</th>
+<tr class="header">
+<th align="right">ID</th>
+<th align="left">Time</th>
+<th align="left">Sex</th>
+<th align="left">Approx.</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-invariant
-</td>
-<td style="text-align:left;">
-one-sex
-</td>
-<td style="text-align:left;">
-GKP
-</td>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">invariant</td>
+<td align="left">one-sex</td>
+<td align="left">GKP</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-variant
-</td>
-<td style="text-align:left;">
-two-sex
-</td>
-<td style="text-align:left;">
-Androgynous fertility
-</td>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">variant</td>
+<td align="left">two-sex</td>
+<td align="left">Androgynous fertility</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-variant
-</td>
-<td style="text-align:left;">
-two-sex
-</td>
-<td style="text-align:left;">
-None
-</td>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">variant</td>
+<td align="left">two-sex</td>
+<td align="left">None</td>
 </tr>
 </tbody>
 </table>
