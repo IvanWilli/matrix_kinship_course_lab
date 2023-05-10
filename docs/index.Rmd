@@ -1555,8 +1555,7 @@ kin_out %>%
   facet_wrap(~kin, scales = "free")
 ```
 
-A question about how to relate with previous models: should the total living aunts be the same number than the one from the female one-sex model? And daughters? -->
-<!-- IW: no, because now you have aunts from father´s side too. Daughters yes because all daughters comes from focal´s fertility -->
+**Answer:** Should the total number of living aunts be the same in the one-sex model compared to the two-sex models? What about daughters?
 
 The experience of kin loss for Focal depends on differences in mortality between sexes.
 A female Focal starts losing fathers earlier than mothers.
@@ -1686,7 +1685,7 @@ arg_surv_males <- data_males %>%
   as.matrix()
 ```
 
-**E1.1** In a time invariant model: how many living grand-mothers and grand-fathers does a female expects to have at age 15 in 1950 and in 2015, and what are their mean ages? Extract a conclusion based on the results.
+**E1.1** In a time invariant model: how many living grand-mothers and grand-fathers can a woman expect to have at age 15 in 1950 and in 2015, and what are their mean ages? Extract a conclusion based on the results.
 
 ```{r}
 kin_out_1950 <- kin2sex(
@@ -1714,7 +1713,7 @@ bind_rows(
     mutate(year = 2015)
   )
 ```
-**E1.2** Compare sex ratios of grandparents, parents, daughters and siblings in a time-variant framework for the cohort 1950, at each of Focal.
+**E1.2** Compare 'kin sex ratios' of grandparents, parents, daughters and siblings in a time-variant framework for the cohort 1950, at each of Focal.
 
 ```{r}
 kin_out_2015 <- kin2sex(
@@ -1771,19 +1770,18 @@ Note that the figure includes female and male kin and that the sex of Focal is n
 
 For this exercise, you should use `DemoKin` to replicate this figure. Concretely, run three iterations of the kinship model:
 
-   1. One-sex model; time-invariant rates; approximate male kin using GKP factors
+   1. One-sex model; time-invariant rates; no two-sex approximation
    2. Two-sex model; time-variant rates; approximate male kin using the androgynous assumption (i.e., male fertility is equivalent to female fertility); use mortality rates for males and females
    3. Two-sex model; time-variant rates; use real male and female fertility rates
 
 Here is a summary of the model specifications:
 
-<!-- IW: I think we can add a variant with time-variant one sex, or replace by the 1 -->
 ```{r}
 data.frame(
 `Model ID` = 1:3
   , `Model Time` = c("invariant", "variant", "variant")
   , `Model sex` = c("one-sex", "two-sex", "two-sex")
-  , `Two-sex approximation` = c("GKP factors", "Androgynous fertility", "None")
+  , `Two-sex approximation` = c("None", "Androgynous fertility", "None")
 ) %>%
   knitr::kable()
 ```
@@ -1796,15 +1794,15 @@ Data for female mortality and fertility are already included in `DemoKin`. For m
 
 Read this important points before start:
 
-1. When arranging inputs for using in `DemoKin`, be aware that female and male data have different window range. For this exercise take the *interval* where you have data for *both* (1968-2015).
+1. When arranging inputs for using in `DemoKin`, be aware that female and male data are available for different period. For this exercise take the *interval* where you have data from *both* data sources (1968-2015).
 
-2. For the sake of simplicity assume [@kolk_swedish_2021] estimate is in 2015. So...
+2. For the sake of simplicity assume [@kolk_swedish_2021] estimate refers to the year 2015. So...
 
 ```{r}
 kolk$cohort <- kolk$cohort-2
 ```
 
-3.  A table for help in using GKP factors and matching kin names with [@kolk_swedish_2021]:
+3.  A useful table for implementing GKP factors (not needed for this exercise) and matching kin names with those of [@kolk_swedish_2021]:
 ```{r}
 gkp_factors <- data.frame(
   kin = c("m","gm","ggm","d","gd","ggd","oa","ya","os","ys","coa","cya","nos","nys"),
@@ -1815,7 +1813,7 @@ gkp_factors <- data.frame(
 
 After running the 3 models, answer:
 
-**E2.1** How well do your models approximate the kin counts reported by [@kolk_swedish_2021]? Justify your answer using some quantitative measure. A clarification on this: many things can be compared and in many ways, there is not a correct one, just think in one that you consider important and pick one indicator. Plotting the comparison or replicating the previous plot for each model gets 1,000 more points that you can exchange for hugs or shake hands at some point.
+**E2.1** How well do your models approximate the kin counts reported by [@kolk_swedish_2021]? Justify your answer using some quantitative measure. A clarification on this: many things can be compared and in many ways, there is not a correct one, just think in one that you consider important and pick one indicator. Plotting the comparison or replicating the previous plot for each model gets 1,000 more points that you can exchange for hugs or handshakes at some point.
 
 ```{r}
 load("../data/swe_males.Rdata")
