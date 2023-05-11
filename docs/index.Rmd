@@ -2117,7 +2117,7 @@ usa_2015_kin_parity %>%
   summarise(count= sum(living)) %>%
   ggplot() +
   geom_bar(aes(x=age_kin, y = count, fill=parity), stat = "identity") +
-  geom_vline(aes(xintercept = age_focal), col=2) +
+  geom_vline(aes(xintercept = age_focal-.5), col=1, linetype=2) +
   labs(y = "Number of sisters") +
   theme_bw() +
   facet_wrap(~age_focal, nrow = 2)
@@ -2128,6 +2128,8 @@ Now with your country do the same steps and then **answer**:
 **E1**. What is the distribution of living mother by parity when Focal is 30 yo?
 
 **E2**. What is the mean age of daughters by parity when Focal is 60 yo?
+
+**E3**. Pick a plot in Caswell (2020) paper, and try to reproduce it.
 
 ### By hand {#by_hand_thurs11}
 
@@ -2704,6 +2706,22 @@ plot_model3 <- Model_3 %>%
   theme_bw() +
   theme(legend.position = "bottom")
 ggpubr::ggarrange(kolk_plot + xlab("Kolk"), plot_model1, plot_model2, plot_model3, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
+```
+</details>
+
+### Thurs 10
+
+**E1**
+<details><summary>Show</summary>
+```{r}
+usa_2015_kin_parity %>% filter(age_focal==30,kin == "m") %>% group_by(stage_kin) %>% summarise(living = sum(living))
+```
+</details>
+
+**E2**
+<details><summary>Show</summary>
+```{r}
+usa_2015_kin_parity %>% filter(age_focal==60,kin == "d") %>% group_by(stage_kin) %>% summarise(mean_age = sum(living*age_kin)/sum(living))
 ```
 </details>
 
