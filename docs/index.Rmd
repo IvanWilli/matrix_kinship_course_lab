@@ -1985,7 +1985,7 @@ During this section we will see how to apply **stage-age-classified time-invaria
 
 ### Using DemoKin {#using_demokin_thurs11}
 
-`DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of of transitions between stages by age.
+`DemoKin` allows the computation of kin structures in a multi-state framework, classifying individuals jointly by age and some other feature (e.g., stages of a disease). For this, we need mortality and fertility data for each possible stage and probabilities of transitions between stages by age.
 
 ```{r, message=FALSE, warning=FALSE}
 library(DemoKin)
@@ -1995,15 +1995,15 @@ library(ggplot2)
 library(knitr)
 ```
 
-Let's consider the example of Slovakia given by Caswell (2021), where stages are parity states.
-`DemoKin` includes the data to replicate this analysis for the year 1990. Note that the function allows that user can entry lists (should be consistent in dimensions), as is shown in the paper, or in a matrix format for some arguments. The data that comes with the package is in this format:
+Let's consider the example of Slovakia given by @caswell_formal_2020, where stages are parity states.
+`DemoKin` includes the data to replicate this analysis for the year 1990. Note that the function allows that user can entry lists for each argument (should be consistent in dimensions), as is shown in the paper and later in this material, or in a data.frame format for some arguments. The data that comes with the package is in this format (take a look in R):
 
-- The data.frame `svk_fxs` is the fertility rate by age (rows) for each parity stage (columns). The first stage represents $parity=0$; the second stage, $parity=1$; and so on, until finally the sixth stage represents $parity\geq5$.
+- The data.frame `svk_fxs` is the probability of reproduction in each age (rows) at each parity stage (columns). The first stage represents from parity=0 to 1; the second from parity=1 to 2; and so on, until finally the sixth stage represents from parity=4 to 5 or more.
 - The data.frame `svk_Hxs` has a similar structure but with $1$'s in the ages corresponding to newborns (the first age in our example).
 - The data.frame `svk_pxs` has the same structure and represents survival probabilities.
-- The list `svk_Uxs` has the same number of elements and ages (in this case 110, where $omega$ is 109). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival.
+- The list `svk_Uxs` has the same number of elements and ages (in this case 110 age-classes). For each age, it contains a column-stochastic transition matrix with dimension for the state space. The entries are transition probabilities conditional on survival.
 
-With the function `kin_multi_stage` we can obtain the joint age-parity kin structure in a time-invariant framework. By now, run the model and inspect the output, we´ll get into details in next section:
+With the function `kin_multi_stage` we can obtain the joint age-parity kin structure in a time-invariant framework, but in this case only a return a `kin_full` version. By now, run the model and inspect the output, we´ll get into details in next section:
 
 ```{r}
 # use birth_female=1 because fertility is for female only
@@ -2014,6 +2014,7 @@ demokin_svk1990 <-
     D = svk_pxs,
     H = svk_Hxs,
     birth_female=1)
+head(demokin_svk1990)
 ```
 
 As an example, consider the age-parity distribution of aunts, when Focal is 20 and 60 yo (this is an intermediate year in Figure 4 in Caswell [2021]).
@@ -2052,7 +2053,7 @@ demokin_svk1990 %>%
   facet_wrap(~kin, nrow = 2)
 ```
 
-**Answer**: What other kind of indicators are interesting in this context?
+**Think**: What other kind of indicators are interesting in this context?
 
 ### Exercises {#exercises_thurs11}
 
@@ -2077,7 +2078,7 @@ data_usa_2015 <- get_UNWPP_inputs(
   countries = "United States of America",
   my_startyr = 2015,
   my_endyr = 2015)
-usa_2015_surv <- data %>%
+usa_2015_surv <- data_usa_2015 %>%
   select(px1 = px) %>%
   mutate(px2 = px1, px3 = px1, px4 = px1, px5 = px1)
 
@@ -2124,10 +2125,9 @@ usa_2015_kin_parity %>%
 
 Now with your country do the same steps and then **answer**: 
 
-**E1**. What is the distribution by parity of the mother when Focal is 30 yo?
+**E1**. What is the distribution of living mother by parity when Focal is 30 yo?
 
 **E2**. What is the mean age of daughters by parity when Focal is 60 yo?
-
 
 ### By hand {#by_hand_thurs11}
 
@@ -2198,7 +2198,7 @@ K <- matrixcalc::commutation.matrix(s, ages)
 Ut <- t(K) %*% Db %*% K %*% Ub  # eq 12
 Ft <-  t(K) %*% Hb %*% K %*% Fb # eq 13
 
-# How makes Focal transits age and education conditioned on being alive.
+# This makes Focal transition over age and education (conditional on being alive).
 Gt <-  Ut%*% MASS::ginv(diag(colSums(Ut))) # eq 21-22
 ```
 
@@ -2273,9 +2273,11 @@ f <- F. <- lapply(1:ages, function(x){
 
 You need to set `birth_female = 1` because fertility already refers to female offspring. Since the analysis is not of parity distribution, set `parity = FALSE`.
 
-```{r, include=F}
+<details><summary>Show</summary>
+```{r}
 source("kin_multi_stage.R")
-debugonce(kin_multi_stage)
+
+# create lists
 U <- list(U_0, U_1, U_2, U_3, U_4)
 H <- list(H_low, H_high)
 D <- list(D_low, D_high)
@@ -2295,6 +2297,7 @@ demokin_multistage_summary <- demokin_multistage %>%
 demokin_multistage_summary %>% filter(kin == "d") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(A_stage[1,],A_stage[2,])
 demokin_multistage_summary %>% filter(kin == "m") %>% arrange(stage_kin, age_focal) %>% pull(living) - c(D_stage[1,],D_stage[2,])
 ```
+</details>
 
 ## Solutions
 
